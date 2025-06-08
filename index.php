@@ -54,6 +54,7 @@
                         <input type="password" class="form-control" id="password" placeholder="Password anda">
                     </div>
                     <button type="submit" class="btn btn-dark w-100">Login</button>
+                    <p class="mt-2">Belum memiliki akun? <a href="#">Daftar</a></p>
                 </form>
             </div>
             <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('./img/background.png'); background-size: cover; background-position: center;">
