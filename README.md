@@ -1,7 +1,10 @@
 # QosKu
 Repository untuk project mata kuliah RPL.
+
 Dikembangkan oleh:
+
 Adi Setya Nur Pradipta (123230026)
+
 Gusti Rama (123230040)
 
 Link Progres Implentasi
