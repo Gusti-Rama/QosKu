@@ -66,7 +66,7 @@
 
         <div class="flex-grow-1">
             <div class="position-relative rounded-4"
-                style="background-image:url('./img/backgroundProfil.png'); background-size:cover; background-position:center;">
+                style="background-image:url('../assets/img/backgroundProfil.png'); background-size:cover; background-position:center;">
                 <div class="d-flex justify-content-between align-items-start mt-4" style="min-height:250px;">
                     <div class="d-flex mt-3 px-4 bg-transparent">
                         <div>

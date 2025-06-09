@@ -90,7 +90,7 @@
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="./img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
+                            <img src="../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
                                 <p class="card-text">Harga: Rp600,000 / bulan</p>
@@ -105,9 +105,9 @@
                         </div>
                         <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                         <div class="d-flex gap-3">
-                            <img src="./img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
-                            <img src="./img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
-                            <img src="./img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
+                            <img src="../assets/img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
+                            <img src="../assets/img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
+                            <img src="../assets/img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
                         </div>
                     </div>
                     <div class="col-md-4">
