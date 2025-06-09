@@ -15,16 +15,11 @@
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-<<<<<<< HEAD:index.php
                 <img src="./img/QosKuIMG.png" alt="Logo" height="60">
                 QosKu
-            </a>    
+            </a>
 
             <!-- Menu links -->
-=======
-                <img src="./img/QosKuIMG.png" class="mb-1" alt="Logo" height="60">QosKu
-            </a>
->>>>>>> a944e506f982c19c74018824cc716a4005474db5:signIn.php
             <div class="collapse navbar-collapse justify-content-center me-5 pe-5" id="navbarMenu">
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item px-2">
