@@ -55,7 +55,7 @@
           </li>
         </ul>
         <div class="position-relative mt-auto rounded-4"
-          style="height: 180px; background-image: url('./img/backgroundHelp.png'); background-size: cover; background-position: center;">
+          style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
           <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
             <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
             <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -99,7 +99,7 @@
           <!-- Kamar 1.10 -->
           <div class="col-md-6 col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.10">
+              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.10">
               <div class="card-body">
                 <h5 class="card-title fw-bold">Kamar No. 1.10 (Rp600,000/bulan)</h5>
                 <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
@@ -113,7 +113,7 @@
           <!-- Kamar 1.18 -->
           <div class="col-md-6 col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.18">
+              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.18">
               <div class="card-body">
                 <h5 class="card-title fw-bold">Kamar No. 1.18 (Rp600,000/bulan)</h5>
                 <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
@@ -127,7 +127,7 @@
           <!-- Kamar 2.1 -->
           <div class="col-md-6 col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.1">
+              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.1">
               <div class="card-body">
                 <h5 class="card-title fw-bold">Kamar No. 2.1 (Rp750,000/bulan)</h5>
                 <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
@@ -141,7 +141,7 @@
           <!-- Kamar 2.5 -->
           <div class="col-md-6 col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.5">
+              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.5">
               <div class="card-body">
                 <h5 class="card-title fw-bold">Kamar No. 2.5 (Rp750,000/bulan)</h5>
                 <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>

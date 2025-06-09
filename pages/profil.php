@@ -54,7 +54,7 @@
                     </li>
                 </ul>
                 <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('./img/backgroundHelp.png'); background-size: cover; background-position: center;">
+                    style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
                     <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
                         <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
                         <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -66,7 +66,7 @@
 
         <div class="flex-grow-1">
             <div class="position-relative rounded-4"
-                style="background-image:url('./img/backgroundProfil.png'); background-size:cover; background-position:center;">
+                style="background-image:url('../assets/img/backgroundProfil.png'); background-size:cover; background-position:center;">
                 <div class="d-flex justify-content-between align-items-start mt-4" style="min-height:250px;">
                     <div class="d-flex mt-3 px-4 bg-transparent">
                         <div>
@@ -94,7 +94,7 @@
                     style="bottom: 0; left: 0; right: 0; transform: translateY(50%); padding: 0 1rem;">
                     <div class="bg-white rounded-4 shadow-sm d-flex align-items-center p-3 mx-auto" style="max-width: 1150px;">
                         <img
-                            src="./img/profilePic.png"
+                            src="../assets/img/profilePic.png"
                             alt="Profile Pic"
                             class="rounded-circle me-3"
                             style="width:60px; height:60px; object-fit:cover;" />

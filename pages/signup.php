@@ -15,9 +15,9 @@
 <body class="d-flex flex-column min-vh-100 bg-light">
   <div class="background-half position-absolute top-0 start-0 w-100 z-n1 rounded-bottom-4"></div>
   <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-50 rounded-3 pe-5">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white bg-opacity-50 rounded-3 pe-5 shadow-sm">
       <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-        <img assets="../assets/img/QosKuIMG.png" alt="Logo" height="60">
+        <img src="../assets/img/QosKuIMG.png" alt="Logo" height="60">
         QosKu
       </a>
       <div class="collapse navbar-collapse justify-content-center me-5 pe-5" id="navbarMenu">
@@ -75,7 +75,7 @@
     &copy; 2025, Made with ❤️ for QosKu
   </footer>
 
-  <script assets="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

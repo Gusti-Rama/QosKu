@@ -54,7 +54,7 @@
                     </li>
                 </ul>
                 <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('./img/backgroundHelp.png'); background-size: cover; background-position: center;">
+                    style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
                     <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
                         <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
                         <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -140,7 +140,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="./img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
+                            <img src="../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
                                 <p class="card-text">Harga: Rp600,000 / bulan</p>
@@ -156,9 +156,9 @@
 
                         <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                         <div class="d-flex gap-3">
-                            <img src="./img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
-                            <img src="./img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
-                            <img src="./img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
+                            <img src="../assets/img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
+                            <img src="../assets/img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
+                            <img src="../assets/img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
                         </div>
                     </div>
 

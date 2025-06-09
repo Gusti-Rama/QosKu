@@ -15,7 +15,7 @@
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-                <img assets="../assets/img/QosKuIMG.png" alt="Logo" height="60">
+                <img src="../assets/img/QosKuIMG.png" alt="Logo" height="60">
                 QosKu
             </a>
 
@@ -61,8 +61,8 @@
                     <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="#" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
                 </form>
             </div>
-            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('./img/background.png'); background-size: cover; background-position: center; border-bottom-left-radius: 2rem;">
-                <img assets="./img/QosKuNoBG.png" class="img-fluid" alt="Logo">
+            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('../assets/img/background.png'); background-size: cover; background-position: center; border-bottom-left-radius: 2rem;">
+                <img src="../assets/img/QosKuNoBG.png" class="img-fluid" alt="Logo">
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
     </div>
 
 </body>
-<script assets="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script assets="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
 
 </html>
