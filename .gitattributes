@@ -1,0 +1,4 @@
+# Ignore image files
+img/*
+
+*.php linguist-language=PHP
