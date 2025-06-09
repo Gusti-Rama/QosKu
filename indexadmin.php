@@ -43,7 +43,7 @@
         <div class="row h-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center bg-white">
                 <form class="w-50">
-                    <h2 class="text-center mb-4 fw-bold">Selamat Datang</h2>
+                    <h2 class="text-center mb-4 fw-bold">Selamat Datang Admin</h2>
                     <p class="fw-bold">Masukkan username dan password untuk login</p>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
