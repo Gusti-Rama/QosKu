@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="icon" href="./img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -15,7 +15,7 @@
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-                <img src="./img/QosKuIMG.png" alt="Logo" height="60">
+                <img assets="../assets/img/QosKuIMG.png" alt="Logo" height="60">
                 QosKu
             </a>
 
@@ -29,7 +29,7 @@
                         <a class="nav-link fw-medium" href="#"><i class="bi bi-person-fill"></i> PROFILE</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a class="nav-link fw-medium" href="#"><i class="bi bi-person-fill-add"></i> SIGN UP</a>
+                        <a class="nav-link fw-medium" href="signup.php"><i class="bi bi-person-fill-add"></i> SIGN UP</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link active fw-medium" href="#"><i class="bi bi-key-fill"></i> SIGN IN</a>
@@ -58,11 +58,11 @@
                         <label class="form-check-label mb-3" for="ingat">Ingat Saya</label>
                     </div>
                     <button type="submit" class="btn btn-lg btn-dark w-100 fs-6">Masuk</button>
-                    <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="#" class="text-dark fw-bold">Daftar</a></p>
+                    <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="#" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
                 </form>
             </div>
             <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('./img/background.png'); background-size: cover; background-position: center; border-bottom-left-radius: 2rem;">
-                <img src="./img/QosKuNoBG.png" class="img-fluid" alt="Logo">
+                <img assets="./img/QosKuNoBG.png" class="img-fluid" alt="Logo">
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
     </div>
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
+<script assets="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script assets="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
 
 </html>

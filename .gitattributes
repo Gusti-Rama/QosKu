@@ -1,4 +1,4 @@
 # Ignore image files
-img/* linguist-vendored
+assets/img/* linguist-vendored
 
 *.php linguist-language=PHP

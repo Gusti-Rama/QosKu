@@ -14,3 +14,10 @@ body {
 .form-check-input:focus {
   box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
 }
+
+.background-half {
+      background: url('../img/backgroundpanjang.png') center/cover no-repeat;
+      height: 65vh;
+      background-size: cover;
+      background-position: center;
+    }

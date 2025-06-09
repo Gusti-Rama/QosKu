@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="icon" href="./img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body class="bg-light">
     <div class="d-flex min-vh-100 ms-4 me-4">
-        <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
+        <!-- Sidebar -->
+        <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
             <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-                <img src="./img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+                <img src="../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
             </a>
             <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
                 <ul class="nav flex-column">
@@ -86,9 +86,59 @@
                     <i class="bi bi-bell-fill fs-5"></i>
                 </div>
             </div>
-            <div class="container-fluid pt-4">
+
+            <!-- Info Cards -->
+            <div class="container-fluid pt-4 pb-3">
                 <div class="row mb-4">
-                    <div class="col-md-8">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="card-title fs-6 fw-bold text-secondary">Tagihan Anda</p>
+                                    <p class="card-text fs-3 fw-bold mb-0">Rp660,000</p>
+                                </div>
+                                <div class="text-white rounded-4 d-flex align-items-center justify-content-center"
+                                    style="width: 60px; height: 60px; background-color: #4FD1C5;">
+                                    <i class="bi bi-receipt-cutoff fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="card-title fs-6 fw-bold text-secondary">Harga Kamar</p>
+                                    <p class="card-text fs-4 fw-bold mb-0">Rp600,000 / Bulan</p>
+                                </div>
+                                <div class="text-white rounded-4 d-flex align-items-center justify-content-center"
+                                    style="width: 60px; height: 60px; background-color: #4FD1C5;">
+                                    <i class="bi bi-door-closed-fill fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="card-title fs-6 fw-bold text-secondary">Tambahan Biaya</p>
+                                    <p class="card-text fs-4 fw-bold mb-0">Rp60,000 / Bulan</p>
+                                </div>
+                                <div class="text-white rounded-4 d-flex align-items-center justify-content-center"
+                                    style="width: 60px; height: 60px; background-color: #4FD1C5;">
+                                    <i class="bi bi-plus-square-fill fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kamar Anda -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
                         <div class="card shadow-sm border-0 rounded-4">
                             <img src="./img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
                             <div class="card-body">
@@ -103,6 +153,7 @@
                                 <p class="fw-bold">Harga: Rp600,000/bulan</p>
                             </div>
                         </div>
+
                         <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                         <div class="d-flex gap-3">
                             <img src="./img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
@@ -110,8 +161,10 @@
                             <img src="./img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0 rounded-4 p-4 h-100 d-flex flex-column">
+
+                    <!-- Pembayaran -->
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm border-0 rounded-4 p-4">
                             <h6 class="fw-bold">Bayar Tagihan</h6>
                             <p class="mb-1">Jenis</p>
                             <div class="form-check">
@@ -140,17 +193,24 @@
                                 <input class="form-check-input" type="radio" name="metode">
                                 <label class="form-check-label">QRIS</label>
                             </div>
+
+                            <p class="fw-bold">Tambahan Alat Listrik</p>
+                            <ul class="ps-3">
+                                <li>Rice cooker <span class="float-end">Rp30,000</span></li>
+                                <li>Panci Elektrik <span class="float-end">Rp30,000</span></li>
+                            </ul>
                             <hr>
                             <p>Subtotal <span class="float-end">Rp600,000</span></p>
+                            <p>Tambahan Alat Listrik <span class="float-end">Rp60,000</span></p>
                             <p>Promo <span class="float-end">-</span></p>
                             <hr>
-                            <h5 class="fw-bold">Total <span class="float-end">Rp600,000</span></h5>
+                            <h5 class="fw-bold">Total <span class="float-end">Rp660,000</span></h5>
                             <button class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">Bayar</button>
-                            <p class="mt-auto small text-muted">*Pembayaran diatas hanya untuk bulan, minggu, atau hari pertama. Tagihan anda berikutnya dapat dilakukan di menu Kamar Anda. Anda dapat mengubah jenis kamar pada pembayaran selanjutnya.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -160,5 +220,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
