@@ -7,8 +7,8 @@
   <title>QosKu</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-  <link rel="stylesheet" href="./css/style.css">
-  <link rel="icon" href="./img/QosKuIMG.png" type="image/png">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -16,7 +16,7 @@
   <div class="d-flex min-vh-100 ms-4 me-4">
     <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
       <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-        <img src="./img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
       </a>
       <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
         <ul class="nav flex-column">
@@ -55,7 +55,7 @@
           </li>
         </ul>
         <div class="position-relative mt-auto rounded-4"
-          style="height: 180px; background-image: url('./img/backgroundHelp.png'); background-size: cover; background-position: center;">
+          style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
           <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
             <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
             <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -102,7 +102,7 @@
   <!-- Kamar 1.1 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.1</h5>
         <div class="d-flex justify-content-center my-4">
@@ -115,7 +115,7 @@
   <!-- Kamar 1.2 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.2</h5>
         <div class="d-flex justify-content-center my-4">
@@ -128,7 +128,7 @@
   <!-- Kamar 1.3 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.3</h5>
         <div class="d-flex justify-content-center my-4">
@@ -141,7 +141,7 @@
   <!-- Kamar 1.4 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.4</h5>
         <div class="d-flex justify-content-center my-4">
@@ -154,7 +154,7 @@
   <!-- Kamar 1.5 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.5</h5>
         <div class="d-flex justify-content-center my-4">
@@ -167,7 +167,7 @@
   <!-- Kamar 1.6 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.6</h5>
         <div class="d-flex justify-content-center my-4">
@@ -180,7 +180,7 @@
   <!-- Kamar 1.7 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.7</h5>
         <div class="d-flex justify-content-center my-4">
@@ -193,7 +193,7 @@
   <!-- Kamar 1.8 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.8</h5>
         <div class="d-flex justify-content-center my-4">
@@ -206,7 +206,7 @@
   <!-- Kamar 1.9 -->
   <div class="col-md-6 col-lg-4">
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-      <img src="./img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
+      <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
       <div class="card-body">
         <h5 class="card-title fw-bold">Kamar No. 1.9</h5>
         <div class="d-flex justify-content-center my-4">

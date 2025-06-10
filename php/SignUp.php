@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssssss", $username, $password_hash, $namaLengkap, $nomorHp, $email, $alamat);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location.href = 'signin.php';</script>";
+        echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location.href = '../pages/pelanggan/login.php';</script>";
     } else {
         echo "<script>alert('Registrasi gagal!'); window.history.back();</script>";
     }

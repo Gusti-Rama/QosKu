@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <!-- Logo -->
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-                <img src="../assets/img/QosKuIMG.png" alt="Logo" height="60">
+                <img src="../../assets/img/QosKuIMG.png" alt="Logo" height="60">
                 QosKu
             </a>    
 
@@ -57,8 +57,8 @@
                     <p class="mt-2">Belum memiliki akun? <a href="#">Daftar</a></p>
                 </form>
             </div>
-            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('../assets/img/background.png'); background-size: cover; background-position: center;">
-                <img src="../assets/img/QosKuNoBG.png" class="img-fluid" alt="Logo" >
+            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('../../assets/img/background.png'); background-size: cover; background-position: center;">
+                <img src="../../assets/img/QosKuNoBG.png" class="img-fluid" alt="Logo" >
             </div>
 
         </div>

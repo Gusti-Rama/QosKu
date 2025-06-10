@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($resultAdmin->num_rows === 1) {
         $admin = $resultAdmin->fetch_assoc();
-        // if (password_verify($password, hash: $admin["password"])) { (PAKE KALO UDAH ADA HASHING PASSWORD)
-        if ($password === $admin["password"]) {
+        if (password_verify($password, hash: $admin["password"])) {
+        // if ($password === $admin["password"]) {
             if (isset($_POST['remember'])) {
                 setcookie("username", $admin['username'], time() + (86400 * 30), "/");
                 setcookie("role", "admin", time() + (86400 * 30), "/");
             }
-            header("location: ../pages/admin/dashboardAdmin.php");
+            header("location: ../pages/admin/dashboard.php");
             exit;
         }
     }
@@ -33,16 +33,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($resultPelanggan->num_rows === 1) {
         $user = $resultPelanggan->fetch_assoc();
-        // if (password_verify($password, $user["password"])) { (PAKE KALO UDAH ADA HASHING PASSWORD)
-        if ($password === $user["password"]) {
+        if (password_verify($password, $user["password"])) {
+        // if ($password === $user["password"]) {
             if (isset($_POST['remember'])) {
                 setcookie("username", $admin['username'], time() + (86400 * 30), "/"); // 30 days
                 setcookie("role", "pelanggan", time() + (86400 * 30), "/");
             }
-            header("location: ../pages/dashboardKamar.php");
+            header("location: ../pages/pelanggan/dashboard.php");
             exit;
         }
     }
-    header("location: ../pages/signin.php?pesan=gagal");
+    header("location: ../pages/pelanggan/login.php?pesan=gagal");
     exit;
 }

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -15,7 +15,7 @@
     <div class="d-flex min-vh-100 ms-4 me-4">
         <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
             <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-                <img src="../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+                <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
             </a>
             <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
                 <ul class="nav flex-column">
@@ -135,7 +135,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="card shadow-sm border-0 rounded-4 text-white"
-                            style="background-image: url('../assets/img/backgroundKamar.png'); background-size: cover; background-position: center; min-height: 300px;">
+                            style="background-image: url('../../assets/img/backgroundKamar.png'); background-size: cover; background-position: center; min-height: 300px;">
                             <div class="card-body rounded-4 p-4">
                                 <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
                             </div>
