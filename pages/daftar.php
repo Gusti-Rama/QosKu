@@ -46,10 +46,14 @@
 
   <div class="flex-grow-1 d-flex justify-content-center align-items-center">
     <div class="z-1 bg-white p-5 shadow rounded-4 w-25">
-      <form method="POST" action="../php/SignUp.php">
+      <form method="POST" action="../php/daftar.php">
         <div class="mb-3">
           <label class="form-label">Username</label>
           <input type="text" class="form-control" name="username" id="username" placeholder="Username anda" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-control" name="namalengkap" id="namalengkap" placeholder="Nama lengkap anda" required />
         </div>
         <div class="mb-3">
           <label class="form-label">Email</label>
@@ -66,7 +70,7 @@
         <button type="submit" class="btn btn-dark w-100" >DAFTAR</button>
       </form>
       <p class="text-center mt-3">
-        Sudah memiliki akun? <a href="#" class="text-decoration-none fw-semibold text-dark">Masuk</a>
+        Sudah memiliki akun? <a href="login.php" class="text-decoration-none fw-semibold text-dark">Masuk</a>
       </p>
     </div>
   </div>

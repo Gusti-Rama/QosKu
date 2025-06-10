@@ -54,7 +54,7 @@
                     </li>
                 </ul>
                 <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
+                    style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
                     <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
                         <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
                         <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>

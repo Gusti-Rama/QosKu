@@ -4,10 +4,22 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
     $_SESSION['username'] = $_COOKIE['username'];
     $_SESSION['role'] = $_COOKIE['role'];
 
-    if ($_COOKIE['role'] === 'admin') {
-        header("Location: ../admin/dashboardAdmin.php");
-    } else {
-        header("Location: ./dashboardKamar.php");
+    // Redirect based on role
+    switch ($_COOKIE['role']) {
+        case 'admin':
+            header("Location: ../admin/dashboard.php");
+            break;
+        case 'owner':
+            header("Location: ../owner/dashboard.php");
+            break;
+        case 'pelanggan':
+            header("Location: ../pelanggan/dashboard.php");
+            break;
+        default:
+            setcookie("username", "", time() - 3600, "/");
+            setcookie("role", "", time() - 3600, "/");
+            header("Location: login.php");
+            break;
     }
     exit;
 }
@@ -20,8 +32,8 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -34,7 +46,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
-                <img src="../../assets/img/QosKuIMG.png" alt="Logo" height="60">
+                <img src="../assets/img/QosKuIMG.png" alt="Logo" height="60">
                 QosKu
             </a>
 
@@ -42,13 +54,13 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
             <div class="collapse navbar-collapse justify-content-center me-5 pe-5" id="navbarMenu">
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item px-2">
-                        <a class="nav-link fw-medium" href="dashboardKamar.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
+                        <a class="nav-link fw-medium" href="dashboard.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link fw-medium" href="#"><i class="bi bi-person-fill"></i> PROFILE</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a class="nav-link fw-medium" href="signup.php"><i class="bi bi-person-fill-add"></i> SIGN UP</a>
+                        <a class="nav-link fw-medium" href="daftar.php"><i class="bi bi-person-fill-add"></i> SIGN UP</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link active fw-medium" href="#"><i class="bi bi-key-fill"></i> SIGN IN</a>
@@ -61,7 +73,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
     <div class="container-fluid full-height">
         <div class="row h-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center bg-white">
-                <form class="w-50 mt-5" method="POST" action="../../php/loginCheck.php">
+                <form class="w-50 mt-5" method="POST" action="../php/loginCheck.php">
                     <h2 class="mb-3 mt-5 fw-bold">Selamat Datang</h2>
                     <p class="mb-5 fw-bold text-secondary">Masukkan username dan password untuk login</p>
                     <div class="mb-3">
@@ -77,11 +89,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
                         <label class="form-check-label mb-3" name="ingat" for="ingat">Ingat Saya</label>
                     </div>
                     <button type="submit" class="btn btn-lg btn-dark w-100 fs-6">Masuk</button>
-                    <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="#" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
+                    <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="daftar.php" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
                 </form>
             </div>
-            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('../../assets/img/background.png'); background-size: cover; background-position: center; border-bottom-left-radius: 2rem;">
-                <img src="../../assets/img/QosKuNoBG.png" class="img-fluid" alt="Logo">
+            <div class="col-md-6 d-flex justify-content-center align-items-center bg-white position-relative" style="background-image: url('../assets/img/background.png'); background-size: cover; background-position: center; border-bottom-left-radius: 2rem;">
+                <img src="../assets/img/QosKuNoBG.png" class="img-fluid" alt="Logo">
             </div>
         </div>
     </div>

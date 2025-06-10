@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -15,7 +15,7 @@
     <div class="d-flex min-vh-100 ms-4 me-4">
         <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
             <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-                <img src="../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+                <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
             </a>
             <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
                 <ul class="nav flex-column">
@@ -54,7 +54,7 @@
                     </li>
                 </ul>
                 <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
+                    style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
                     <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
                         <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
                         <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -90,7 +90,7 @@
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
+                            <img src="../../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
                                 <p class="card-text">Harga: Rp600,000 / bulan</p>
@@ -105,9 +105,9 @@
                         </div>
                         <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                         <div class="d-flex gap-3">
-                            <img src="../assets/img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
-                            <img src="../assets/img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
-                            <img src="../assets/img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
+                            <img src="../../assets/img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
+                            <img src="../../assets/img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
+                            <img src="../../assets/img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
                         </div>
                     </div>
                     <div class="col-md-4">

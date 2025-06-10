@@ -14,7 +14,7 @@ if (!isset($_SESSION['role'])) {
 $role = strtolower($_SESSION['role']);
 
 // Define allowed roles for admin pages
-$allowedRoles = ['admin']; 
+$allowedRoles = ['owner']; 
 
 // Check if user has required role
 if (!in_array($role, $allowedRoles)) {
@@ -51,7 +51,7 @@ if (!$stmt->get_result()->num_rows) {
   <div class="d-flex min-vh-100 ms-4 me-4">
     <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
       <a class="navbar-brand fw-bold fs-4 pt-3 border-bottom" href="#" style="color: #2D3748;">
-        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu Admin
+        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu Owner
       </a>
       <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
         <ul class="nav flex-column">

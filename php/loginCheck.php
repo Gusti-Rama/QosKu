@@ -1,11 +1,12 @@
 <?php
 session_start();
-$connect = new mysqli('localhost', 'root', '', 'qosku');
+include 'connect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = htmlspecialchars($_POST["username"]);
     $password = htmlspecialchars($_POST['password']);
 
+    // Check admin table first
     $queryAdmin = "SELECT * FROM `admin` WHERE username = ?";
     $stmtAdmin = $connect->prepare($queryAdmin);
     $stmtAdmin->bind_param("s", $username);
@@ -14,17 +15,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($resultAdmin->num_rows === 1) {
         $admin = $resultAdmin->fetch_assoc();
-        if (password_verify($password, hash: $admin["password"])) {
-        // if ($password === $admin["password"]) {
+        if (password_verify($password, $admin["password"])) {
+            // CORRECTED: Use 'peran' instead of 'role'
+            $_SESSION['username'] = $admin['username'];
+            $_SESSION['role'] = $admin['peran']; // Changed from 'role' to 'peran'
+
             if (isset($_POST['remember'])) {
                 setcookie("username", $admin['username'], time() + (86400 * 30), "/");
-                setcookie("role", "admin", time() + (86400 * 30), "/");
+                setcookie("role", $admin['peran'], time() + (86400 * 30), "/"); // Also changed here
             }
-            header("location: ../pages/admin/dashboard.php");
+
+            if ($admin['peran'] === 'owner') { // Changed here too
+                header("location: ../pages/pemilik/dashboard.php");
+            } else {
+                header("location: ../pages/admin/dashboard.php");
+            }
             exit;
         }
     }
 
+    // Check pelanggan table
     $queryPelanggan = "SELECT * FROM `pelanggan` WHERE username = ?";
     $stmtPelanggan = $connect->prepare($queryPelanggan);
     $stmtPelanggan->bind_param("s", $username);
@@ -34,15 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($resultPelanggan->num_rows === 1) {
         $user = $resultPelanggan->fetch_assoc();
         if (password_verify($password, $user["password"])) {
-        // if ($password === $user["password"]) {
+            // Set session variables
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = 'pelanggan';
+
             if (isset($_POST['remember'])) {
-                setcookie("username", $admin['username'], time() + (86400 * 30), "/"); // 30 days
+                setcookie("username", $user['username'], time() + (86400 * 30), "/");
                 setcookie("role", "pelanggan", time() + (86400 * 30), "/");
             }
             header("location: ../pages/pelanggan/dashboard.php");
             exit;
         }
     }
-    header("location: ../pages/pelanggan/login.php?pesan=gagal");
+
+    header("location: ../pages/login.php?pesan=gagal");
     exit;
 }
