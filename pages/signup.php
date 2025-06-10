@@ -46,24 +46,24 @@
 
   <div class="flex-grow-1 d-flex justify-content-center align-items-center">
     <div class="z-1 bg-white p-5 shadow rounded-4 w-25">
-      <form>
+      <form method="POST" action="../php/SignUp.php">
         <div class="mb-3">
           <label class="form-label">Username</label>
-          <input type="text" class="form-control" placeholder="Username anda" required />
+          <input type="text" class="form-control" name="username" id="username" placeholder="Username anda" required />
         </div>
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input type="email" class="form-control" placeholder="Alamat email anda" required />
+          <input type="email" class="form-control" name= "email" id = "email" placeholder="Alamat email anda" required />
         </div>
         <div class="mb-3">
           <label class="form-label">Password</label>
-          <input type="password" class="form-control" placeholder="Password anda" required />
+          <input type="password" class="form-control" name= "password" id = "password" placeholder="Password anda" required />
         </div>
         <div class="form-check form-switch mb-3">
           <input class="form-check-input" type="checkbox" id="rememberMe" />
           <label class="form-check-label" for="rememberMe">Ingat saya</label>
         </div>
-        <button type="submit" class="btn btn-dark w-100">DAFTAR</button>
+        <button type="submit" class="btn btn-dark w-100" >DAFTAR</button>
       </form>
       <p class="text-center mt-3">
         Sudah memiliki akun? <a href="#" class="text-decoration-none fw-semibold text-dark">Masuk</a>
