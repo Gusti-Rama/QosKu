@@ -1,3 +1,17 @@
+<?php
+session_start();
+if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
+    $_SESSION['username'] = $_COOKIE['username'];
+    $_SESSION['role'] = $_COOKIE['role'];
+
+    if ($_COOKIE['role'] === 'admin') {
+        header("Location: ../pages/admin/dashboardAdmin.php");
+    } else {
+        header("Location: ../pages/dashboardKamar.php");
+    }
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,6 +26,11 @@
 </head>
 
 <body>
+    <?php if (isset($_GET['pesan']) && $_GET['pesan'] === 'gagal') : ?>
+        <div class="position-fixed top-50 start-50 translate-middle alert alert-danger text-center fw-semibold rounded-4 shadow" style="z-index: 1050; width: 300px;">
+            Username atau password salah!
+        </div>
+    <?php endif; ?>
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">
         <nav class="navbar navbar-expand-lg navbar-light bg-light shadow rounded-3 pe-5">
             <a class="navbar-brand fw-bold" href="#" style="color: #2D3748;">
@@ -42,20 +61,20 @@
     <div class="container-fluid full-height">
         <div class="row h-100">
             <div class="col-md-6 d-flex justify-content-center align-items-center bg-white">
-                <form class="w-50 mt-5">
+                <form class="w-50 mt-5" method="POST" action="../php/loginCheck.php">
                     <h2 class="mb-3 mt-5 fw-bold">Selamat Datang</h2>
                     <p class="mb-5 fw-bold text-secondary">Masukkan username dan password untuk login</p>
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control rounded-3" id="username" placeholder="Username anda">
+                        <input type="text" name="username" class="form-control rounded-3" id="username" placeholder="Username anda">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label mt-2">Password</label>
-                        <input type="password" class="form-control rounded-3" id="password" placeholder="Password anda">
+                        <input type="password" name="password" class="form-control rounded-3" id="password" placeholder="Password anda">
                     </div>
                     <div class="form-check form-switch mb-3">
                         <input class="form-check-input" type="checkbox" id="ingat">
-                        <label class="form-check-label mb-3" for="ingat">Ingat Saya</label>
+                        <label class="form-check-label mb-3" name="ingat" for="ingat">Ingat Saya</label>
                     </div>
                     <button type="submit" class="btn btn-lg btn-dark w-100 fs-6">Masuk</button>
                     <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="#" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
@@ -71,6 +90,17 @@
     </div>
 
 </body>
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.style.opacity = '0';
+            alert.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000); // Hide after 3 seconds
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
 
