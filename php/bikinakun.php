@@ -1,4 +1,5 @@
 <!-- <?php
+//uncomment includenya kalo mau pake
 // include 'connect.php';
 
 // DELETE THIS FILE AFTER USE!

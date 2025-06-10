@@ -14,7 +14,7 @@ if (!isset($_SESSION['role'])) {
 $role = strtolower($_SESSION['role']);
 
 // Define allowed roles for admin pages
-$allowedRoles = ['owner']; 
+$allowedRoles = ['owner'];
 
 // Check if user has required role
 if (!in_array($role, $allowedRoles)) {
@@ -32,7 +32,7 @@ if (!$stmt->get_result()->num_rows) {
     header("Location: ../../pages/login.php?error=invalid_session");
     exit;
 }
-?> 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -125,9 +125,9 @@ if (!$stmt->get_result()->num_rows) {
             <div class="container-fluid pt-4">
                 <div class="row mb-4">
                     <div class="col-md-8">
-                        <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card shadow-sm border-0 rounded-4 position-relative">
                             <img src="../../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
-                            <div class="card-body">
+                            <div class="card-body pb-5"> <!-- Added pb-5 to make space for buttons -->
                                 <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
                                 <p class="card-text">Harga: Rp600,000 / bulan</p>
                                 <p class="text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (diluar alat listrik tambahan). Terletak di lantai 1 yang memudahkan akses dan mobilitas.</p>
@@ -137,6 +137,92 @@ if (!$stmt->get_result()->num_rows) {
                                     <li>Kamar mandi: dalam</li>
                                 </ul>
                                 <p class="fw-bold">Harga: Rp600,000/bulan</p>
+
+                                <!-- Action Buttons Container -->
+                                <div class="position-absolute bottom-0 end-0 m-3">
+                                    <div class="btn-group" role="group">
+                                        <!-- Edit Button -->
+                                        <button class="btn btn-sm btn-outline-primary rounded-start-4"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editKamarModal"
+                                            data-kamar-id="1.15">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </button>
+
+                                        <!-- Delete Button -->
+                                        <button class="btn btn-sm btn-outline-danger rounded-end-4"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#hapusKamarModal"
+                                            data-kamar-id="1.15">
+                                            <i class="bi bi-trash"></i> Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Edit Kamar Modal -->
+                        <div class="modal fade" id="editKamarModal" tabindex="-1" aria-labelledby="editKamarModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editKamarModalLabel">Edit Kamar <span id="editKamarTitle"></span></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="formEditKamar">
+                                            <input type="hidden" id="editKamarId">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="editNamaKamar" class="form-label">Nomor Kamar</label>
+                                                        <input type="text" class="form-control" id="editNamaKamar" value="1.15">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="editHargaKamar" class="form-label">Harga Kamar</label>
+                                                        <input type="number" class="form-control" id="editHargaKamar" value="600000">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="editLuasKamar" class="form-label">Luas Kamar</label>
+                                                        <input type="text" class="form-control" id="editLuasKamar" value="3m x 3m">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="editFotoKamar" class="form-label">Foto Kamar</label>
+                                                        <input class="form-control" type="file" id="editFotoKamar" accept="image/*">
+                                                        <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
+                                                    </div>
+                                                    <div class="current-image">
+                                                        <img src="../../assets/img/Kamar1.png" class="img-thumbnail" width="150" alt="Current Image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editDeskripsiKamar" class="form-label">Deskripsi Kamar</label>
+                                                <textarea class="form-control" id="editDeskripsiKamar" rows="3">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (diluar alat listrik tambahan). Terletak di lantai 1 yang memudahkan akses dan mobilitas.</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editPerabotanKamar" class="form-label">Perabotan</label>
+                                                <textarea class="form-control" id="editPerabotanKamar" rows="2">Meja, kursi, kasur, lemari</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Kamar Mandi</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="editKamarMandi" id="editKamarMandiDalam" value="dalam" checked>
+                                                    <label class="form-check-label" for="editKamarMandiDalam">Dalam</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="editKamarMandi" id="editKamarMandiLuar" value="luar">
+                                                    <label class="form-check-label" for="editKamarMandiLuar">Luar</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn btn-primary" id="simpanEditKamar">Simpan Perubahan</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -244,6 +330,52 @@ if (!$stmt->get_result()->num_rows) {
         &copy; 2025, Made with ❤️ for QosKu
     </div>
     <script>
+        // Edit button handler
+        document.querySelectorAll('[data-bs-target="#editKamarModal"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const kamarId = this.getAttribute('data-kamar-id');
+                document.getElementById('editKamarId').value = kamarId;
+                document.getElementById('editKamarTitle').textContent = kamarId;
+
+                // In a real app, you would fetch the room data here via AJAX
+                // and populate the form fields with the current values
+            });
+        });
+
+        // Delete button handler
+        document.querySelectorAll('[data-bs-target="#hapusKamarModal"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const kamarId = this.getAttribute('data-kamar-id');
+                if (confirm(`Apakah Anda yakin ingin menghapus Kamar ${kamarId}?`)) {
+                    // AJAX call to delete the room would go here
+                    console.log(`Deleting room ${kamarId}`);
+                    // Then remove the card from DOM or refresh the page
+                    this.closest('.card').remove();
+                }
+            });
+        });
+
+        // Save edit handler
+        document.getElementById('simpanEditKamar').addEventListener('click', function() {
+            // Collect all form data
+            const formData = {
+                id: document.getElementById('editKamarId').value,
+                nama: document.getElementById('editNamaKamar').value,
+                harga: document.getElementById('editHargaKamar').value,
+                luas: document.getElementById('editLuasKamar').value,
+                deskripsi: document.getElementById('editDeskripsiKamar').value,
+                perabotan: document.getElementById('editPerabotanKamar').value,
+                kamar_mandi: document.querySelector('input[name="editKamarMandi"]:checked').value,
+                foto: document.getElementById('editFotoKamar').files[0]
+            };
+
+            // Here you would typically make an AJAX call to update the room
+            console.log('Updating room:', formData);
+
+            // Close the modal
+            bootstrap.Modal.getInstance(document.getElementById('editKamarModal')).hide();
+            alert('Perubahan berhasil disimpan!');
+        });
         // Simple JavaScript to handle the form toggling
         document.getElementById('addButton').addEventListener('click', function() {
             document.getElementById('appliancesList').style.display = 'none';

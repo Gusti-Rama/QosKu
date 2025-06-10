@@ -6,20 +6,20 @@ session_start();
 
 // Check if user is logged in at all
 if (!isset($_SESSION['role'])) {
-    header("Location: ../../pages/login.php?error=not_logged_in");
-    exit;
+  header("Location: ../../pages/login.php?error=not_logged_in");
+  exit;
 }
 
 // Normalize role to lowercase for consistent comparison
 $role = strtolower($_SESSION['role']);
 
 // Define allowed roles for admin pages
-$allowedRoles = ['owner']; 
+$allowedRoles = ['owner'];
 
 // Check if user has required role
 if (!in_array($role, $allowedRoles)) {
-    header("Location: ../../pages/login.php?error=access_denied");
-    exit;
+  header("Location: ../../pages/login.php?error=access_denied");
+  exit;
 }
 
 // Optional: Verify the user still exists in database
@@ -28,9 +28,9 @@ $stmt = $connect->prepare("SELECT idAdmin FROM admin WHERE username = ? AND pera
 $stmt->bind_param("ss", $_SESSION['username'], $role);
 $stmt->execute();
 if (!$stmt->get_result()->num_rows) {
-    session_destroy();
-    header("Location: ../../pages/login.php?error=invalid_session");
-    exit;
+  session_destroy();
+  header("Location: ../../pages/login.php?error=invalid_session");
+  exit;
 }
 ?>
 <!DOCTYPE html>
@@ -128,138 +128,269 @@ if (!$stmt->get_result()->num_rows) {
             <button class="btn btn-outline-secondary rounded-4"><i class="bi bi-funnel-fill"></i> Filter</button>
             <button class="btn btn-outline-secondary rounded-4"><i class="bi bi-sort-down"></i> Urutkan</button>
           </div>
-        </div>
-        <div class="row g-4 px-2">
-          <!-- Ulangi 9 kamar -->
-          <!-- Gunakan col-md-6 col-lg-4 agar tampil 3 per baris di layar besar -->
+          <div>
+            <button class="btn btn-primary rounded-4 me-2" data-bs-toggle="modal" data-bs-target="#tambahKamarModal">
+              <i class="bi bi-plus-circle"></i> Tambah Kamar
+            </button>
 
-          <!-- Kamar 1.1 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.1</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.2 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.2</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.3 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.3</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.4 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.4</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.5 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.5</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.6 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.6</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.7 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.7</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.8 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.8</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.9 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.9</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
+            <button class="btn btn-danger rounded-4" data-bs-toggle="modal" data-bs-target="#hapusKamarModal">
+              <i class="bi bi-trash"></i> Hapus Kamar
+            </button>
           </div>
         </div>
-
-
       </div>
+
+      <!-- Tambah Kamar Modal -->
+      <div class="modal fade" id="tambahKamarModal" tabindex="-1" aria-labelledby="tambahKamarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tambahKamarModalLabel">Tambah Kamar Baru</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formTambahKamar">
+                <div class="mb-3">
+                  <label for="namaKamar" class="form-label">Nama Kamar</label>
+                  <input type="text" class="form-control" id="namaKamar" required>
+                </div>
+                <div class="mb-3">
+                  <label for="hargaKamar" class="form-label">Harga Kamar</label>
+                  <input type="number" class="form-control" id="hargaKamar" required>
+                </div>
+                <div class="mb-3">
+                  <label for="deskripsiKamar" class="form-label">Deskripsi Kamar</label>
+                  <textarea class="form-control" id="deskripsiKamar" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="fotoKamar" class="form-label">Foto Kamar</label>
+                  <input class="form-control" type="file" id="fotoKamar" accept="image/*">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-primary" id="simpanKamar">Simpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hapus Kamar Modal -->
+      <div class="modal fade" id="hapusKamarModal" tabindex="-1" aria-labelledby="hapusKamarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="hapusKamarModalLabel">Hapus Kamar</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="formHapusKamar">
+                <div class="mb-3">
+                  <label for="pilihKamar" class="form-label">Pilih Kamar yang akan dihapus</label>
+                  <select class="form-select" id="pilihKamar" required>
+                    <option value="" selected disabled>Pilih kamar...</option>
+                    <option value="1">Kamar No. 1.1</option>
+                    <option value="2">Kamar No. 1.2</option>
+                    <option value="3">Kamar No. 1.3</option>
+                  </select>
+                </div>
+                <div class="alert alert-warning">
+                  <i class="bi bi-exclamation-triangle"></i> Perhatian: Aksi ini tidak dapat dibatalkan!
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-danger" id="konfirmasiHapus">Hapus</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4 px-2">
+        <!-- Ulangi 9 kamar -->
+        <!-- Gunakan col-md-6 col-lg-4 agar tampil 3 per baris di layar besar -->
+
+        <!-- Kamar 1.1 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.1</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.2 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.2</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.3 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.3</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.4 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.4</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.5 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.5</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.6 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.6</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.7 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.7</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.8 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.8</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kamar 1.9 -->
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">Kamar No. 1.9</h5>
+              <div class="d-flex justify-content-center my-4">
+                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
+  </div>
   </div>
 
   <div class="footer text-center mt-5 pt-5">
     &copy; 2025, Made with ❤️ for QosKu
   </div>
+  <script>
+    document.getElementById('simpanKamar').addEventListener('click', function() {
+      // Get form values
+      const namaKamar = document.getElementById('namaKamar').value;
+      const hargaKamar = document.getElementById('hargaKamar').value;
+      const deskripsiKamar = document.getElementById('deskripsiKamar').value;
+      const fotoKamar = document.getElementById('fotoKamar').files[0];
 
+      // Validate form
+      if (!namaKamar || !hargaKamar) {
+        alert('Nama kamar dan harga kamar wajib diisi!');
+        return;
+      }
+
+      // Process form data (you would typically send this to server via AJAX)
+      const formData = new FormData();
+      formData.append('nama', namaKamar);
+      formData.append('harga', hargaKamar);
+      formData.append('deskripsi', deskripsiKamar);
+      if (fotoKamar) formData.append('foto', fotoKamar);
+
+      // Here you would typically make an AJAX call to your backend
+      console.log('Data kamar:', {
+        namaKamar,
+        hargaKamar,
+        deskripsiKamar,
+        fotoKamar: fotoKamar ? fotoKamar.name : 'No file selected'
+      });
+
+      // Close modal after processing
+      bootstrap.Modal.getInstance(document.getElementById('tambahKamarModal')).hide();
+      alert('Kamar berhasil ditambahkan!');
+    });
+
+    document.getElementById('konfirmasiHapus').addEventListener('click', function() {
+      const selectedKamar = document.getElementById('pilihKamar');
+      const kamarId = selectedKamar.value;
+      const kamarName = selectedKamar.options[selectedKamar.selectedIndex].text;
+
+      if (!kamarId) {
+        alert('Silakan pilih kamar yang akan dihapus!');
+        return;
+      }
+
+      if (confirm(`Apakah Anda yakin ingin menghapus ${kamarName}?`)) {
+        // Here you would typically make an AJAX call to your backend
+        console.log('Menghapus kamar dengan ID:', kamarId);
+
+        // Close modal after processing
+        bootstrap.Modal.getInstance(document.getElementById('hapusKamarModal')).hide();
+        alert(`${kamarName} berhasil dihapus!`);
+      }
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

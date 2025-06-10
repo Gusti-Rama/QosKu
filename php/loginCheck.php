@@ -16,16 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($resultAdmin->num_rows === 1) {
         $admin = $resultAdmin->fetch_assoc();
         if (password_verify($password, $admin["password"])) {
-            // CORRECTED: Use 'peran' instead of 'role'
             $_SESSION['username'] = $admin['username'];
-            $_SESSION['role'] = $admin['peran']; // Changed from 'role' to 'peran'
+            $_SESSION['role'] = $admin['peran']; 
 
-            if (isset($_POST['remember'])) {
+            if (isset($_POST['ingat'])) {
                 setcookie("username", $admin['username'], time() + (86400 * 30), "/");
-                setcookie("role", $admin['peran'], time() + (86400 * 30), "/"); // Also changed here
+                $role = ($admin['peran'] === 'owner') ? 'owner' : 'admin';
+                setcookie("role", $role, time() + (86400 * 30), "/");
             }
 
-            if ($admin['peran'] === 'owner') { // Changed here too
+            if ($admin['peran'] === 'owner') {
                 header("location: ../pages/pemilik/dashboard.php");
             } else {
                 header("location: ../pages/admin/dashboard.php");
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = 'pelanggan';
 
-            if (isset($_POST['remember'])) {
+            if (isset($_POST['ingat'])) {
                 setcookie("username", $user['username'], time() + (86400 * 30), "/");
                 setcookie("role", "pelanggan", time() + (86400 * 30), "/");
             }

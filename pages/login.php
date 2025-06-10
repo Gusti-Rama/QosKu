@@ -1,27 +1,32 @@
 <?php
 session_start();
-if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
-    $_SESSION['username'] = $_COOKIE['username'];
-    $_SESSION['role'] = $_COOKIE['role'];
 
-    // Redirect based on role
-    switch ($_COOKIE['role']) {
-        case 'admin':
-            header("Location: ../admin/dashboard.php");
-            break;
-        case 'owner':
-            header("Location: ../owner/dashboard.php");
-            break;
-        case 'pelanggan':
-            header("Location: ../pelanggan/dashboard.php");
-            break;
-        default:
-            setcookie("username", "", time() - 3600, "/");
-            setcookie("role", "", time() - 3600, "/");
-            header("Location: login.php");
-            break;
+if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
+    // Validate role against known values
+    $valid_roles = ['admin', 'owner', 'pelanggan'];
+    
+    if (in_array($_COOKIE['role'], $valid_roles)) {
+        $_SESSION['username'] = $_COOKIE['username'];
+        $_SESSION['role'] = $_COOKIE['role'];
+        
+        // Redirect to appropriate dashboard
+        switch ($_COOKIE['role']) {
+            case 'admin':
+                header("Location: ../pages/admin/dashboard.php");
+                break;
+            case 'owner':
+                header("Location: ../pages/pemilik/dashboard.php");
+                break;
+            case 'pelanggan':
+                header("Location: ../pages/pelanggan/dashboard.php");
+                break;
+        }
+        exit;
+    } else {
+        // Invalid role - clear corrupted cookies
+        setcookie("username", "", time() - 3600, "/");
+        setcookie("role", "", time() - 3600, "/");
     }
-    exit;
 }
 ?>
 <!DOCTYPE html>
