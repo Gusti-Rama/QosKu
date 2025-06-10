@@ -1,9 +1,6 @@
 <?php
 session_start();
-
-// Debugging (remove after testing)
-// echo "<pre>Session: "; print_r($_SESSION); echo "</pre>";
-
+require "../../php/connect.php";
 // Check if user is logged in at all
 if (!isset($_SESSION['role'])) {
   header("Location: ../../pages/login.php?error=not_logged_in");
@@ -22,8 +19,15 @@ if (!in_array($role, $allowedRoles)) {
   exit;
 }
 
-// Optional: Verify the user still exists in database
-require_once '../../php/connect.php';
+// Fetch all rooms from database
+$query = "SELECT * FROM kamar_kos ORDER BY nomorKamar";
+$result = $connect->query($query);
+$rooms = [];
+if ($result) {
+  $rooms = $result->fetch_all(MYSQLI_ASSOC);
+}
+
+// Verify the user still exists in database
 $stmt = $connect->prepare("SELECT idAdmin FROM admin WHERE username = ? AND peran = ?");
 $stmt->bind_param("ss", $_SESSION['username'], $role);
 $stmt->execute();
@@ -148,30 +152,35 @@ if (!$stmt->get_result()->num_rows) {
               <h5 class="modal-title" id="tambahKamarModalLabel">Tambah Kamar Baru</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-              <form id="formTambahKamar">
+            <form method="POST" enctype="multipart/form-data" action="../../php/prosesowner.php">
+              <div class="modal-body">
                 <div class="mb-3">
-                  <label for="namaKamar" class="form-label">Nama Kamar</label>
-                  <input type="text" class="form-control" id="namaKamar" required>
+                  <label for="nomorKamar" class="form-label">Nomor Kamar</label>
+                  <input type="text" class="form-control" id="nomorKamar" name="nomorKamar" required>
                 </div>
                 <div class="mb-3">
-                  <label for="hargaKamar" class="form-label">Harga Kamar</label>
-                  <input type="number" class="form-control" id="hargaKamar" required>
+                  <label for="tipeKamar" class="form-label">Tipe Kamar</label>
+                  <input type="text" class="form-control" id="tipeKamar" name="tipeKamar" required>
                 </div>
                 <div class="mb-3">
-                  <label for="deskripsiKamar" class="form-label">Deskripsi Kamar</label>
-                  <textarea class="form-control" id="deskripsiKamar" rows="3"></textarea>
+                  <label for="harga" class="form-label">Harga Kamar</label>
+                  <input type="number" class="form-control" id="harga" name="harga" required>
+                </div>
+                <div class="mb-3">
+                  <label for="deskripsi" class="form-label">Deskripsi Kamar</label>
+                  <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
                 </div>
                 <div class="mb-3">
                   <label for="fotoKamar" class="form-label">Foto Kamar</label>
-                  <input class="form-control" type="file" id="fotoKamar" accept="image/*">
+                  <input class="form-control" type="file" id="fotoKamar" name="fotoKamar" accept="image/*">
                 </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-              <button type="button" class="btn btn-primary" id="simpanKamar">Simpan</button>
-            </div>
+                <input type="hidden" name="add_room" value="1">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -184,149 +193,60 @@ if (!$stmt->get_result()->num_rows) {
               <h5 class="modal-title" id="hapusKamarModalLabel">Hapus Kamar</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-              <form id="formHapusKamar">
+            <form method="POST" action="../../php/prosesowner.php">
+              <div class="modal-body">
                 <div class="mb-3">
-                  <label for="pilihKamar" class="form-label">Pilih Kamar yang akan dihapus</label>
-                  <select class="form-select" id="pilihKamar" required>
+                  <label for="idKamar" class="form-label">Pilih Kamar yang akan dihapus</label>
+                  <select class="form-select" id="idKamar" name="idKamar" required>
                     <option value="" selected disabled>Pilih kamar...</option>
-                    <option value="1">Kamar No. 1.1</option>
-                    <option value="2">Kamar No. 1.2</option>
-                    <option value="3">Kamar No. 1.3</option>
+                    <?php foreach ($rooms as $room): ?>
+                      <option value="<?= $room['idKamar'] ?>">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></option>
+                    <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="alert alert-warning">
                   <i class="bi bi-exclamation-triangle"></i> Perhatian: Aksi ini tidak dapat dibatalkan!
                 </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-              <button type="button" class="btn btn-danger" id="konfirmasiHapus">Hapus</button>
-            </div>
+                <input type="hidden" name="delete_room" value="1">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-danger">Hapus</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+
       <div class="row g-4 px-2">
-        <!-- Ulangi 9 kamar -->
-        <!-- Gunakan col-md-6 col-lg-4 agar tampil 3 per baris di layar besar -->
-
-        <!-- Kamar 1.1 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.1</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+        <?php foreach ($rooms as $room): ?>
+          <div class="col-md-4">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+              <?php
+              $imagePath = !empty($room['gambar']) ? "../../assets/img/" . $room['gambar'] : "../../assets/img/backgroundKamar.png";
+              ?>
+              <img src="<?= $imagePath ?>" class="card-img-top" alt="Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?>">
+              <div class="card-body">
+                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></h5>
+                <p class="card-text">
+                  <small class="text-muted">Tipe: <?= htmlspecialchars($room['tipeKamar']) ?></small><br>
+                  <small class="text-muted">Harga: Rp <?= number_format($room['harga'], 0, ',', '.') ?></small><br>
+                  <small class="text-muted">Status: <?= htmlspecialchars($room['statusKetersediaan']) ?></small>
+                </p>
+                <div class="d-flex justify-content-center my-4">
+                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        <?php endforeach; ?>
 
-        <!-- Kamar 1.2 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.2</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
+        <?php if (empty($rooms)): ?>
+          <div class="col-12 text-center py-5">
+            <h5>Belum ada kamar yang tersedia</h5>
+            <p>Tambahkan kamar baru menggunakan tombol di atas</p>
           </div>
-        </div>
-
-        <!-- Kamar 1.3 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.3</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.4 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.4</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.5 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.5</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.6 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.6</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.7 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.7</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.8 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.8</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kamar 1.9 -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
-            <div class="card-body">
-              <h5 class="card-title fw-bold">Kamar No. 1.9</h5>
-              <div class="d-flex justify-content-center my-4">
-                <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php endif; ?>
       </div>
 
 
@@ -338,57 +258,9 @@ if (!$stmt->get_result()->num_rows) {
     &copy; 2025, Made with ❤️ for QosKu
   </div>
   <script>
-    document.getElementById('simpanKamar').addEventListener('click', function() {
-      // Get form values
-      const namaKamar = document.getElementById('namaKamar').value;
-      const hargaKamar = document.getElementById('hargaKamar').value;
-      const deskripsiKamar = document.getElementById('deskripsiKamar').value;
-      const fotoKamar = document.getElementById('fotoKamar').files[0];
-
-      // Validate form
-      if (!namaKamar || !hargaKamar) {
-        alert('Nama kamar dan harga kamar wajib diisi!');
-        return;
-      }
-
-      // Process form data (you would typically send this to server via AJAX)
-      const formData = new FormData();
-      formData.append('nama', namaKamar);
-      formData.append('harga', hargaKamar);
-      formData.append('deskripsi', deskripsiKamar);
-      if (fotoKamar) formData.append('foto', fotoKamar);
-
-      // Here you would typically make an AJAX call to your backend
-      console.log('Data kamar:', {
-        namaKamar,
-        hargaKamar,
-        deskripsiKamar,
-        fotoKamar: fotoKamar ? fotoKamar.name : 'No file selected'
-      });
-
-      // Close modal after processing
-      bootstrap.Modal.getInstance(document.getElementById('tambahKamarModal')).hide();
-      alert('Kamar berhasil ditambahkan!');
-    });
-
-    document.getElementById('konfirmasiHapus').addEventListener('click', function() {
-      const selectedKamar = document.getElementById('pilihKamar');
-      const kamarId = selectedKamar.value;
-      const kamarName = selectedKamar.options[selectedKamar.selectedIndex].text;
-
-      if (!kamarId) {
-        alert('Silakan pilih kamar yang akan dihapus!');
-        return;
-      }
-
-      if (confirm(`Apakah Anda yakin ingin menghapus ${kamarName}?`)) {
-        // Here you would typically make an AJAX call to your backend
-        console.log('Menghapus kamar dengan ID:', kamarId);
-
-        // Close modal after processing
-        bootstrap.Modal.getInstance(document.getElementById('hapusKamarModal')).hide();
-        alert(`${kamarName} berhasil dihapus!`);
-      }
+    // No longer need the client-side form handling since we're using proper form submissions
+    document.addEventListener('DOMContentLoaded', function() {
+      // You can add any additional client-side functionality here
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
