@@ -1,3 +1,25 @@
+<?php
+session_start();
+require "../../php/connect.php";
+
+// Pastikan idKamar tersedia di URL
+if (!isset($_GET['idKamar'])) {
+    die("ID Kamar tidak ditemukan.");
+}
+
+$idKamar = intval($_GET['idKamar']); // pastikan berupa angka
+
+$query = "SELECT * FROM kamar_kos WHERE idKamar = $idKamar";
+$result = $connect->query($query);
+
+// Cek apakah kamar ditemukan
+if ($result && $result->num_rows > 0) {
+    $rooms = $result->fetch_assoc();
+} else {
+    die("Data kamar tidak ditemukan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,17 +112,15 @@
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="../../assets/img/Kamar1.png" class="card-img-top rounded-top-4" alt="Kamar 1">
+                            <img src="../../assets/img/<?= htmlspecialchars($rooms['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
                             <div class="card-body">
-                                <h5 class="card-title fw-bold">Kamar No. 1.15</h5>
-                                <p class="card-text">Harga: Rp600,000 / bulan</p>
-                                <p class="text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (diluar alat listrik tambahan). Terletak di lantai 1 yang memudahkan akses dan mobilitas.</p>
-                                <ul>
-                                    <li>Luas: 3m x 3m</li>
-                                    <li>Perabotan: Meja, kursi, kasur, lemari</li>
-                                    <li>Kamar mandi: dalam</li>
-                                </ul>
-                                <p class="fw-bold">Harga: Rp600,000/bulan</p>
+                                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($rooms['nomorKamar']) ?></h5>
+                                <p class="card-text">
+                                    <strong>Tipe:</strong> <?= htmlspecialchars($rooms['tipeKamar']) ?><br>
+                                    <strong>Harga:</strong> Rp <?= number_format($rooms['harga'], 0, ',', '.') ?><br>
+                                    <strong>Status:</strong> <?= htmlspecialchars($rooms['statusKetersediaan']) ?><br>
+                                    <strong>Deskripsi:</strong><br> <?= nl2br(htmlspecialchars($rooms['deskripsi'])) ?>
+                                </p>
                             </div>
                         </div>
                         <h6 class="fw-bold mt-4">Foto Lainnya</h6>

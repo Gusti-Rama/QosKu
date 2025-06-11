@@ -121,8 +121,8 @@ if ($result) {
                     <small class="text-muted">Status: <?= htmlspecialchars($room['statusKetersediaan']) ?></small>
                   </p>
                   <div class="d-flex justify-content-center my-4">
-                    <a href="detailkamar.php?idKamar=<?= urlencode($room['idKamar']) ?>" class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">
-                      Lihat Detail Kamar & Penghuni
+                    <a href="pesankamar.php?idKamar=<?= urlencode($room['idKamar']) ?>" class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">
+                      Pesan Sekarang
                     </a>
                   </div>
 
