@@ -32,7 +32,7 @@
                     </li>
                     <li class="nav-item mb-2">
                         <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
+                            <a href="pesan.php" class="nav-link text-secondary d-flex align-items-center gap-2">
                                 <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
                                     style="width: 32px; height: 32px;">
                                     <i class="bi bi-credit-card-fill" style="color: #4FD1C5;"></i>

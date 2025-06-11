@@ -1,3 +1,13 @@
+<?php
+session_start();
+require "../../php/connect.php";
+$query = "SELECT * FROM kamar_kos ORDER BY nomorKamar";
+$result = $connect->query($query);
+$rooms = [];
+if ($result) {
+  $rooms = $result->fetch_all(MYSQLI_ASSOC);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +17,8 @@
   <title>QosKu</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
@@ -16,7 +26,7 @@
   <div class="d-flex min-vh-100 ms-4 me-4">
     <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
       <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-        <img src="../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
       </a>
       <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
         <ul class="nav flex-column">
@@ -55,7 +65,7 @@
           </li>
         </ul>
         <div class="position-relative mt-auto rounded-4"
-          style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
+          style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
           <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
             <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
             <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
@@ -96,63 +106,38 @@
         </div>
 
         <div class="row g-4 px-2">
-          <!-- Kamar 1.10 -->
-          <div class="col-md-6 col-lg-6">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.10">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.10 (Rp600,000/bulan)</h5>
-                <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
-                <div class="d-flex justify-content-center my-4">
-                    <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-50">Pesan Sekarang</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php foreach ($rooms as $room): ?>
+            <div class="col-md-4">
+              <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <?php
+                $imagePath = !empty($room['gambar']) ? "../../assets/img/" . $room['gambar'] : "../../assets/img/backgroundKamar.png";
+                ?>
+                <img src="<?= $imagePath ?>" class="card-img-top" alt="Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?>">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></h5>
+                  <p class="card-text">
+                    <small class="text-muted">Tipe: <?= htmlspecialchars($room['tipeKamar']) ?></small><br>
+                    <small class="text-muted">Harga: Rp <?= number_format($room['harga'], 0, ',', '.') ?></small><br>
+                    <small class="text-muted">Status: <?= htmlspecialchars($room['statusKetersediaan']) ?></small>
+                  </p>
+                  <div class="d-flex justify-content-center my-4">
+                    <a href="detailkamar.php?idKamar=<?= urlencode($room['idKamar']) ?>" class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">
+                      Lihat Detail Kamar & Penghuni
+                    </a>
+                  </div>
 
-          <!-- Kamar 1.18 -->
-          <div class="col-md-6 col-lg-6">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.18">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.18 (Rp600,000/bulan)</h5>
-                <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
-                <div class="d-flex justify-content-center my-4">
-                    <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-50">Pesan Sekarang</button>
                 </div>
               </div>
             </div>
-          </div>
+          <?php endforeach; ?>
 
-          <!-- Kamar 2.1 -->
-          <div class="col-md-6 col-lg-6">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.1">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 2.1 (Rp750,000/bulan)</h5>
-                <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
-                <div class="d-flex justify-content-center my-4">
-                    <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-50">Pesan Sekarang</button>
-                </div>
-              </div>
+          <?php if (empty($rooms)): ?>
+            <div class="col-12 text-center py-5">
+              <h5>Belum ada kamar yang tersedia</h5>
+              <p>Tambahkan kamar baru menggunakan tombol di atas</p>
             </div>
-          </div>
-
-          <!-- Kamar 2.5 -->
-          <div class="col-md-6 col-lg-6">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 2.5">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 2.5 (Rp750,000/bulan)</h5>
-                <p class="card-text text-muted">Kamar Kos dengan perabotan lengkap. Sudah termasuk air dan listrik (di luar alat listrik tambahan).</p>
-                <div class="d-flex justify-content-center my-4">
-                    <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-50">Pesan Sekarang</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php endif; ?>
         </div>
-
       </div>
     </div>
   </div>

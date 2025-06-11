@@ -32,7 +32,18 @@ if (!$stmt->get_result()->num_rows) {
     header("Location: ../../pages/login.php?error=invalid_session");
     exit;
 }
+
+// Fetch all rooms from database
+$query = "SELECT * FROM kamar_kos ORDER BY nomorKamar";
+$result = $connect->query($query);
+$rooms = [];
+if ($result) {
+  $rooms = $result->fetch_all(MYSQLI_ASSOC);
+}
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -130,126 +141,36 @@ if (!$stmt->get_result()->num_rows) {
           </div>
         </div>
         <div class="row g-4 px-2">
-          <!-- Ulangi 9 kamar -->
-          <!-- Gunakan col-md-6 col-lg-4 agar tampil 3 per baris di layar besar -->
-
-          <!-- Kamar 1.1 -->
+        <?php foreach ($rooms as $room): ?>
           <div class="col-md-4">
             <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.1">
+              <?php
+              $imagePath = !empty($room['gambar']) ? "../../assets/img/" . $room['gambar'] : "../../assets/img/backgroundKamar.png";
+              ?>
+              <img src="<?= $imagePath ?>" class="card-img-top" alt="Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?>">
               <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.1</h5>
+                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></h5>
+                <p class="card-text">
+                  <small class="text-muted">Tipe: <?= htmlspecialchars($room['tipeKamar']) ?></small><br>
+                  <small class="text-muted">Harga: Rp <?= number_format($room['harga'], 0, ',', '.') ?></small><br>
+                  <small class="text-muted">Status: <?= htmlspecialchars($room['statusKetersediaan']) ?></small>
+                </p>
                 <div class="d-flex justify-content-center my-4">
                   <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
                 </div>
               </div>
             </div>
           </div>
+        <?php endforeach; ?>
 
-          <!-- Kamar 1.2 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.2">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.2</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
+        <?php if (empty($rooms)): ?>
+          <div class="col-12 text-center py-5">
+            <h5>Belum ada kamar yang tersedia</h5>
+            <p>Tambahkan kamar baru menggunakan tombol di atas</p>
           </div>
+        <?php endif; ?>
+      </div>
 
-          <!-- Kamar 1.3 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.3">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.3</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.4 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.4">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.4</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.5 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.5">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.5</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.6 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.6">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.6</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.7 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.7">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.7</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.8 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.8">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.8</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Kamar 1.9 -->
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <img src="../../assets/img/backgroundKamar.png" class="card-img-top" alt="Kamar No. 1.9">
-              <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. 1.9</h5>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
 
       </div>
