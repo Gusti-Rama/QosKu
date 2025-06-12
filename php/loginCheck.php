@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Set session variables
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = 'pelanggan';
+            $_SESSION['idPelanggan'] = $user['idPelanggan'];
 
             if (isset($_POST['ingat'])) {
                 setcookie("username", $user['username'], time() + (86400 * 30), "/");

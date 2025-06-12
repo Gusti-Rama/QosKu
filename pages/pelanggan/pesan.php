@@ -1,6 +1,13 @@
 <?php
 session_start();
 require "../../php/connect.php";
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'pelanggan') {
+  echo "<script>
+        alert('Silakan login sebagai pelanggan terlebih dahulu.');
+        window.location.href = '../../auth/login.php'; // sesuaikan path
+    </script>";
+  exit;
+}
 $query = "SELECT * FROM kamar_kos ORDER BY nomorKamar";
 $result = $connect->query($query);
 $rooms = [];

@@ -2,6 +2,15 @@
 session_start();
 require "../../php/connect.php";
 
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'pelanggan') {
+    echo "<script>
+        alert('Silakan login sebagai pelanggan terlebih dahulu.');
+        window.location.href = '../../auth/login.php'; // sesuaikan path
+    </script>";
+    exit;
+}
+
+
 // Pastikan idKamar tersedia di URL
 if (!isset($_GET['idKamar'])) {
     die("ID Kamar tidak ditemukan.");
@@ -156,16 +165,12 @@ if ($result && $result->num_rows > 0) {
                                 <input class="form-check-input" type="radio" name="metode">
                                 <label class="form-check-label">Transfer Bank</label>
                             </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="metode">
-                                <label class="form-check-label">QRIS</label>
-                            </div>
                             <hr>
                             <p>Subtotal <span class="float-end">Rp600,000</span></p>
                             <p>Promo <span class="float-end">-</span></p>
                             <hr>
                             <h5 class="fw-bold">Total <span class="float-end">Rp600,000</span></h5>
-                            <button class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">Bayar</button>
+                           <a href="formbayar.php" class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">Bayar</a>
                             <p class="mt-auto small text-muted">*Pembayaran diatas hanya untuk bulan, minggu, atau hari pertama. Tagihan anda berikutnya dapat dilakukan di menu Kamar Anda. Anda dapat mengubah jenis kamar pada pembayaran selanjutnya.</p>
                         </div>
                     </div>

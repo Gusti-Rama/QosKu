@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'pelanggan') {
+    echo "<script>
+        alert('Silakan login sebagai pelanggan terlebih dahulu.');
+        window.location.href = '../../auth/login.php'; // sesuaikan path
+    </script>";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
