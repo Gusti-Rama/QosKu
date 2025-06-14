@@ -31,7 +31,7 @@ if ($result) {
 
 <body class="bg-light">
   <div class="d-flex min-vh-100 ms-4 me-4">
-    <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
+    <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
       <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
         <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
       </a>

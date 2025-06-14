@@ -121,7 +121,7 @@ if ($result && $result->num_rows > 0) {
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="../../assets/img/<?= htmlspecialchars($rooms['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                            <img src="../../assets/img/<?= htmlspecialchars($rooms['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($rooms['nomorKamar']) ?>">
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($rooms['nomorKamar']) ?></h5>
                                 <p class="card-text">

@@ -4,11 +4,11 @@ session_start();
 if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
     // Validate role against known values
     $valid_roles = ['admin', 'owner', 'pelanggan'];
-    
+
     if (in_array($_COOKIE['role'], $valid_roles)) {
         $_SESSION['username'] = $_COOKIE['username'];
         $_SESSION['role'] = $_COOKIE['role'];
-        
+
         // Redirect to appropriate dashboard
         switch ($_COOKIE['role']) {
             case 'admin':
@@ -30,7 +30,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -43,9 +43,23 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
 </head>
 
 <body>
-    <?php if (isset($_GET['pesan']) && $_GET['pesan'] === 'gagal') : ?>
+    <?php if (isset($_GET['pesan'])) : ?>
         <div class="position-fixed top-50 start-50 translate-middle alert alert-danger text-center fw-semibold rounded-4 shadow" style="z-index: 1050; width: 300px;">
-            Username atau password salah!
+            <?php
+            switch ($_GET['pesan']) {
+                case 'gagal':
+                    echo "Username atau Password Salah!";
+                    break;
+                case 'username_kosong':
+                    echo "Username Wajib diisi!";
+                    break;
+                case 'password_kosong':
+                    echo "Password Wajib diisi!";
+                    break;
+                default:
+                    echo "Ada Kesalahan saat Login!";
+            }
+            ?>
         </div>
     <?php endif; ?>
     <div class="position-fixed top-0 start-50 translate-middle-x mt-4 mx-4" style="z-index: 10; width: 70%;">

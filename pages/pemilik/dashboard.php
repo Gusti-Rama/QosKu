@@ -1,35 +1,43 @@
 <?php
 session_start();
 require "../../php/connect.php";
-// Check if user is logged in at all
 if (!isset($_SESSION['role'])) {
   header("Location: ../../pages/login.php?error=not_logged_in");
   exit;
 }
 
-// Normalize role to lowercase for consistent comparison
-$role = strtolower($_SESSION['role']);
+$peran = strtolower($_SESSION['role']);
 
-// Define allowed roles for admin pages
-$allowedRoles = ['owner'];
+$diperbolehkan = ['owner'];
 
-// Check if user has required role
-if (!in_array($role, $allowedRoles)) {
-  header("Location: ../../pages/login.php?error=access_denied");
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?error=Akses_Ditolak");
   exit;
 }
 
-// Fetch all rooms from database
-$query = "SELECT * FROM kamar_kos ORDER BY nomorKamar";
-$result = $connect->query($query);
-$rooms = [];
-if ($result) {
-  $rooms = $result->fetch_all(MYSQLI_ASSOC);
+// Pagination
+$perPage = 6;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $perPage;
+
+// Count total rooms
+$countQuery = "SELECT COUNT(*) AS total FROM kamar_kos";
+$countResult = $connect->query($countQuery);
+$totalRooms = $countResult->fetch_assoc()['total'];
+$totalPages = ceil($totalRooms / $perPage);
+
+// Fetch rooms for the current page
+$query = "SELECT * FROM kamar_kos ORDER BY nomorKamar LIMIT $perPage OFFSET $offset";
+$hasil = $connect->query($query);
+$kamar = [];
+if ($hasil) {
+  $kamar = $hasil->fetch_all(MYSQLI_ASSOC);
 }
 
 // Verify the user still exists in database
 $stmt = $connect->prepare("SELECT idAdmin FROM admin WHERE username = ? AND peran = ?");
-$stmt->bind_param("ss", $_SESSION['username'], $role);
+$stmt->bind_param("ss", $_SESSION['username'], $peran);
 $stmt->execute();
 if (!$stmt->get_result()->num_rows) {
   session_destroy();
@@ -53,78 +61,10 @@ if (!$stmt->get_result()->num_rows) {
 
 <body class="bg-light">
   <div class="d-flex min-vh-100 ms-4 me-4">
-    <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
-      <a class="navbar-brand fw-bold fs-4 pt-3 border-bottom" href="#" style="color: #2D3748;">
-        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu Owner
-      </a>
-      <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <div class="bg-white rounded-4 shadow-sm py-2 px-2 d-flex align-items-center">
-              <a href="#" class="nav-link text-dark fw-bold d-flex align-items-center gap-2">
-                <span class="d-flex justify-content-center align-items-center rounded-3"
-                  style="width: 32px; height: 32px; background-color: #4FD1C5;">
-                  <i class="bi bi-house-door-fill text-white"></i>
-                </span>
-                List Kamar
-              </a>
-            </div>
-          </li>
-          <li class="nav-item mb-2">
-            <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-              <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                  style="width: 32px; height: 32px;">
-                  <i class="bi bi-credit-card-fill" style="color: #4FD1C5;"></i>
-                </span>
-                Laporan
-              </a>
-            </div>
-          </li>
-          <li class="nav-item mb-2">
-            <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-              <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                  style="width: 32px; height: 32px;">
-                  <i class="bi bi-person-fill" style="color: #4FD1C5;"></i>
-                </span>
-                Profil
-              </a>
-            </div>
-          </li>
-        </ul>
-        <div class="position-relative mt-auto rounded-4"
-          style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
-          <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
-            <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
-            <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
-            <button class="btn btn-sm btn-light w-100 rounded-3 fw-bold">Kontak</button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <?php include '../../layout/pemilikNavbar.php'; ?>
 
     <div class="flex-grow-1">
-      <div class="d-flex justify-content-between mt-4 px-4 pt-3 bg-transparent">
-        <div>
-          <p class="mb-0 fs-6 text-secondary">Pages <b>/ List Kamar</b></p>
-          <p class="fs-5 fw-bold">List Kamar</p>
-        </div>
-        <div class="d-flex align-items-start gap-3">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text bg-white rounded-4 border-end-0 rounded-end-0">
-              <i class="bi bi-search"></i>
-            </span>
-            <input type="text" class="form-control border-start-0 rounded-4 rounded-start-0" placeholder="Pencarian">
-          </div>
-          <div class="d-flex align-items-center gap-1">
-            <i class="bi bi-person-fill fs-5"></i>
-            <span class="fs-6">Profil</span>
-          </div>
-          <i class="bi bi-gear-fill fs-5"></i>
-          <i class="bi bi-bell-fill fs-5"></i>
-        </div>
-      </div>
+      <?php include '../../layout/pemilikHeader.php'; ?>
 
       <div class="container-fluid pt-4 pb-3">
         <div class="d-flex justify-content-between align-items-center mb-3 px-2">
@@ -199,7 +139,7 @@ if (!$stmt->get_result()->num_rows) {
                   <label for="idKamar" class="form-label">Pilih Kamar yang akan dihapus</label>
                   <select class="form-select" id="idKamar" name="idKamar" required>
                     <option value="" selected disabled>Pilih kamar...</option>
-                    <?php foreach ($rooms as $room): ?>
+                    <?php foreach ($kamar as $room): ?>
                       <option value="<?= $room['idKamar'] ?>">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></option>
                     <?php endforeach; ?>
                   </select>
@@ -219,37 +159,68 @@ if (!$stmt->get_result()->num_rows) {
       </div>
 
       <div class="row g-4 px-2">
-        <?php foreach ($rooms as $room): ?>
-          <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-              <?php
-              $imagePath = !empty($room['gambar']) ? "../../assets/img/" . $room['gambar'] : "../../assets/img/backgroundKamar.png";
-              ?>
-              <img src="<?= $imagePath ?>" class="card-img-top" alt="Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?>">
+        <?php foreach ($kamar as $room): ?>
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+              <img src="<?= !empty($room['gambar']) ? '../../assets/img/' . $room['gambar'] : '../../assets/img/backgroundKamar.png' ?>"
+                class="card-img-top"
+                alt="Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?>"
+                style="height: 200px; object-fit: cover;">
               <div class="card-body">
-                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></h5>
+                <div class="d-flex justify-content-between align-items-start">
+                  <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($room['nomorKamar']) ?></h5>
+                  <span class="badge bg-<?= $room['statusKetersediaan'] === 'Tersedia' ? 'success' : 'danger' ?>">
+                    <?= htmlspecialchars($room['statusKetersediaan']) ?>
+                  </span>
+                </div>
                 <p class="card-text">
-                  <small class="text-muted">Tipe: <?= htmlspecialchars($room['tipeKamar']) ?></small><br>
-                  <small class="text-muted">Harga: Rp <?= number_format($room['harga'], 0, ',', '.') ?></small><br>
-                  <small class="text-muted">Status: <?= htmlspecialchars($room['statusKetersediaan']) ?></small>
+                  <span class="d-block">Tipe: <?= htmlspecialchars($room['tipeKamar']) ?></span>
+                  <span class="d-block">Harga: Rp <?= number_format($room['harga'], 0, ',', '.') ?></span>
                 </p>
-                <div class="d-flex justify-content-center my-4">
-                  <button class="btn btn-light text-dark px-4 rounded-3 fw-bold w-100">Lihat Detail Kamar & Penghuni</button>
+                <p class="card-text small text-muted"><?= nl2br(htmlspecialchars($room['deskripsi'])) ?></p>
+              </div>
+              <div class="card-footer bg-white border-0">
+                <div class="d-grid">
+                  <a href="detailkamar.php?id=<?= $room['idKamar'] ?>" class="btn btn-outline-primary rounded-3">
+                    Lihat Detail & Fasilitas
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         <?php endforeach; ?>
+        <?php if ($totalPages > 1): ?>
+          <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+              <?php if ($page > 1): ?>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<?= $page - 1 ?>">Previous</a>
+                </li>
+              <?php endif; ?>
 
-        <?php if (empty($rooms)): ?>
+              <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                  <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+              <?php endfor; ?>
+
+              <?php if ($page < $totalPages): ?>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<?= $page + 1 ?>">Next</a>
+                </li>
+              <?php endif; ?>
+            </ul>
+          </nav>
+        <?php endif; ?>
+
+
+        <?php if (empty($kamar)): ?>
           <div class="col-12 text-center py-5">
             <h5>Belum ada kamar yang tersedia</h5>
             <p>Tambahkan kamar baru menggunakan tombol di atas</p>
           </div>
         <?php endif; ?>
       </div>
-
-
     </div>
   </div>
   </div>
@@ -258,10 +229,7 @@ if (!$stmt->get_result()->num_rows) {
     &copy; 2025, Made with ❤️ for QosKu
   </div>
   <script>
-    // No longer need the client-side form handling since we're using proper form submissions
-    document.addEventListener('DOMContentLoaded', function() {
-      // You can add any additional client-side functionality here
-    });
+    document.addEventListener('DOMContentLoaded', function() {});
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

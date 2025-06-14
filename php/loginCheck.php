@@ -6,7 +6,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = htmlspecialchars($_POST["username"]);
     $password = htmlspecialchars($_POST['password']);
 
-    // Check admin table first
+    // Add to loginCheck.php before processing
+    if (empty(trim($username))) {
+        header("location: ../pages/login.php?pesan=username_kosong");
+        exit;
+    }
+
+    if (empty($password)) {
+        header("location: ../pages/login.php?pesan=password_kosong");
+        exit;
+    }
+
     $queryAdmin = "SELECT * FROM `admin` WHERE username = ?";
     $stmtAdmin = $connect->prepare($queryAdmin);
     $stmtAdmin->bind_param("s", $username);
@@ -34,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Check pelanggan table
     $queryPelanggan = "SELECT * FROM `pelanggan` WHERE username = ?";
     $stmtPelanggan = $connect->prepare($queryPelanggan);
     $stmtPelanggan->bind_param("s", $username);

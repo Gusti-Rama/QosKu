@@ -3,7 +3,7 @@ body {
 }
 
 .full-height {
-    height: 100vh;
+  height: 100vh;
 }
 
 .form-check-input:checked {
@@ -16,8 +16,8 @@ body {
 }
 
 .background-half {
-      background: url('../img/backgroundpanjang.png') center/cover no-repeat;
-      height: 65vh;
-      background-size: cover;
-      background-position: center;
-    }
+  background: url("../img/backgroundpanjang.png") center/cover no-repeat;
+  height: 65vh;
+  background-size: cover;
+  background-position: center;
+}

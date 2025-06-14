@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,30 +8,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $namalengkap = trim($_POST['namalengkap']);
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'] ?? '';
 
-    // Enhanced validation
     $errors = [];
 
-    if (empty($username)) {
-        $errors[] = "Username wajib diisi!";
-    } elseif (strlen($username) < 4) {
-        $errors[] = "Username minimal 4 karakter!";
+    if (strlen($username) < 4) {
+        header("Location: ../pages/daftar.php?error=short_username");
+        exit;
     }
 
-    if (empty($namalengkap)) {
-        $errors[] = "Nama lengkap wajib diisi!";
-    } 
-
-    if (empty($email)) {
-        $errors[] = "Email wajib diisi!";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Format email tidak valid!";
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header("Location: ../pages/daftar.php?error=invalid_email");
+        exit;
     }
 
-    if (empty($password)) {
-        $errors[] = "Password wajib diisi!";
-    } elseif (strlen($password) < 8) {
-        $errors[] = "Password minimal 8 karakter!";
+    if (strlen($password) < 8) {
+        header("Location: ../pages/daftar.php?error=short_password");
+        exit;
+    }
+
+    if ($password !== $confirm_password) {
+        header("Location: ../pages/daftar.php?error=password_mismatch");
+        exit;
     }
 
     if (!empty($errors)) {
@@ -46,10 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $existing = $result->fetch_assoc();
-        $error = ($existing['username'] === $username)
-            ? "Username sudah terdaftar!"
-            : "Email sudah terdaftar!";
-        echo "<script>alert('$error'); window.history.back();</script>";
+        $error = ($existing['username'] === $username) ? 'username_exists' : 'email_exists';
+        header("Location: ../pages/daftar.php?error=$error");
         exit;
     }
 
