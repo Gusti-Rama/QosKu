@@ -130,6 +130,28 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
             setTimeout(() => alert.remove(), 500);
         }
     }, 3000); // Hide after 3 seconds
+    let lastScroll = 0;
+    const navbar = document.querySelector('.navbar');
+
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll <= 0) {
+            // At top of page - always show navbar
+            navbar.classList.remove('navbar-hidden');
+            return;
+        }
+
+        if (currentScroll > lastScroll) {
+            // Scrolling down - hide navbar
+            navbar.classList.add('navbar-hidden');
+        } else if (currentScroll < lastScroll) {
+            // Scrolling up - show navbar
+            navbar.classList.remove('navbar-hidden');
+        }
+
+        lastScroll = currentScroll;
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

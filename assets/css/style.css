@@ -21,3 +21,11 @@ body {
   background-size: cover;
   background-position: center;
 }
+
+.navbar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
+}
