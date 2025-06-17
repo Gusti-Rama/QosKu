@@ -51,9 +51,6 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                 </div>
             </div>
         </div>
-
-        <i class="bi bi-gear-fill fs-5 text-secondary"></i>
-        <i class="bi bi-bell-fill fs-5 text-secondary"></i>
     </div>
 </div>
 
