@@ -65,6 +65,7 @@ $totalCost = $roomPrice + $additionalCostsTotal;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,27 +89,27 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4 position-relative">
                             <!-- Main Image -->
-                            <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar'] ?? 'room-placeholder.jpg') ?>" 
-                                 class="card-img-top rounded-top-4" 
-                                 alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>"
-                                 style="height: 400px; object-fit: cover;">
-                            
+                            <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar'] ?? 'room-placeholder.jpg') ?>"
+                                class="card-img-top rounded-top-4"
+                                alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>"
+                                style="height: 400px; object-fit: cover;">
+
                             <div class="card-body pb-5">
                                 <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($kamar['nomorKamar']) ?></h5>
                                 <p class="card-text">Harga: Rp<?= number_format($kamar['harga'], 0, ',', '.') ?> / bulan</p>
                                 <p class="text-muted"><?= nl2br(htmlspecialchars($kamar['deskripsi'])) ?></p>
-                                
+
                                 <!-- Facilities -->
                                 <h6 class="fw-bold mt-4">Fasilitas Kamar</h6>
                                 <ul>
                                     <?php if ($kamar['luasKamar']): ?>
                                         <li>Luas: <?= htmlspecialchars($kamar['luasKamar']) ?></li>
                                     <?php endif; ?>
-                                    
+
                                     <?php if ($kamar['perabotan']): ?>
                                         <li>Perabotan: <?= htmlspecialchars($kamar['perabotan']) ?></li>
                                     <?php endif; ?>
-                                    
+
                                     <?php if ($kamar['kamarMandi']): ?>
                                         <li>Kamar mandi: <?= htmlspecialchars($kamar['kamarMandi']) ?></li>
                                     <?php endif; ?>
@@ -140,10 +141,10 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                             <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                             <div class="d-flex gap-3 flex-wrap">
                                 <?php foreach ($additionalImages as $image): ?>
-                                    <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>" 
-                                         class="img-thumbnail rounded-3" 
-                                         style="width: 100px; height: 80px; object-fit: cover;" 
-                                         alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                    <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>"
+                                        class="img-thumbnail rounded-3"
+                                        style="width: 100px; height: 80px; object-fit: cover;"
+                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -155,8 +156,8 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                             <?php if ($occupant): ?>
                                 <!-- Resident Information -->
                                 <div class="text-center mb-4">
-                                    <div class="d-inline-block bg-secondary rounded-circle mb-2" 
-                                         style="width: 100px; height: 100px; line-height: 100px;">
+                                    <div class="d-inline-block bg-secondary rounded-circle mb-2"
+                                        style="width: 100px; height: 100px; line-height: 100px;">
                                         <span class="text-white fs-1"><?= substr($occupant['namaLengkap'], 0, 1) ?></span>
                                     </div>
                                     <h5 class="fw-bold mb-1"><?= htmlspecialchars($occupant['namaLengkap']) ?></h5>
@@ -169,15 +170,15 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                                 </div>
                             <?php endif; ?>
 
-                            <!-- Electricity Appliances List -->
                             <div id="appliancesList">
                                 <h6 class="fw-bold mb-3">Biaya Tambahan</h6>
-                                
+
                                 <?php if ($additionalCosts): ?>
                                     <ul class="list-group mb-3">
                                         <?php foreach ($additionalCosts as $cost): ?>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <?= htmlspecialchars($cost['jenisBiaya']) ?>
+                                                <?= htmlspecialchars($cost['namaBiaya']) ?>
+                                                (<?= htmlspecialchars($cost['jenisBiaya']) ?>)
                                                 <span>Rp<?= number_format($cost['jumlahBiaya'], 0, ',', '.') ?></span>
                                             </li>
                                         <?php endforeach; ?>
@@ -188,8 +189,8 @@ $totalCost = $roomPrice + $additionalCostsTotal;
 
                                 <?php if ($occupant): ?>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button id="addButton" class="btn btn-primary me-md-2" 
-                                                style="background-color: #4FD1C5; border: none;">
+                                        <button id="addButton" class="btn btn-primary me-md-2"
+                                            style="background-color: #4FD1C5; border: none;">
                                             <i class="bi bi-plus"></i> Tambah
                                         </button>
                                     </div>
@@ -198,23 +199,31 @@ $totalCost = $roomPrice + $additionalCostsTotal;
 
                             <!-- Add Form (hidden by default) -->
                             <div id="addForm" class="mb-3" style="display: none;">
-                                <h6 class="fw-bold mb-3">Tambah Alat Listrik</h6>
+                                <h6 class="fw-bold mb-3">Tambah Biaya Tambahan</h6>
                                 <form id="addCostForm" method="POST" action="../../php/prosesowner.php">
                                     <div class="mb-3">
-                                        <label for="applianceName" class="form-label">Nama Alat</label>
-                                        <input type="text" class="form-control" id="applianceName" name="jenisBiaya" required>
+                                        <label for="namabiaya" class="form-label">Nama Biaya</label>
+                                        <input type="text" class="form-control" id="namabiaya" name="namabiaya" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="applianceCost" class="form-label">Biaya</label>
-                                        <input type="number" class="form-control" id="applianceCost" name="jumlahBiaya" required>
+                                        <label for="jumlahbiaya" class="form-label">Harga</label>
+                                        <input type="number" class="form-control" id="jumlahbiaya" name="jumlahbiaya" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jenisbiaya" class="form-label">Jenis Biaya</label>
+                                        <select class="form-select" name="jenisbiaya" aria-label="Jenis Biaya">
+                                            <option value="Listrik">Listrik</option>
+                                            <option value="Air">Air</option>
+                                            <option value="Lainnya">Lainnya</option>
+                                        </select>
                                     </div>
                                     <input type="hidden" name="idPelanggan" value="<?= $occupant['idPelanggan'] ?? '' ?>">
                                     <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
                                     <input type="hidden" name="add_cost" value="1">
-                                    
+
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button type="submit" class="btn btn-primary me-md-2" 
-                                                style="background-color: #4FD1C5; border: none;">
+                                        <button type="submit" class="btn btn-primary me-md-2"
+                                            style="background-color: #4FD1C5; border: none;">
                                             Simpan
                                         </button>
                                         <button type="button" id="cancelAddButton" class="btn btn-outline-secondary">
@@ -232,14 +241,14 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                                     <span>Subtotal (Kamar)</span>
                                     <span>Rp<?= number_format($roomPrice, 0, ',', '.') ?></span>
                                 </div>
-                                
+
                                 <?php if ($additionalCosts): ?>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span>Tambahan Alat Listrik</span>
                                         <span>Rp<?= number_format($additionalCostsTotal, 0, ',', '.') ?></span>
                                     </div>
                                 <?php endif; ?>
-                                
+
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold">
                                     <span>Total</span>
@@ -265,23 +274,23 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                     <div class="modal-body">
                         <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
                         <input type="hidden" name="edit_room" value="1">
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editNamaKamar" class="form-label">Nomor Kamar</label>
-                                    <input type="text" class="form-control" id="editNamaKamar" 
-                                           name="nomorKamar" value="<?= htmlspecialchars($kamar['nomorKamar'] ?? '') ?>" required>
+                                    <input type="text" class="form-control" id="editNamaKamar"
+                                        name="nomorKamar" value="<?= htmlspecialchars($kamar['nomorKamar'] ?? '') ?>" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editHargaKamar" class="form-label">Harga Kamar</label>
-                                    <input type="number" class="form-control" id="editHargaKamar" 
-                                           name="harga" value="<?= $kamar['harga'] ?? '' ?>" required>
+                                    <input type="number" class="form-control" id="editHargaKamar"
+                                        name="harga" value="<?= $kamar['harga'] ?? '' ?>" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editLuasKamar" class="form-label">Luas Kamar</label>
-                                    <input type="text" class="form-control" id="editLuasKamar" 
-                                           name="luasKamar" value="<?= htmlspecialchars($kamar['luasKamar'] ?? '') ?>">
+                                    <input type="text" class="form-control" id="editLuasKamar"
+                                        name="luasKamar" value="<?= htmlspecialchars($kamar['luasKamar'] ?? '') ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -291,8 +300,8 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                                     <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
                                 </div>
                                 <div class="current-image">
-                                    <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar'] ?? 'room-placeholder.jpg') ?>" 
-                                         class="img-thumbnail" width="150" alt="Current Image">
+                                    <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar'] ?? 'room-placeholder.jpg') ?>"
+                                        class="img-thumbnail" width="150" alt="Current Image">
                                 </div>
                             </div>
                         </div>
@@ -307,17 +316,17 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                         <div class="mb-3">
                             <label class="form-label">Kamar Mandi</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiDalam" 
-                                       value="dalam" <?= ($kamar['kamarMandi'] ?? '') === 'dalam' ? 'checked' : '' ?>>
+                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiDalam"
+                                    value="dalam" <?= ($kamar['kamarMandi'] ?? '') === 'dalam' ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="editKamarMandiDalam">Dalam</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiLuar" 
-                                       value="luar" <?= ($kamar['kamarMandi'] ?? '') === 'luar' ? 'checked' : '' ?>>
+                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiLuar"
+                                    value="luar" <?= ($kamar['kamarMandi'] ?? '') === 'luar' ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="editKamarMandiLuar">Luar</label>
                             </div>
                         </div>
-                        
+
                         <!-- Add Images Form -->
                         <div class="mb-3">
                             <label for="additionalImages" class="form-label">Tambah Foto Lainnya</label>
@@ -342,7 +351,7 @@ $totalCost = $roomPrice + $additionalCostsTotal;
     <div class="footer text-center mt-5 pt-5">
         &copy; 2025, Made with ❤️ for QosKu
     </div>
-    
+
     <script>
         // Add cost form toggle
         document.getElementById('addButton')?.addEventListener('click', function() {
@@ -370,7 +379,8 @@ $totalCost = $roomPrice + $additionalCostsTotal;
             document.getElementById('editKamarTitle').textContent = kamarId;
         });
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

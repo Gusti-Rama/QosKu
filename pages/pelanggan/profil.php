@@ -24,15 +24,15 @@
                 <div
                     class="position-absolute"
                     style="bottom: 0; left: 0; right: 0; transform: translateY(50%); padding: 0 1rem;">
-                    <div class="bg-white rounded-4 shadow-sm d-flex align-items-center p-3 mx-auto" style="max-width: 1150px;">
+                    <div class="bg-white bg-opacity-75 rounded-4 shadow-sm d-flex align-items-center p-3 mx-auto border border-white border-2" style="max-width: 1150px;">
                         <img
                             src="../assets/img/profilePic.png"
                             alt="Profile Pic"
                             class="rounded-circle me-3"
                             style="width:60px; height:60px; object-fit:cover;" />
                         <div>
-                            <p class="mb-0 fw-bold">John Doe</p>
-                            <p class="mb-0 text-muted small">john.doe@example.com</p>
+                            <p class="mb-0 fw-bold text-dark">John Doe</p>
+                            <p class="mb-0 text-dark small">john.doe@example.com</p>
                         </div>
                     </div>
                 </div>

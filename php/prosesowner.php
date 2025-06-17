@@ -161,15 +161,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_cost'])) {
         $idPelanggan = (int)$_POST['idPelanggan'];
         $idKamar = (int)$_POST['idKamar'];
-        $jenisBiaya = trim($_POST['jenisBiaya']);
-        $jumlahBiaya = (int)$_POST['jumlahBiaya'];
-        $periode = date('Y-m'); // Current month
+        $namaBiaya = trim($_POST['namabiaya']);
+        $jenisBiaya = trim($_POST['jenisbiaya']);
+        $jumlahBiaya = (int)$_POST['jumlahbiaya'];
+        $periode = date('Y-m');
 
         $stmt = $connect->prepare("
-            INSERT INTO biaya_tambahan (jenisBiaya, jumlahBiaya, Periode, statusPembayaran, idPelanggan) 
-            VALUES (?, ?, ?, 'belum_lunas', ?)
+            INSERT INTO biaya_tambahan (namaBiaya, jumlahBiaya, Periode, statusPembayaran, idPelanggan, jenisBiaya) 
+            VALUES (?, ?, ?, 'belum_lunas', ?, ?)
         ");
-        $stmt->bind_param("sisi", $jenisBiaya, $jumlahBiaya, $periode, $idPelanggan);
+        $stmt->bind_param("sisis", $namaBiaya, $jumlahBiaya, $periode ,$idPelanggan, $jenisBiaya);
 
         if ($stmt->execute()) {
             $_SESSION['success'] = "Biaya tambahan berhasil ditambahkan!";
