@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2025 at 12:20 PM
+-- Generation Time: Jun 17, 2025 at 12:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.3.13
 
@@ -154,17 +154,18 @@ CREATE TABLE `pelanggan` (
   `namaLengkap` varchar(255) NOT NULL,
   `nomorHp` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `alamat` varchar(255) NOT NULL
+  `alamat` varchar(255) NOT NULL,
+  `profilePicture` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pelanggan`
 --
 
-INSERT INTO `pelanggan` (`idPelanggan`, `username`, `password`, `namaLengkap`, `nomorHp`, `email`, `alamat`) VALUES
-(1, 'rama', '123', 'gusti rama', '123', 'rama@mail.com', 'jalan'),
-(2, 'adis', '$2y$10$LoOeuxlNk355xUqwXbYnwOohp/NAVISmwU5opif2oVwDY.wzVK3EO', 'Adi Setya', '-', 'adi@gmail.com', '-'),
-(6, 'jokowi', '$2y$10$t69fabhRQAkT5lOoOWmzieZJrR0S9bFNeeuLU.RjK09BdP1niXLWG', 'jkw dodo', '-', 'jkw@gmail.com', '-');
+INSERT INTO `pelanggan` (`idPelanggan`, `username`, `password`, `namaLengkap`, `nomorHp`, `email`, `alamat`, `profilePicture`) VALUES
+(1, 'rama', '123', 'gusti rama', '123', 'rama@mail.com', 'jalan', ''),
+(2, 'adis', '$2y$10$LoOeuxlNk355xUqwXbYnwOohp/NAVISmwU5opif2oVwDY.wzVK3EO', 'Adi Setya', '082108210821', 'adi@gmail.com', 'Jl. Jalan No. 22', '68515fb236d78_images (2).jpg'),
+(6, 'jokowi', '$2y$10$t69fabhRQAkT5lOoOWmzieZJrR0S9bFNeeuLU.RjK09BdP1niXLWG', 'jkw dodo', '-', 'jkw@gmail.com', '-', '');
 
 -- --------------------------------------------------------
 
