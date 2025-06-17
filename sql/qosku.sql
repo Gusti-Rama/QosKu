@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 01:40 PM
+-- Generation Time: Jun 17, 2025 at 07:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.3.13
 
@@ -31,10 +31,17 @@ CREATE TABLE `admin` (
   `idAdmin` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `namaAdmin` int(11) NOT NULL,
-  `peran` varchar(255) NOT NULL,
-  `idLaporan` int(11) NOT NULL
+  `namaAdmin` varchar(255) NOT NULL,
+  `peran` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`idAdmin`, `username`, `password`, `namaAdmin`, `peran`) VALUES
+(1, 'admin', '$2y$10$kw4byBCIw2RqFXB57QTmgua97xhV30m7BHeZ47ue4eB.wPTGpjvy2', 'Aku Admin', 'admin'),
+(2, 'owner', '$2y$10$hHHOlI4bJ1.NGKgtMewi0.PqJ1nPx111mkpdj4cgfiUMrm3ciPBaq', 'Aku Owner', 'owner');
 
 -- --------------------------------------------------------
 
@@ -49,7 +56,8 @@ CREATE TABLE `biaya_tambahan` (
   `Periode` varchar(255) NOT NULL,
   `statusPembayaran` varchar(255) NOT NULL,
   `idPelanggan` int(11) NOT NULL,
-  `idPembayaran` int(11) NOT NULL
+  `idPemesanan` int(11) NOT NULL,
+  `jenis_pembayaran` enum('Listrik','Air','Lainnya') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -69,6 +77,18 @@ CREATE TABLE `fasilitas` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `kamar_images`
+--
+
+CREATE TABLE `kamar_images` (
+  `idImage` int(11) NOT NULL,
+  `idKamar` int(11) NOT NULL,
+  `image_path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `kamar_kos`
 --
 
@@ -77,10 +97,20 @@ CREATE TABLE `kamar_kos` (
   `nomorKamar` int(11) NOT NULL,
   `tipeKamar` varchar(255) NOT NULL,
   `harga` int(11) NOT NULL,
-  `statusKetersediaan` varchar(255) NOT NULL,
+  `statusKetersediaan` enum('Tersedia','Ditempati','Dalam Perbaikan') NOT NULL DEFAULT 'Tersedia',
   `deskripsi` varchar(255) NOT NULL,
   `gambar` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kamar_kos`
+--
+
+INSERT INTO `kamar_kos` (`idKamar`, `nomorKamar`, `tipeKamar`, `harga`, `statusKetersediaan`, `deskripsi`, `gambar`) VALUES
+(1, 1, 'asd', 600000, 'Ditempati', 'ini kamar', '6848260ab1a2c_Kamar1.png'),
+(4, 4, 'asdasd', 123123123, 'Tersedia', 'asdasd', ''),
+(5, 5, 'asdasd', 123123, 'Tersedia', 'asdad', '68483de0a1729_Kamar2.png'),
+(7, 8, 'asd', 800000, 'Tersedia', 'kamar kos', '684938a9555c6_Kamar3.png');
 
 -- --------------------------------------------------------
 
@@ -93,9 +123,7 @@ CREATE TABLE `laporan` (
   `periodeLaporan` varchar(255) NOT NULL,
   `totalProfit` int(11) NOT NULL,
   `totalOmset` int(11) NOT NULL,
-  `totalPengeluaran` int(11) NOT NULL,
-  `idPembayaran` int(11) NOT NULL,
-  `idPengeluaran` int(11) NOT NULL
+  `totalPengeluaran` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -111,10 +139,16 @@ CREATE TABLE `pelanggan` (
   `namaLengkap` varchar(255) NOT NULL,
   `nomorHp` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `alamat` varchar(255) NOT NULL,
-  `idPemesanan` int(11) NOT NULL,
-  `idPembayaran` int(11) NOT NULL
+  `alamat` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pelanggan`
+--
+
+INSERT INTO `pelanggan` (`idPelanggan`, `username`, `password`, `namaLengkap`, `nomorHp`, `email`, `alamat`) VALUES
+(1, 'rama', '123', 'gusti rama', '123', 'rama@mail.com', 'jalan'),
+(2, 'adis', '$2y$10$LoOeuxlNk355xUqwXbYnwOohp/NAVISmwU5opif2oVwDY.wzVK3EO', 'Adi Setya', '-', 'adi@gmail.com', '-');
 
 -- --------------------------------------------------------
 
@@ -128,9 +162,20 @@ CREATE TABLE `pembayaran` (
   `metodePembayaran` varchar(255) NOT NULL,
   `jumlahPembayaran` int(11) NOT NULL,
   `statusPembayaran` varchar(255) NOT NULL,
-  `idPelanggan` int(11) NOT NULL,
+  `bukti_transfer` varchar(255) DEFAULT NULL,
   `idPemesanan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pembayaran`
+--
+
+INSERT INTO `pembayaran` (`idPembayaran`, `tanggalPembayaran`, `metodePembayaran`, `jumlahPembayaran`, `statusPembayaran`, `bukti_transfer`, `idPemesanan`) VALUES
+(1, '2025-06-15', 'cash', 600000, 'Menunggu Konfirmasi', NULL, 0),
+(2, '2025-06-15', 'cash', 600000, 'Lunas', NULL, 2),
+(3, '2025-06-15', 'cash', 600000, 'Lunas', NULL, 3),
+(4, '2025-06-15', 'cash', 600000, 'Lunas', NULL, 4),
+(5, '2025-06-15', 'cash', 600000, 'Lunas', NULL, 5);
 
 -- --------------------------------------------------------
 
@@ -141,11 +186,44 @@ CREATE TABLE `pembayaran` (
 CREATE TABLE `pemesanan` (
   `idPemesanan` int(11) NOT NULL,
   `tanggalPemesanan` date NOT NULL,
-  `lamaSewa` time NOT NULL,
+  `lamaSewa` int(11) NOT NULL,
+  `jenis_sewa` enum('bulanan','mingguan','harian') NOT NULL,
+  `harga_per_periode` int(11) NOT NULL,
   `totalHarga` int(11) NOT NULL,
-  `statusPemesanan` varchar(255) NOT NULL,
+  `statusPemesanan` enum('Tertunda','Terkonfirmasi','Dibatalkan') NOT NULL,
   `idPelanggan` int(11) NOT NULL,
-  `idKamar` int(11) NOT NULL
+  `idPelanggan_aktif` int(11) DEFAULT NULL,
+  `idKamar` int(11) NOT NULL,
+  `tanggal_mulai` date DEFAULT NULL,
+  `tanggal_selesai` date DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pemesanan`
+--
+
+INSERT INTO `pemesanan` (`idPemesanan`, `tanggalPemesanan`, `lamaSewa`, `jenis_sewa`, `harga_per_periode`, `totalHarga`, `statusPemesanan`, `idPelanggan`, `idPelanggan_aktif`, `idKamar`, `tanggal_mulai`, `tanggal_selesai`, `is_active`) VALUES
+(2, '2025-06-15', 1, 'bulanan', 0, 600000, 'Terkonfirmasi', 2, 2, 1, '2025-06-14', '1970-01-01', 1),
+(3, '2025-06-15', 1, 'bulanan', 0, 600000, 'Tertunda', 2, NULL, 1, NULL, NULL, 1),
+(4, '2025-06-15', 1, 'bulanan', 600000, 600000, 'Tertunda', 2, NULL, 1, NULL, NULL, 1),
+(5, '2025-06-15', 1, 'bulanan', 600000, 600000, 'Terkonfirmasi', 2, NULL, 1, NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pemesanan_perpanjangan`
+--
+
+CREATE TABLE `pemesanan_perpanjangan` (
+  `id` int(11) NOT NULL,
+  `id_pemesanan` int(11) NOT NULL,
+  `durasi` int(11) NOT NULL,
+  `jenis_durasi` enum('harian','mingguan','bulanan') NOT NULL,
+  `tanggal_mulai` date NOT NULL,
+  `tanggal_selesai` date NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -158,7 +236,7 @@ CREATE TABLE `pengeluaran` (
   `idPengeluaran` int(11) NOT NULL,
   `listrik` int(11) NOT NULL,
   `air` int(11) NOT NULL,
-  `idLaporan` int(11) NOT NULL
+  `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -169,8 +247,7 @@ CREATE TABLE `pengeluaran` (
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
-  ADD PRIMARY KEY (`idAdmin`),
-  ADD KEY `idLaporan` (`idLaporan`);
+  ADD PRIMARY KEY (`idAdmin`);
 
 --
 -- Indexes for table `biaya_tambahan`
@@ -178,13 +255,20 @@ ALTER TABLE `admin`
 ALTER TABLE `biaya_tambahan`
   ADD PRIMARY KEY (`idBiayaTambahan`),
   ADD KEY `idPelanggan` (`idPelanggan`),
-  ADD KEY `idPembayaran` (`idPembayaran`);
+  ADD KEY `idPemesanan` (`idPemesanan`);
 
 --
 -- Indexes for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
   ADD PRIMARY KEY (`idFasilitas`),
+  ADD KEY `idKamar` (`idKamar`);
+
+--
+-- Indexes for table `kamar_images`
+--
+ALTER TABLE `kamar_images`
+  ADD PRIMARY KEY (`idImage`),
   ADD KEY `idKamar` (`idKamar`);
 
 --
@@ -197,24 +281,19 @@ ALTER TABLE `kamar_kos`
 -- Indexes for table `laporan`
 --
 ALTER TABLE `laporan`
-  ADD PRIMARY KEY (`idLaporan`),
-  ADD KEY `idPembayaran` (`idPembayaran`),
-  ADD KEY `idPengeluaran` (`idPengeluaran`);
+  ADD PRIMARY KEY (`idLaporan`);
 
 --
 -- Indexes for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  ADD PRIMARY KEY (`idPelanggan`),
-  ADD KEY `idPemesanan` (`idPemesanan`),
-  ADD KEY `idPembayaran` (`idPembayaran`);
+  ADD PRIMARY KEY (`idPelanggan`);
 
 --
 -- Indexes for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD PRIMARY KEY (`idPembayaran`),
-  ADD KEY `idPelanggan` (`idPelanggan`),
   ADD KEY `idPemesanan` (`idPemesanan`);
 
 --
@@ -226,28 +305,73 @@ ALTER TABLE `pemesanan`
   ADD KEY `idKamar` (`idKamar`);
 
 --
+-- Indexes for table `pemesanan_perpanjangan`
+--
+ALTER TABLE `pemesanan_perpanjangan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_pemesanan` (`id_pemesanan`);
+
+--
 -- Indexes for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  ADD PRIMARY KEY (`idPengeluaran`),
-  ADD KEY `idLaporan` (`idLaporan`);
+  ADD PRIMARY KEY (`idPengeluaran`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `idAdmin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `kamar_images`
+--
+ALTER TABLE `kamar_images`
+  MODIFY `idImage` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `kamar_kos`
+--
+ALTER TABLE `kamar_kos`
+  MODIFY `idKamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  MODIFY `idPelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `pembayaran`
+--
+ALTER TABLE `pembayaran`
+  MODIFY `idPembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  MODIFY `idPemesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `pemesanan_perpanjangan`
+--
+ALTER TABLE `pemesanan_perpanjangan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `admin`
---
-ALTER TABLE `admin`
-  ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`idLaporan`) REFERENCES `laporan` (`idLaporan`);
-
---
 -- Constraints for table `biaya_tambahan`
 --
 ALTER TABLE `biaya_tambahan`
-  ADD CONSTRAINT `biaya_tambahan_ibfk_1` FOREIGN KEY (`idPelanggan`) REFERENCES `pelanggan` (`idPelanggan`),
-  ADD CONSTRAINT `biaya_tambahan_ibfk_2` FOREIGN KEY (`idPembayaran`) REFERENCES `pembayaran` (`idPembayaran`);
+  ADD CONSTRAINT `biaya_tambahan_ibfk_1` FOREIGN KEY (`idPelanggan`) REFERENCES `pelanggan` (`idPelanggan`);
 
 --
 -- Constraints for table `fasilitas`
@@ -256,25 +380,16 @@ ALTER TABLE `fasilitas`
   ADD CONSTRAINT `fasilitas_ibfk_1` FOREIGN KEY (`idKamar`) REFERENCES `kamar_kos` (`idKamar`);
 
 --
--- Constraints for table `laporan`
+-- Constraints for table `kamar_images`
 --
-ALTER TABLE `laporan`
-  ADD CONSTRAINT `laporan_ibfk_1` FOREIGN KEY (`idPembayaran`) REFERENCES `pembayaran` (`idPembayaran`),
-  ADD CONSTRAINT `laporan_ibfk_2` FOREIGN KEY (`idPengeluaran`) REFERENCES `pengeluaran` (`idPengeluaran`);
-
---
--- Constraints for table `pelanggan`
---
-ALTER TABLE `pelanggan`
-  ADD CONSTRAINT `pelanggan_ibfk_1` FOREIGN KEY (`idPemesanan`) REFERENCES `pemesanan` (`idPemesanan`),
-  ADD CONSTRAINT `pelanggan_ibfk_2` FOREIGN KEY (`idPembayaran`) REFERENCES `pembayaran` (`idPembayaran`);
+ALTER TABLE `kamar_images`
+  ADD CONSTRAINT `kamar_images_ibfk_1` FOREIGN KEY (`idKamar`) REFERENCES `kamar_kos` (`idKamar`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`idPemesanan`) REFERENCES `pemesanan` (`idPemesanan`),
-  ADD CONSTRAINT `pembayaran_ibfk_2` FOREIGN KEY (`idPelanggan`) REFERENCES `pelanggan` (`idPelanggan`);
+  ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`idPemesanan`) REFERENCES `pemesanan` (`idPemesanan`);
 
 --
 -- Constraints for table `pemesanan`
@@ -282,6 +397,12 @@ ALTER TABLE `pembayaran`
 ALTER TABLE `pemesanan`
   ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`idPelanggan`) REFERENCES `pelanggan` (`idPelanggan`),
   ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`idKamar`) REFERENCES `kamar_kos` (`idKamar`);
+
+--
+-- Constraints for table `pemesanan_perpanjangan`
+--
+ALTER TABLE `pemesanan_perpanjangan`
+  ADD CONSTRAINT `pemesanan_perpanjangan_ibfk_1` FOREIGN KEY (`id_pemesanan`) REFERENCES `pemesanan` (`idPemesanan`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
