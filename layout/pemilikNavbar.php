@@ -1,6 +1,7 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
-$is_room_related = in_array($current_page, ['dashboard', 'detailkamar']); // Add other room-related pages here if needed
+$is_room_related = in_array($current_page, ['dashboard', 'detailkamar']); 
+$is_laporan_related = in_array($current_page, ['laporan', 'riwayattransaksi']); 
 ?>
 
 <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
@@ -38,17 +39,6 @@ $is_room_related = in_array($current_page, ['dashboard', 'detailkamar']); // Add
                             <i class="bi bi-bar-chart-fill <?= $current_page === 'laporan' ? 'text-white' : 'text-utama' ?>"></i>
                         </span>
                         <span class="ms-2 <?= $current_page === 'laporan' ? 'fw-bold text-dark' : 'text-secondary' ?>">Laporan</span>
-                    </div>
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="profil.php" class="nav-link p-0">
-                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'profil' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
-                        <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'profil' ? 'bg-utama' : 'bg-white' ?>"
-                            style="width: 32px; height: 32px;">
-                            <i class="bi bi-person-fill <?= $current_page === 'profil' ? 'text-white' : 'text-utama' ?>"></i>
-                        </span>
-                        <span class="ms-2 <?= $current_page === 'profil' ? 'fw-bold text-dark' : 'text-secondary' ?>">Profil</span>
                     </div>
                 </a>
             </li>

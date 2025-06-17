@@ -181,7 +181,7 @@ if (!$stmt->get_result()->num_rows) {
               </div>
               <div class="card-footer bg-white border-0">
                 <div class="d-grid">
-                  <a href="detailkamar.php?id=<?= $room['idKamar'] ?>" class="btn btn-outline-primary rounded-3">
+                  <a href="detailkamar.php?idKamar=<?= $room['idKamar'] ?>" class="btn btn-outline-primary rounded-3">
                     Lihat Detail & Fasilitas
                   </a>
                 </div>

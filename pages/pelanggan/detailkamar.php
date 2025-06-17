@@ -23,7 +23,7 @@ $result = $connect->query($query);
 if (!$result || $result->num_rows === 0) {
     die("Data kamar tidak ditemukan.");
 }
-$rooms = $result->fetch_assoc();
+$kamar = $result->fetch_assoc();
 
 // Verify user has active booking for this room
 $bookingQuery = "SELECT * FROM pemesanan 
@@ -32,10 +32,28 @@ $bookingQuery = "SELECT * FROM pemesanan
                 AND statusPemesanan = 'Terkonfirmasi'
                 LIMIT 1";
 $bookingResult = $connect->query($bookingQuery);
-
 if (!$bookingResult || $bookingResult->num_rows === 0) {
     die("Anda tidak memiliki akses ke kamar ini.");
 }
+
+// Get room details and facilities
+$query = "SELECT k.*, f.luasKamar, f.perabotan, f.kamarMandi 
+          FROM kamar_kos k
+          LEFT JOIN fasilitas f ON k.idKamar = f.idKamar
+          WHERE k.idKamar = ?";
+$stmt = $connect->prepare($query);
+$stmt->bind_param("i", $idKamar);
+$stmt->execute();
+$result = $stmt->get_result();
+$kamar = $result->fetch_assoc();
+
+// Fetch additional images
+$imagesQuery = "SELECT image_path FROM kamar_images WHERE idKamar = ?";
+$imagesStmt = $connect->prepare($imagesQuery);
+$imagesStmt->bind_param("i", $idKamar);
+$imagesStmt->execute();
+$imagesResult = $imagesStmt->get_result();
+$additionalImages = $imagesResult->fetch_all(MYSQLI_ASSOC);
 
 $currentMonth = date('Y-m');
 $additionalCostsQuery = "SELECT jenisBiaya, jumlahBiaya 
@@ -59,7 +77,7 @@ $costsQuery = "SELECT SUM(jumlahBiaya) AS total
                AND statusPembayaran = 'belum_lunas'";
 $costsResult = $connect->query($costsQuery);
 $additionalCosts = $costsResult->fetch_assoc()['total'] ?? 0;
-$totalAmount = $rooms['harga'] + $additionalCosts;
+$totalAmount = $kamar['harga'] + $additionalCosts;
 ?>
 
 <!DOCTYPE html>
@@ -96,26 +114,45 @@ $totalAmount = $rooms['harga'] + $additionalCosts;
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
-                            <img src="../../assets/img/<?= htmlspecialchars($rooms['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                            <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
 
                             <div class="card-body">
-                                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($rooms['nomorKamar']) ?></h5>
+                                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($kamar['nomorKamar']) ?></h5>
                                 <p class="card-text">
-                                    <strong>Tipe:</strong> <?= htmlspecialchars($rooms['tipeKamar']) ?><br>
-                                    <strong>Harga:</strong> Rp <?= number_format($rooms['harga'], 0, ',', '.') ?><br>
-                                    <strong>Status:</strong> <?= htmlspecialchars($rooms['statusKetersediaan']) ?><br>
-                                    <strong>Deskripsi:</strong><br> <?= nl2br(htmlspecialchars($rooms['deskripsi'])) ?>
+                                    <strong>Tipe:</strong> <?= htmlspecialchars($kamar['tipeKamar']) ?><br>
+                                    <strong>Harga:</strong> Rp <?= number_format($kamar['harga'], 0, ',', '.') ?><br>
+                                    <strong>Status:</strong> <?= htmlspecialchars($kamar['statusKetersediaan']) ?><br>
+                                    <strong>Deskripsi:</strong><br> <?= nl2br(htmlspecialchars($kamar['deskripsi'])) ?>
+                                <h6 class="fw-bold mt-4">Fasilitas Kamar</h6>
+                                <ul>
+                                    <?php if (!empty($kamar['luasKamar'])): ?>
+                                        <li>Luas: <?= htmlspecialchars($kamar['luasKamar']) ?></li>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($kamar['perabotan'])): ?>
+                                        <li>Perabotan: <?= htmlspecialchars($kamar['perabotan']) ?></li>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($kamar['kamarMandi'])): ?>
+                                        <li>Kamar mandi: <?= htmlspecialchars($kamar['kamarMandi']) ?></li>
+                                    <?php endif; ?>
+                                </ul>
                                 </p>
                             </div>
 
                         </div>
 
-                        <h6 class="fw-bold mt-4">Foto Lainnya</h6>
-                        <div class="d-flex gap-3">
-                            <img src="../../assets/img/Kamar1.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 1">
-                            <img src="../../assets/img/Kamar2.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 2">
-                            <img src="../../assets/img/Kamar3.png" class="img-thumbnail rounded-3" style="width: 100px; height: 80px; object-fit: cover;" alt="Kamar 3">
-                        </div>
+                        <?php if (!empty($additionalImages)): ?>
+                            <h6 class="fw-bold mt-4">Foto Lainnya</h6>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <?php foreach ($additionalImages as $image): ?>
+                                    <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>"
+                                        class="img-thumbnail rounded-3"
+                                        style="width: 100px; height: 80px; object-fit: cover;"
+                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Pembayaran -->
@@ -158,12 +195,12 @@ $totalAmount = $rooms['harga'] + $additionalCosts;
                                 </ul>
 
                                 <hr>
-                                <p>Harga Kamar <span class="float-end">Rp<?= number_format($rooms['harga'], 0, ',', '.') ?></span></p>
+                                <p>Harga Kamar <span class="float-end">Rp<?= number_format($kamar['harga'], 0, ',', '.') ?></span></p>
                                 <?php if ($totalAdditional > 0): ?>
                                     <p>Biaya Tambahan <span class="float-end">Rp<?= number_format($totalAdditional, 0, ',', '.') ?></span></p>
                                 <?php endif; ?>
                                 <hr>
-                                <h5 class="fw-bold">Total <span class="float-end">Rp<?= number_format($rooms['harga'] + $totalAdditional, 0, ',', '.') ?></span></h5>
+                                <h5 class="fw-bold">Total <span class="float-end">Rp<?= number_format($kamar['harga'] + $totalAdditional, 0, ',', '.') ?></span></h5>
 
                                 <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">
                                     Bayar

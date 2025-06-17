@@ -3,7 +3,8 @@ $page_titles = [
     'dashboard' => 'List Kamar',
     'detailkamar' => 'Detail Kamar',
     'laporan' => 'Laporan',
-    'profil' => 'Profil'
+    'pesanan' => 'Pesanan',
+    'riwayattransaksi' => 'Riwayat Transaksi',
 ];
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
 ?>

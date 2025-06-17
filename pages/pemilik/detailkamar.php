@@ -3,7 +3,7 @@ session_start();
 require "../../php/connect.php";
 
 // Validate room ID
-$idKamar = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$idKamar = isset($_GET['idKamar']) ? (int)$_GET['idKamar'] : 0;
 if (!$idKamar) {
     header("Location: dashboard.php");
     exit;
@@ -31,27 +31,29 @@ $imageStmt->bind_param("i", $idKamar);
 $imageStmt->execute();
 $additionalImages = $imageStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// Fetch current occupant
 $occupantStmt = $connect->prepare("
     SELECT p.* 
     FROM pemesanan pm
-    JOIN pelanggan p ON pm.idPelanggan = p.idPelanggan
-    WHERE pm.idKamar = ? AND pm.statusPemesanan = 'aktif'
+    JOIN pelanggan p ON (pm.idPelanggan = p.idPelanggan OR pm.idPelanggan_aktif = p.idPelanggan)
+    WHERE pm.idKamar = ? 
+    AND pm.statusPemesanan = 'Terkonfirmasi'
+    AND (pm.tanggal_mulai <= CURDATE() AND (pm.tanggal_selesai >= CURDATE() OR pm.tanggal_selesai = '1970-01-01'))
     LIMIT 1
 ");
 $occupantStmt->bind_param("i", $idKamar);
 $occupantStmt->execute();
 $occupant = $occupantStmt->get_result()->fetch_assoc();
 
-// Fetch additional costs
-$costsStmt = $connect->prepare("
-    SELECT * FROM biaya_tambahan 
-    WHERE idPelanggan = ? AND statusPembayaran = 'belum_lunas'
-");
-$occupantId = $occupant['idPelanggan'] ?? 0;
-$costsStmt->bind_param("i", $occupantId);
-$costsStmt->execute();
-$additionalCosts = $costsStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$additionalCosts = [];
+if ($occupant) {
+    $costsStmt = $connect->prepare("
+        SELECT * FROM biaya_tambahan 
+        WHERE idPelanggan = ? AND statusPembayaran = 'belum_lunas'
+    ");
+    $costsStmt->bind_param("i", $occupant['idPelanggan']);
+    $costsStmt->execute();
+    $additionalCosts = $costsStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
 // Calculate total costs
 $roomPrice = $kamar['harga'] ?? 0;
