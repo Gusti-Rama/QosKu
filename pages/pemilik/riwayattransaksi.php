@@ -2,19 +2,16 @@
 session_start();
 require_once "../../php/connect.php";
 
-// Cek login
-if (!isset($_SESSION['idPelanggan']) || !isset($_SESSION['username'])) {
+// Cek login dan role owner
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'owner') {
     echo "<script>
-        alert('Silakan login terlebih dahulu.');
+        alert('Silakan login sebagai owner terlebih dahulu.');
         window.location.href='../../auth/login.php';
     </script>";
     exit;
 }
 
-$idPelanggan = $_SESSION['idPelanggan'];
-$username = $_SESSION['username'];
-
-// Ambil data transaksi lunas dari database
+// Ambil semua data pembayaran dari database
 $query = "
 SELECT 
     pembayaran.idPembayaran,
@@ -22,36 +19,32 @@ SELECT
     pembayaran.statusPembayaran,
     pembayaran.jumlahPembayaran,
     pemesanan.jenis_sewa,
-    pemesanan.idPemesanan
+    pemesanan.idPemesanan,
+    pelanggan.username AS namaPelanggan
 FROM 
     pembayaran
 JOIN 
     pemesanan ON pembayaran.idPemesanan = pemesanan.idPemesanan
-WHERE 
-    pemesanan.idPelanggan = ?
-    AND pembayaran.statusPembayaran = 'Lunas'
-ORDER BY pembayaran.tanggalPembayaran DESC
+JOIN 
+    pelanggan ON pemesanan.idPelanggan = pelanggan.idPelanggan
+ORDER BY 
+    pembayaran.tanggalPembayaran DESC
 ";
 
-$stmt = $connect->prepare($query);
-$stmt->bind_param("i", $idPelanggan);
-$stmt->execute();
-$result = $stmt->get_result();
-
+$result = $connect->query($query);
 $transactions = [];
 
 while ($row = $result->fetch_assoc()) {
     $transactions[] = [
-        'nama' => $username,
+        'nama' => $row['namaPelanggan'],
         'jenis' => $row['jenis_sewa'],
-        'id' => $row['idPembayaran'],
+        'idPembayaran' => $row['idPembayaran'],
+        'idPemesanan' => $row['idPemesanan'],
         'tanggal' => date('d M Y', strtotime($row['tanggalPembayaran'])),
         'harga' => $row['jumlahPembayaran'],
         'status' => $row['statusPembayaran']
     ];
 }
-
-$stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -59,25 +52,28 @@ $stmt->close();
 
 <head>
     <meta charset="UTF-8">
-    <title>Riwayat Transaksi | QosKu</title>
+    <title>Semua Riwayat Pembayaran | QosKu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="icon" href="../assets/img/QosKuIMG.png" type="image/png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body class="bg-light">
     <div class="d-flex min-vh-100 ms-4 me-4">
-        <?php include '../../layout/pelangganNavbar.php'; ?>
+        <?php include '../../layout/pemilikNavbar.php'; ?>
         <div class="flex-grow-1">
             <div class="position-relative rounded-4"
                 style="background-image:url('../../assets/img/backgroundProfil.png'); height:200px;background-size:cover; background-position:center;">
-                <?php include '../../layout/pelangganHeader.php'; ?>
+                <link rel="icon" href="../../assets/img/QosKuIMG.png" type="image/png">
+                <?php include '../../layout/pemilikHeader.php'; ?>
             </div>
 
             <div class="mt-4 container-fluid">
                 <div class="row">
                     <div class="col-12 bg-white rounded-4 p-4 shadow-sm">
+
+                        <h4 class="mb-3">Riwayat Semua Pembayaran</h4>
 
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
@@ -95,23 +91,22 @@ $stmt->close();
                         </div>
 
                         <?php if (empty($transactions)): ?>
-                            <div class="alert alert-info">Belum ada transaksi pembayaran yang lunas.</div>
+                            <div class="alert alert-info">Belum ada data pembayaran yang tersedia.</div>
                         <?php else: ?>
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle rounded-4 shadow-sm bg-white">
                                     <thead class="table-light">
                                         <tr>
                                             <th>Nama</th>
-                                            <th>Jenis</th>
-                                            <th>ID Transaksi</th>
+                                            <th>Jenis Sewa</th>
+                                            <th>ID Pemesanan</th>
+                                            <th>ID Pembayaran</th>
                                             <th>Tanggal</th>
-                                            <th>JumlahPembayaran</th>
+                                            <th>Jumlah Pembayaran</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableBody">
-                                        <!-- JavaScript akan inject data -->
-                                    </tbody>
+                                    <tbody id="tableBody"></tbody>
                                 </table>
                             </div>
                             <nav aria-label="table pagination">
@@ -119,7 +114,7 @@ $stmt->close();
                             </nav>
                         <?php endif; ?>
 
-                        <a href="dashboard.php" class="btn btn-secondary mt-4">Kembali ke Dashboard</a>
+                        <a href="dashboardOwner.php" class="btn btn-secondary mt-4">Kembali ke Dashboard</a>
 
                     </div>
                 </div>
@@ -132,7 +127,6 @@ $stmt->close();
     </div>
 
     <script>
-        // Data PHP ke JavaScript
         const transactions = <?= json_encode($transactions) ?>;
 
         let currentPage = 1;
@@ -158,7 +152,8 @@ $stmt->close();
                 <tr>
                     <td>${tx.nama}</td>
                     <td>${tx.jenis}</td>
-                    <td>${tx.id}</td>
+                    <td>${tx.idPemesanan}</td>
+                    <td>${tx.idPembayaran}</td>
                     <td>${tx.tanggal}</td>
                     <td>Rp ${tx.harga}</td>
                     <td>${renderStatusBadge(tx.status)}</td>
