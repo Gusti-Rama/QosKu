@@ -1,8 +1,11 @@
 <?php
 $page_titles = [
     'dashboard' => 'Kamar Anda',
-    'pesan' => 'Pesan Kamar',
-    'profil' => 'Profil'
+    'listkamar' => 'Pesan Kamar',
+    'profil' => 'Profil',
+    'pesankamar' => 'Pesan Kamar',
+    'detailkamar' => 'Detail Kamar',
+    'riwayattransaksi' => 'Riwayat Transaksi',
 ];
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
 ?>
@@ -75,10 +78,12 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 
     .dropdown-item {
         transition: background-color 0.2s ease;
+        border-radius: 10px;
     }
 
     .dropdown-item:hover {
         background-color: #f8f9fa;
+        border-radius: 10px;
     }
 
     .profile-trigger:hover {
@@ -91,26 +96,26 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
 </style>
 
 <script>
-let dropdownTimeout;
+    let dropdownTimeout;
 
-document.querySelector('.profile-container').addEventListener('mouseover', function() {
-    clearTimeout(dropdownTimeout);
-    document.getElementById('profileDropdown').classList.add('show');
-});
+    document.querySelector('.profile-container').addEventListener('mouseover', function() {
+        clearTimeout(dropdownTimeout);
+        document.getElementById('profileDropdown').classList.add('show');
+    });
 
-document.querySelector('.profile-container').addEventListener('mouseout', function() {
-    dropdownTimeout = setTimeout(() => {
-        document.getElementById('profileDropdown').classList.remove('show');
-    }, 300);
-});
+    document.querySelector('.profile-container').addEventListener('mouseout', function() {
+        dropdownTimeout = setTimeout(() => {
+            document.getElementById('profileDropdown').classList.remove('show');
+        }, 300);
+    });
 
-document.getElementById('profileDropdown').addEventListener('mouseover', function() {
-    clearTimeout(dropdownTimeout);
-});
+    document.getElementById('profileDropdown').addEventListener('mouseover', function() {
+        clearTimeout(dropdownTimeout);
+    });
 
-document.getElementById('profileDropdown').addEventListener('mouseout', function() {
-    dropdownTimeout = setTimeout(() => {
-        this.classList.remove('show');
-    }, 300);
-});
+    document.getElementById('profileDropdown').addEventListener('mouseout', function() {
+        dropdownTimeout = setTimeout(() => {
+            this.classList.remove('show');
+        }, 300);
+    });
 </script>

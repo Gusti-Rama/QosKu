@@ -1,43 +1,46 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
+$is_room_related = in_array($current_page, ['dashboard', 'detailkamar']);
+$is_order_related = in_array($current_page, ['listkamar', 'pesankamar']);
+$is_profile_related = in_array($current_page, ['profil', 'riwayattransaksi']);
 ?>
 
-<nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
-    <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
+<nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
+    <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="dashboard.php" style="color: #2D3748;">
         <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
     </a>
     <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
         <ul class="nav flex-column">
             <li class="nav-item mb-2">
                 <a href="dashboard.php" class="nav-link p-0">
-                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $current_page === 'dashboard' ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
-                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $current_page === 'dashboard' ? 'bg-utama' : 'bg-white'; ?>"
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $is_room_related ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $is_room_related ? 'bg-utama' : 'bg-white'; ?>"
                             style="width: 32px; height: 32px;">
-                            <i class="bi bi-house-door-fill <?php echo $current_page === 'dashboard' ? 'text-white' : 'text-utama'; ?>"></i>
+                            <i class="bi bi-house-door-fill <?php echo $is_room_related ? 'text-white' : 'text-utama'; ?>"></i>
                         </span>
-                        <span class="ms-2 <?php echo $current_page === 'dashboard' ? 'fw-bold text-dark' : 'text-secondary'; ?>">Kamar Anda</span>
+                        <span class="ms-2 <?php echo $is_room_related ? 'fw-bold text-dark' : 'text-secondary'; ?>">Kamar Anda</span>
                     </div>
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="pesan.php" class="nav-link p-0">
-                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $current_page === 'pesan' ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
-                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $current_page === 'pesan' ? 'bg-utama' : 'bg-white'; ?>"
+                <a href="listkamar.php" class="nav-link p-0">
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $is_order_related ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $is_order_related ? 'bg-utama' : 'bg-white'; ?>"
                             style="width: 32px; height: 32px;">
-                            <i class="bi bi-credit-card-fill <?php echo $current_page === 'pesan' ? 'text-white' : 'text-utama'; ?>"></i>
+                            <i class="bi bi-credit-card-fill <?php echo $is_order_related ? 'text-white' : 'text-utama'; ?>"></i>
                         </span>
-                        <span class="ms-2 <?php echo $current_page === 'pesan' ? 'fw-bold text-dark' : 'text-secondary'; ?>">Pesan Kamar</span>
+                        <span class="ms-2 <?php echo $is_order_related ? 'fw-bold text-dark' : 'text-secondary'; ?>">Pesan Kamar</span>
                     </div>
                 </a>
             </li>
             <li class="nav-item mb-2">
                 <a href="profil.php" class="nav-link p-0">
-                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $current_page === 'profil' ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
-                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $current_page === 'profil' ? 'bg-utama' : 'bg-white'; ?>"
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?php echo $is_profile_related ? 'bg-white shadow-sm' : 'bg-transparent'; ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?php echo $is_profile_related ? 'bg-utama' : 'bg-white'; ?>"
                             style="width: 32px; height: 32px;">
-                            <i class="bi bi-person-fill <?php echo $current_page === 'profil' ? 'text-white' : 'text-utama'; ?>"></i>
+                            <i class="bi bi-person-fill <?php echo $is_profile_related ? 'text-white' : 'text-utama'; ?>"></i>
                         </span>
-                        <span class="ms-2 <?php echo $current_page === 'profil' ? 'fw-bold text-dark' : 'text-secondary'; ?>">Profil</span>
+                        <span class="ms-2 <?php echo $is_profile_related ? 'fw-bold text-dark' : 'text-secondary'; ?>">Profil</span>
                     </div>
                 </a>
             </li>

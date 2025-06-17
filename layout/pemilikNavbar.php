@@ -21,6 +21,16 @@ $is_room_related = in_array($current_page, ['dashboard', 'detailkamar']); // Add
                 </a>
             </li>
             <li class="nav-item mb-2">
+                <a href="pesanan.php" class="nav-link p-0">
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'pesanan' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'pesanan' ? 'bg-utama' : 'bg-white' ?>" style="width: 32px; height: 32px;">
+                            <i class="bi bi-credit-card-2-front-fill <?= $current_page === 'pesanan' ? 'text-white' : 'text-utama' ?>"></i>
+                        </span>
+                        <span class="ms-2 <?= $current_page === 'pesanan' ? 'fw-bold text-dark' : 'text-secondary' ?>">Manajemen Pesanan</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item mb-2">
                 <a href="laporan.php" class="nav-link p-0">
                     <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'laporan' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
                         <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'laporan' ? 'bg-utama' : 'bg-white' ?>"

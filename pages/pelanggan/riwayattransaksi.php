@@ -13,80 +13,13 @@
 
 <body class="bg-light">
     <div class="d-flex min-vh-100 ms-4 me-4">
-        <nav class="bg-transparent p-3 me-4 d-flex flex-column" style="width: 250px;">
-            <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-                <img src="../assets/img/QosKuNoBG.png" class="mb-1" alt="Logo" height="80">QosKu
-            </a>
-            <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <div class="bg-white rounded-4 shadow-sm py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-dark fw-bold d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3"
-                                    style="width: 32px; height: 32px; background-color: #4FD1C5;">
-                                    <i class="bi bi-house-door-fill text-white"></i>
-                                </span>
-                                Kamar Anda
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                                    style="width: 32px; height: 32px;">
-                                    <i class="bi bi-credit-card-fill" style="color: #4FD1C5;"></i>
-                                </span>
-                                Pesan Kamar
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                                    style="width: 32px; height: 32px;">
-                                    <i class="bi bi-person-fill" style="color: #4FD1C5;"></i>
-                                </span>
-                                Profil
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-                <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
-                    <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
-                        <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
-                        <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
-                        <button class="btn btn-sm btn-light w-100 rounded-3 fw-bold">Kontak</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <?php include '../../layout/pelangganNavbar.php'; ?>
 
         <div class="flex-grow-1">
             <div class="position-relative rounded-4"
-                style="background-image:url('../assets/img/backgroundProfil.png'); background-size:cover; background-position:center;">
-                <div class="d-flex justify-content-between align-items-start mt-4" style="min-height:250px;">
-                    <div class="d-flex mt-3 px-4 bg-transparent">
-                        <div>
-                            <p class="mb-0 fs-6 text-white">Pages <b>/ Profil</b></p>
-                            <h3 class="fs-5 text-white fw-bold">Riwayat Transaksi</h3>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-3 pt-4 pe-4">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-white rounded-4 border-end-0 rounded-end-0">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0 rounded-4 rounded-start-0"
-                                placeholder="Pencarian" />
-                        </div>
-                        <i class="bi bi-person-fill fs-5 text-white"></i>
-                        <i class="bi bi-gear-fill fs-5 text-white"></i>
-                        <i class="bi bi-bell-fill fs-5 text-white"></i>
-                    </div>
-                </div>
+                style="background-image:url('../../assets/img/backgroundProfil.png'); height:200px;background-size:cover; background-position:center;">
+                
+                <?php include '../../layout/pelangganHeader.php'; ?>
 
             </div>
             <div class="mt-4 container-fluid">

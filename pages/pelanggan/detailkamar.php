@@ -1,23 +1,65 @@
-<?php 
+<?php
 session_start();
 require "../../php/connect.php";
 
-// Pastikan idKamar tersedia di URL
+// Check if user is logged in
+if (!isset($_SESSION['idPelanggan'])) {
+    header("Location: ../../auth/login.php");
+    exit;
+}
+
+// Validate room ID
 if (!isset($_GET['idKamar'])) {
     die("ID Kamar tidak ditemukan.");
 }
 
-$idKamar = intval($_GET['idKamar']); // pastikan berupa angka
+$idKamar = intval($_GET['idKamar']);
+$idPelanggan = $_SESSION['idPelanggan'];
 
+// Get room details
 $query = "SELECT * FROM kamar_kos WHERE idKamar = $idKamar";
 $result = $connect->query($query);
 
-// Cek apakah kamar ditemukan
-if ($result && $result->num_rows > 0) {
-    $rooms = $result->fetch_assoc();
-} else {
+if (!$result || $result->num_rows === 0) {
     die("Data kamar tidak ditemukan.");
 }
+$rooms = $result->fetch_assoc();
+
+// Verify user has active booking for this room
+$bookingQuery = "SELECT * FROM pemesanan 
+                WHERE idKamar = $idKamar 
+                AND (idPelanggan = $idPelanggan OR idPelanggan_aktif = $idPelanggan)
+                AND statusPemesanan = 'Terkonfirmasi'
+                LIMIT 1";
+$bookingResult = $connect->query($bookingQuery);
+
+if (!$bookingResult || $bookingResult->num_rows === 0) {
+    die("Anda tidak memiliki akses ke kamar ini.");
+}
+
+$currentMonth = date('Y-m');
+$additionalCostsQuery = "SELECT jenisBiaya, jumlahBiaya 
+                        FROM biaya_tambahan 
+                        WHERE idPelanggan = ? 
+                        AND Periode = ? 
+                        AND statusPembayaran = 'belum_lunas'";
+$stmt = $connect->prepare($additionalCostsQuery);
+$stmt->bind_param("is", $_SESSION['idPelanggan'], $currentMonth);
+$stmt->execute();
+$additionalCostsResult = $stmt->get_result();
+
+$totalAdditional = 0;
+
+// Get additional charges
+$currentMonth = date('Y-m');
+$costsQuery = "SELECT SUM(jumlahBiaya) AS total 
+               FROM biaya_tambahan 
+               WHERE idPelanggan = $idPelanggan 
+               AND Periode = '$currentMonth' 
+               AND statusPembayaran = 'belum_lunas'";
+$costsResult = $connect->query($costsQuery);
+$additionalCosts = $costsResult->fetch_assoc()['total'] ?? 0;
+$totalAmount = $rooms['harga'] + $additionalCosts;
 ?>
 
 <!DOCTYPE html>
@@ -34,96 +76,37 @@ if ($result && $result->num_rows > 0) {
 </head>
 
 <body class="bg-light">
-    <div class="d-flex min-vh-100 ms-4 me-4">
-        <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
-            <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="#" style="color: #2D3748;">
-                <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
-            </a>
-            <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <div class="bg-white rounded-4 shadow-sm py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-dark fw-bold d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3"
-                                    style="width: 32px; height: 32px; background-color: #4FD1C5;">
-                                    <i class="bi bi-house-door-fill text-white"></i>
-                                </span>
-                                Kamar Anda
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                                    style="width: 32px; height: 32px;">
-                                    <i class="bi bi-credit-card-fill" style="color: #4FD1C5;"></i>
-                                </span>
-                                Pesan Kamar
-                            </a>
-                        </div>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <div class="bg-transparent rounded-4 py-2 px-2 d-flex align-items-center">
-                            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
-                                <span class="d-flex justify-content-center align-items-center rounded-3 bg-white"
-                                    style="width: 32px; height: 32px;">
-                                    <i class="bi bi-person-fill" style="color: #4FD1C5;"></i>
-                                </span>
-                                Profil
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-                <div class="position-relative mt-auto rounded-4"
-                    style="height: 180px; background-image: url('../../assets/img/backgroundHelp.png'); background-size: cover; background-position: center;">
-                    <div class="text-white position-absolute bottom-0 w-100 start-0 px-3 pb-3 text-white">
-                        <p class="fw-bold fs-6 mb-0">Butuh Bantuan?</p>
-                        <p class="fs-6 mt-0 mb-1">Hubungi Kami</p>
-                        <button class="btn btn-sm btn-light w-100 rounded-3 fw-bold">Kontak</button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?= $_SESSION['error'] ?></div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
 
-        <!-- Main content -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['success'] ?></div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    <div class="d-flex min-vh-100 ms-4 me-4">
+        <?php include '../../layout/pelangganNavbar.php'; ?>
+
         <div class="flex-grow-1">
-            <div class="d-flex justify-content-between mt-4 px-4 pt-3 bg-transparent">
-                <div>
-                    <p class="mb-0 fs-6 text-secondary">Pages <b>/ Kamar Anda</b></p>
-                    <p class="fs-5 fw-bold">Kamar Anda</p>
-                </div>
-                <div class="d-flex align-items-start gap-3">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white rounded-4 border-end-0 rounded-end-0">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0 rounded-4 rounded-start-0" placeholder="Pencarian">
-                    </div>
-                    <div class="d-flex align-items-center gap-1">
-                        <i class="bi bi-person-fill fs-5"></i>
-                        <span class="fs-6">Profil</span>
-                    </div>
-                    <i class="bi bi-gear-fill fs-5"></i>
-                    <i class="bi bi-bell-fill fs-5"></i>
-                </div>
-            </div>
-            <!-- Kamar Anda -->
-            <div class="container-fluid pt-4">
+            <?php include '../../layout/pelangganHeader.php'; ?>
+
+            <div class="container-fluid pt-4 pb-3">
+
                 <div class="row mb-4">
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
                             <img src="../../assets/img/<?= htmlspecialchars($rooms['gambar']) ?>" class="card-img-top rounded-top-4" alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
 
-                        <div class="card-body">
-                        <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($rooms['nomorKamar']) ?></h5>
-                        <p class="card-text">
-                            <strong>Tipe:</strong> <?= htmlspecialchars($rooms['tipeKamar']) ?><br>
-                            <strong>Harga:</strong> Rp <?= number_format($rooms['harga'], 0, ',', '.') ?><br>
-                            <strong>Status:</strong> <?= htmlspecialchars($rooms['statusKetersediaan']) ?><br>
-                            <strong>Deskripsi:</strong><br> <?= nl2br(htmlspecialchars($rooms['deskripsi'])) ?>
-                        </p>
-                        </div>
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Kamar No. <?= htmlspecialchars($rooms['nomorKamar']) ?></h5>
+                                <p class="card-text">
+                                    <strong>Tipe:</strong> <?= htmlspecialchars($rooms['tipeKamar']) ?><br>
+                                    <strong>Harga:</strong> Rp <?= number_format($rooms['harga'], 0, ',', '.') ?><br>
+                                    <strong>Status:</strong> <?= htmlspecialchars($rooms['statusKetersediaan']) ?><br>
+                                    <strong>Deskripsi:</strong><br> <?= nl2br(htmlspecialchars($rooms['deskripsi'])) ?>
+                                </p>
+                            </div>
 
                         </div>
 
@@ -137,49 +120,56 @@ if ($result && $result->num_rows > 0) {
 
                     <!-- Pembayaran -->
                     <div class="col-md-4">
-                        <div class="card shadow-sm border-0 rounded-4 p-4">
-                            <h6 class="fw-bold">Bayar Tagihan</h6>
-                            <p class="mb-1">Jenis</p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="jenis" checked>
-                                <label class="form-check-label">Bulanan</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="jenis">
-                                <label class="form-check-label">Mingguan</label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="jenis">
-                                <label class="form-check-label">Harian</label>
-                            </div>
+                        <form action="../../php/proses_pembayaran.php" method="POST">
+                            <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
+                            <div class="card shadow-sm border-0 rounded-4 p-4">
+                                <h6 class="fw-bold">Bayar Tagihan</h6>
 
-                            <p class="mb-1">Metode Pembayaran</p>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="metode" checked>
-                                <label class="form-check-label">Uang Tunai</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="metode">
-                                <label class="form-check-label">Transfer Bank</label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="metode">
-                                <label class="form-check-label">QRIS</label>
-                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Pembayaran</label>
+                                    <select class="form-select" name="jenis_pembayaran" required>
+                                        <option value="bulanan">Bulanan</option>
+                                        <option value="mingguan">Mingguan</option>
+                                        <option value="harian">Harian</option>
+                                    </select>
+                                </div>
 
-                            <p class="fw-bold">Tambahan Alat Listrik</p>
-                            <ul class="ps-3">
-                                <li>Rice cooker <span class="float-end">Rp30,000</span></li>
-                                <li>Panci Elektrik <span class="float-end">Rp30,000</span></li>
-                            </ul>
-                            <hr>
-                            <p>Subtotal <span class="float-end">Rp600,000</span></p>
-                            <p>Tambahan Alat Listrik <span class="float-end">Rp60,000</span></p>
-                            <p>Promo <span class="float-end">-</span></p>
-                            <hr>
-                            <h5 class="fw-bold">Total <span class="float-end">Rp660,000</span></h5>
-                            <button class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">Bayar</button>
-                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Metode Pembayaran</label>
+                                    <select class="form-select" name="metode_pembayaran" required>
+                                        <option value="cash">Uang Tunai</option>
+                                        <option value="transfer">Transfer Bank</option>
+                                    </select>
+                                </div>
+
+                                <p class="fw-bold">Biaya Tambahan</p>
+                                <ul class="ps-3">
+                                    <?php if ($additionalCostsResult && $additionalCostsResult->num_rows > 0): ?>
+                                        <?php while ($cost = $additionalCostsResult->fetch_assoc()): ?>
+                                            <?php $totalAdditional += $cost['jumlahBiaya']; ?>
+                                            <li>
+                                                <?= htmlspecialchars($cost['jenisBiaya']) ?>
+                                                <span class="float-end">Rp<?= number_format($cost['jumlahBiaya'], 0, ',', '.') ?></span>
+                                            </li>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <li>Tidak ada biaya tambahan</li>
+                                    <?php endif; ?>
+                                </ul>
+
+                                <hr>
+                                <p>Harga Kamar <span class="float-end">Rp<?= number_format($rooms['harga'], 0, ',', '.') ?></span></p>
+                                <?php if ($totalAdditional > 0): ?>
+                                    <p>Biaya Tambahan <span class="float-end">Rp<?= number_format($totalAdditional, 0, ',', '.') ?></span></p>
+                                <?php endif; ?>
+                                <hr>
+                                <h5 class="fw-bold">Total <span class="float-end">Rp<?= number_format($rooms['harga'] + $totalAdditional, 0, ',', '.') ?></span></h5>
+
+                                <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">
+                                    Bayar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -193,4 +183,5 @@ if ($result && $result->num_rows > 0) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
