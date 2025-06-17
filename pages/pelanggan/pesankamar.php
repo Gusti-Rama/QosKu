@@ -7,6 +7,23 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+// Verify pelanggan exists and get their ID
+$username = $_SESSION['username'];
+$stmt = $connect->prepare("SELECT idPelanggan FROM pelanggan WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    // If no pelanggan found, redirect to login
+    session_destroy();
+    header("Location: ../../auth/login.php");
+    exit;
+}
+
+$pelanggan = $result->fetch_assoc();
+$_SESSION['idPelanggan'] = $pelanggan['idPelanggan'];
+
 if (!isset($_GET['idKamar'])) {
     die("ID Kamar tidak ditemukan.");
 }
@@ -64,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_payment'])) {
 
     $totalAmount = $pricePerPeriod * $duration;
 
-    // Insert into pemesanan
+    // Insert into pemesanan using prepared statement
     $orderQuery = "INSERT INTO pemesanan (
         tanggalPemesanan, 
         lamaSewa, 
@@ -76,16 +93,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_payment'])) {
         idKamar
     ) VALUES (
         NOW(), 
-        $duration, 
-        '$jenisSewa', 
-        $pricePerPeriod,
-        $totalAmount, 
+        ?, 
+        ?, 
+        ?,
+        ?, 
         'Tertunda', 
-        {$_SESSION['idPelanggan']}, 
-        $idKamar
+        ?, 
+        ?
     )";
 
-    $connect->query($orderQuery);
+    $stmt = $connect->prepare($orderQuery);
+    if (!$stmt) {
+        die("Prepare failed: " . $connect->error);
+    }
+
+    $stmt->bind_param("isdiis", 
+        $duration, 
+        $jenisSewa, 
+        $pricePerPeriod, 
+        $totalAmount, 
+        $pelanggan['idPelanggan'], 
+        $idKamar
+    );
+    
+    if (!$stmt->execute()) {
+        die("Error executing order: " . $stmt->error);
+    }
+    
     $orderId = $connect->insert_id;
 
     // Handle payment

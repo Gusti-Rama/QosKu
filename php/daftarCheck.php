@@ -66,9 +66,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             $connect->commit();
-            // Auto-login after registration (optional)
+            // Get the idPelanggan of the newly registered user
+            $idPelanggan = $connect->insert_id;
+            
+            // Auto-login after registration
             $_SESSION['username'] = $username;
             $_SESSION['role'] = 'pelanggan';
+            $_SESSION['idPelanggan'] = $idPelanggan;
 
             echo "<script>
                 alert('Registrasi berhasil!');
