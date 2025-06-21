@@ -5,6 +5,7 @@ $page_titles = [
     'laporan' => 'Laporan',
     'pesanan' => 'Pesanan',
     'riwayattransaksi' => 'Riwayat Transaksi',
+    'pengeluaran' => 'Pengeluaran',
 ];
 $current_page = basename($_SERVER['PHP_SELF'], '.php');
 ?>

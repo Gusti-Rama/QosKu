@@ -56,12 +56,12 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                         <?php
                         $profilePicture = !empty($pelanggan['profilePicture']) 
                             ? "../../assets/img/" . $pelanggan['profilePicture']
-                            : "../../assets/img/";
+                            : "../../assets/img/profilepic.png";
                         ?>
                         <img
                             src="<?= $profilePicture?>"
                             alt="Profile Pic"
-                            class="rounded-circle me-3"
+                            class="rounded-circle me-3 shadow-sm"
                             style="width:60px; height:60px; object-fit:cover;" />
                         <div>
                             <p class="mb-0 fw-bold text-dark"><?= htmlspecialchars($pelanggan['namaLengkap']) ?></p>
