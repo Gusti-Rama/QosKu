@@ -47,9 +47,20 @@ $is_laporan_related = in_array($current_page, ['laporan', 'riwayattransaksi']);
                     <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'pengeluaran' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
                         <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'pengeluaran' ? 'bg-utama' : 'bg-white' ?>"
                             style="width: 32px; height: 32px;">
-                            <i class="bi bi-bar-chart-fill <?= $current_page === 'pengeluaran' ? 'text-white' : 'text-utama' ?>"></i>
+                            <i class="bi bi-cash-stack <?= $current_page === 'pengeluaran' ? 'text-white' : 'text-utama' ?>"></i>
                         </span>
                         <span class="ms-2 <?= $current_page === 'pengeluaran' ? 'fw-bold text-dark' : 'text-secondary' ?>">Pengeluaran</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="listakun.php" class="nav-link p-0">
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'listakun' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'listakun' ? 'bg-utama' : 'bg-white' ?>"
+                            style="width: 32px; height: 32px;">
+                            <i class="bi bi-people <?= $current_page === 'listakun' ? 'text-white' : 'text-utama' ?>"></i>
+                        </span>
+                        <span class="ms-2 <?= $current_page === 'listakun' ? 'fw-bold text-dark' : 'text-secondary' ?>">List Akun</span>
                     </div>
                 </a>
             </li>

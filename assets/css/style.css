@@ -29,3 +29,14 @@ body {
 .navbar-hidden {
   transform: translateY(-100%);
 }
+
+.chart-container {
+  background: linear-gradient(90deg, #313860 0%, #151928 100%);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+}
+
+.chart-container canvas {
+  border-radius: 12px;
+}

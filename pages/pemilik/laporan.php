@@ -110,13 +110,15 @@ while ($row = $resultPembayaran->fetch_assoc()) {
     ];
 }
 
-function rupiah($angka) {
+function rupiah($angka)
+{
     return 'Rp' . number_format($angka, 0, ',', '.');
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -137,13 +139,12 @@ function rupiah($angka) {
 
             <div class="container-fluid pt-4 pb-3">
                 <div class="row mb-4">
-                    <!-- Omset Card -->
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <p class="card-title fs-6 fw-bold text-secondary">Omset Bulan ini</p>
-                                    <p class="card-text fs-3 fw-bold mb-0"><?= rupiah($omset) ?></p>
+                                    <p class="card-text fs-4 fw-bold mb-0"><?= rupiah($omset) ?></p>
                                 </div>
                                 <div class="text-white rounded-4 d-flex align-items-center justify-content-center"
                                     style="width: 60px; height: 60px; background-color: #4FD1C5;">
@@ -153,16 +154,16 @@ function rupiah($angka) {
                         </div>
                     </div>
 
-                    <!-- Kamar Terpakai Card -->
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
                                     <p class="card-title fs-6 fw-bold text-secondary">Kamar Terpakai</p>
-                                    <p class="card-text fs-4 fw-bold mb-0"><?= $kamarTerpakai ?>/<?= $jumlahKamar ?></p>
-                                    <small class="text-<?= $selisihKamar >= 0 ? 'success' : 'danger' ?>">
-                                        (<?= $selisihKamar >= 0 ? '+' : '' ?><?= $selisihKamar ?>) dari bulan lalu
-                                    </small>
+                                    <p class="card-text fs-4 fw-bold mb-0">
+                                        <?= $kamarTerpakai ?>/<?= $jumlahKamar ?><small
+                                            class="text-<?= $selisihKamar >= 0 ? 'success' : 'danger' ?> fs-6">
+                                            (<?= $selisihKamar >= 0 ? '+' : '' ?><?= $selisihKamar ?>) dari bulan lalu
+                                        </small></p>
                                 </div>
                                 <div class="text-white rounded-4 d-flex align-items-center justify-content-center"
                                     style="width: 60px; height: 60px; background-color: #4FD1C5;">
@@ -172,7 +173,6 @@ function rupiah($angka) {
                         </div>
                     </div>
 
-                    <!-- Pengeluaran Card -->
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
@@ -189,65 +189,96 @@ function rupiah($angka) {
                     </div>
                 </div>
 
-                <div class="row g-2 justify-content-center">
-                    <!-- Statistik Keuangan -->
-                    <div class="col-md-7 bg-white rounded-4 p-4 shadow-sm">
-                        <h6 class="fw-semibold mb-3">Keuntungan enam bulan terakhir (dalam jutaan rupiah)</h6>
-                        <div class="mb-4">
-                            <canvas id="profitChart" height="160"></canvas>
-                        </div>
-                        <p class="fw-semibold mb-1">Kamar Terpakai</p>
-                        <p class="text-<?= $selisihKamar >= 0 ? 'success' : 'danger' ?> small mb-3">
-                            (<?= $selisihKamar >= 0 ? '+' : '' ?><?= $selisihKamar ?>) dari bulan lalu</p>
-
-                        <div class="row text-center mb-4">
-                            <div class="col"><i class="bi bi-cash-coin me-1 text-success"></i><br><span
-                                    class="fw-bold"><?= rupiah($profit) ?></span><br><span
-                                    class="text-muted small">Profit</span></div>
-                            <div class="col"><i class="bi bi-bar-chart me-1 text-info"></i><br><span
-                                    class="fw-bold"><?= rupiah($omset) ?></span><br><span
-                                    class="text-muted small">Omset</span></div>
-                            <div class="col"><i class="bi bi-wallet2 me-1 text-danger"></i><br><span
-                                    class="fw-bold"><?= rupiah($pengeluaran) ?></span><br><span
-                                    class="text-muted small">Pengeluaran</span></div>
-                            <div class="col"><i class="bi bi-door-closed me-1 text-primary"></i><br><span
-                                    class="fw-bold"><?= $jumlahKamar ?></span><br><span class="text-muted small">Total
-                                    Kamar</span></div>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <a href="export_laporan.php?type=monthly" class="btn btn-info text-white">Unduh Laporan Bulanan</a>
-                            <a href="export_laporan.php?type=yearly" class="btn btn-info text-white">Unduh Laporan Tahunan</a>
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body p-4">
+                                <h6 class="fw-semibold mb-3">Keuntungan enam bulan terakhir (dalam jutaan rupiah)</h6>
+                                <div class="chart-container mb-4">
+                                    <canvas id="profitChart" height="160"></canvas>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                                            <div class="card-body text-center p-3">
+                                                <i class="bi bi-cash-coin fs-2 text-success mb-2"></i>
+                                                <h6 class="fw-bold mb-1"><?= rupiah($profit) ?></h6>
+                                                <small class="text-muted">Profit</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                                            <div class="card-body text-center p-3">
+                                                <i class="bi bi-bar-chart fs-2 text-info mb-2"></i>
+                                                <h6 class="fw-bold mb-1"><?= rupiah($omset) ?></h6>
+                                                <small class="text-muted">Omset</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                                            <div class="card-body text-center p-3">
+                                                <i class="bi bi-wallet2 fs-2 text-danger mb-2"></i>
+                                                <h6 class="fw-bold mb-1"><?= rupiah($pengeluaran) ?></h6>
+                                                <small class="text-muted">Pengeluaran</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card shadow-sm border-0 rounded-4 h-100">
+                                            <div class="card-body text-center p-3">
+                                                <i class="bi bi-door-closed fs-2 text-primary mb-2"></i>
+                                                <h6 class="fw-bold mb-1"><?= $jumlahKamar ?></h6>
+                                                <small class="text-muted">Total Kamar</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <a href="export_laporan.php?type=monthly" class="btn btn-info text-white">Unduh
+                                        Laporan Bulanan</a>
+                                    <a href="export_laporan.php?type=yearly" class="btn btn-info text-white">Unduh
+                                        Laporan Tahunan</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Riwayat Transaksi -->
-                    <div class="col-md-5 bg-white rounded-4 p-4 shadow-sm">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="fw-semibold">Riwayat Transaksi</h5>
-                            <span class="text-<?= $profit >= 0 ? 'success' : 'danger' ?> small fw-semibold">
-                                <?= $profit >= 0 ? '+' : '' ?><?= $jumlahKamar > 0 ? round(($profit / ($omset ?: 1)) * 100) : 0 ?>% keuntungan bulan ini
-                            </span>
-                        </div>
-                        <ul class="list-unstyled">
-                            <?php foreach ($transaksi as $item): ?>
-                                <li class="mb-3 d-flex align-items-start">
-                                    <i class="bi <?= $item['ikon'] ?> fs-5 me-2"></i>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-semibold d-flex justify-content-between">
-                                            <span>
-                                                <?= $item['jenis'] ?>
-                                                <?php if ($item['id']) echo "#{$item['id']}"; ?>
-                                            </span>
-                                            <span class="text-success"><?= rupiah($item['jumlah']) ?></span>
-                                        </div>
-                                        <div class="text-muted small"><?= $item['tanggal'] ?> • <?= $item['jam'] ?></div>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <div class="text-end">
-                            <a href="riwayatPembayaran.php" class="btn btn-outline-success btn-sm">Lihat Semua</a>
+                    <div class="col-md-5">
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-semibold">Riwayat Transaksi</h5>
+                                    <span class="text-<?= $profit >= 0 ? 'success' : 'danger' ?> small fw-semibold">
+                                        <?= $profit >= 0 ? '+' : '' ?><?= $jumlahKamar > 0 ? round(($profit / ($omset ?: 1)) * 100) : 0 ?>%
+                                        keuntungan bulan ini
+                                    </span>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <?php foreach ($transaksi as $item): ?>
+                                        <li class="mb-3 d-flex align-items-start">
+                                            <i class="bi <?= $item['ikon'] ?> fs-5 me-2"></i>
+                                            <div class="flex-grow-1">
+                                                <div class="fw-semibold d-flex justify-content-between">
+                                                    <span>
+                                                        <?= $item['jenis'] ?>
+                                                        <?php if ($item['id'])
+                                                            echo "#{$item['id']}"; ?>
+                                                    </span>
+                                                    <span class="text-success"><?= rupiah($item['jumlah']) ?></span>
+                                                </div>
+                                                <div class="text-muted small"><?= $item['tanggal'] ?> • <?= $item['jam'] ?>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                                <div class="text-end">
+                                    <a href="riwayatPembayaran.php" class="btn btn-outline-success btn-sm">Lihat
+                                        Semua</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -255,9 +286,14 @@ function rupiah($angka) {
         </div>
     </div>
 
+    <div class="footer text-center mt-5 pt-5">
+        &copy; 2025, Made with ❤️ for QosKu
+    </div>
+
     <script>
         // Profit Chart
         const ctx = document.getElementById('profitChart').getContext('2d');
+
         const profitChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -265,27 +301,17 @@ function rupiah($angka) {
                 datasets: [{
                     label: 'Profit (juta Rp)',
                     data: [<?= implode(',', $chartData) ?>],
-                    backgroundColor: [
-                        'rgba(79, 209, 197, 0.7)',
-                        'rgba(79, 209, 197, 0.7)',
-                        'rgba(79, 209, 197, 0.7)',
-                        'rgba(79, 209, 197, 0.7)',
-                        'rgba(79, 209, 197, 0.7)',
-                        'rgba(79, 209, 197, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(79, 209, 197, 1)',
-                        'rgba(79, 209, 197, 1)',
-                        'rgba(79, 209, 197, 1)',
-                        'rgba(79, 209, 197, 1)',
-                        'rgba(79, 209, 197, 1)',
-                        'rgba(79, 209, 197, 1)'
-                    ],
-                    borderWidth: 1
+                    backgroundColor: 'rgba(255, 255, 255, 1)',
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderSkipped: false,
+                    barThickness: 10,
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: {
                         display: false
@@ -295,24 +321,30 @@ function rupiah($angka) {
                     y: {
                         beginAtZero: true,
                         grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
+                            color: 'rgba(255, 255, 255, 0.3)',
+                            drawBorder: false
                         },
                         ticks: {
-                            callback: function(value) {
-                                return value + ' jt';
+                            color: 'rgba(255, 255, 255, 1)',
+                            callback: function (value) {
+                                return value + ' Juta';
                             }
                         }
                     },
                     x: {
                         grid: {
                             display: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.3)'
                         }
                     }
-                }
+                },
             }
         });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

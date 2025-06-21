@@ -154,12 +154,19 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 rounded-4 p-4">
                             <?php if ($occupant): ?>
-                                <!-- Resident Information -->
                                 <div class="text-center mb-4">
-                                    <div class="d-inline-block bg-secondary rounded-circle mb-2"
-                                        style="width: 100px; height: 100px; line-height: 100px;">
-                                        <span class="text-white fs-1"><?= substr($occupant['namaLengkap'], 0, 1) ?></span>
-                                    </div>
+                                    <?php if (!empty($occupant['profilePicture'])): ?>
+                                        <img src="../../assets/img/<?= htmlspecialchars($occupant['profilePicture']) ?>"
+                                            class="rounded-circle mb-2"
+                                            style="width: 100px; height: 100px; object-fit: cover;"
+                                            alt="Foto <?= htmlspecialchars($occupant['namaLengkap']) ?>">
+                                    <?php else: ?>
+                                        <div class="d-inline-block bg-secondary rounded-circle mb-2"
+                                            style="width: 100px; height: 100px; line-height: 100px;">
+                                            <span class="text-white fs-1"><?= substr($occupant['namaLengkap'], 0, 1) ?></span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <h5 class="fw-bold mb-1"><?= htmlspecialchars($occupant['namaLengkap']) ?></h5>
                                     <p class="text-muted mb-1"><?= htmlspecialchars($occupant['email']) ?></p>
                                     <p class="text-muted"><?= htmlspecialchars($occupant['nomorHp']) ?></p>
