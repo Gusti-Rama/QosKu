@@ -39,11 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Enhanced approval logic
             if ($action === 'approve') {
-                // Get booking and payment details - CORRECTED
+                // Get booking and payment details
                 $bookingQuery = $connect->query("
         SELECT p.*, 
                p.jenis_sewa,
                p.lamaSewa,
+               p.jenisPemesanan,
                k.idKamar,
                p.idPelanggan
         FROM pemesanan p
@@ -53,27 +54,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ");
                 $booking = $bookingQuery->fetch_assoc();
 
-                // Calculate dates
-                $startDate = date('Y-m-d');
-                $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $booking['lamaSewa'] . ' ' . $booking['jenis_sewa']));
+                if ($booking['jenisPemesanan'] === 'perpanjang') {
+                    // Handle extension approval
+                    // Update the extension pemesanan to active
+                    $connect->query("
+                        UPDATE pemesanan SET 
+                            statusPemesanan = 'Terkonfirmasi',
+                            is_active = TRUE
+                        WHERE idPemesanan = {$booking['idPemesanan']}
+                    ");
+                    
+                    // Update the original booking's end date to the extension's end date
+                    $connect->query("
+                        UPDATE pemesanan SET 
+                            tanggal_selesai = (
+                                SELECT tanggal_selesai 
+                                FROM pemesanan 
+                                WHERE idPemesanan = {$booking['idPemesanan']}
+                            )
+                        WHERE idKamar = {$booking['idKamar']}
+                        AND (idPelanggan = {$booking['idPelanggan']} OR idPelanggan_aktif = {$booking['idPelanggan']})
+                        AND statusPemesanan = 'Terkonfirmasi'
+                        AND is_active = 1
+                        AND jenisPemesanan = 'pesan'
+                    ");
+                    
+                    $_SESSION['payment_message'] = "Extension request approved! Room rental extended.";
+                } else {
+                    // Handle regular booking approval
+                    // Calculate dates
+                    $startDate = date('Y-m-d');
+                    
+                    // Fix the date calculation based on rental period type
+                    $lamaSewa = (int)$booking['lamaSewa'];
+                    $jenisSewa = $booking['jenis_sewa'];
+                    
+                    // Calculate end date based on rental period type
+                    switch ($jenisSewa) {
+                        case 'bulanan':
+                            $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $lamaSewa . ' months'));
+                            break;
+                        case 'mingguan':
+                            $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $lamaSewa . ' weeks'));
+                            break;
+                        case 'harian':
+                            $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $lamaSewa . ' days'));
+                            break;
+                        default:
+                            // Fallback to monthly if unknown type
+                            $endDate = date('Y-m-d', strtotime($startDate . ' + ' . $lamaSewa . ' months'));
+                            break;
+                    }
+                    
+                    // Update booking status
+                    $connect->query("
+                UPDATE pemesanan SET 
+                    statusPemesanan = 'Terkonfirmasi',
+                    is_active = TRUE,
+                    idPelanggan_aktif = {$booking['idPelanggan']},
+                    tanggal_mulai = '$startDate',
+                    tanggal_selesai = '$endDate'
+                WHERE idPemesanan = {$booking['idPemesanan']}
+            ");
 
-                // Update booking status
-                $connect->query("
-            UPDATE pemesanan SET 
-                statusPemesanan = 'Terkonfirmasi',
-                is_active = TRUE,
-                idPelanggan_aktif = {$booking['idPelanggan']},
-                tanggal_mulai = '$startDate',
-                tanggal_selesai = '$endDate'
-            WHERE idPemesanan = {$booking['idPemesanan']}
-        ");
-
-                // Update room status
-                $connect->query("
-            UPDATE kamar_kos 
-            SET statusKetersediaan = 'Ditempati' 
-            WHERE idKamar = {$booking['idKamar']}
-        ");
+                    // Update room status
+                    $connect->query("
+                UPDATE kamar_kos 
+                SET statusKetersediaan = 'Ditempati' 
+                WHERE idKamar = {$booking['idKamar']}
+            ");
+                    
+                    $_SESSION['payment_message'] = "Payment approved and room assigned!";
+                }
             }
 
             $_SESSION['payment_message'] = "Payment #$paymentId has been " . ($action === 'approve' ? 'approved and room assigned!' : 'declined');
@@ -95,7 +147,8 @@ $query = "SELECT p.*,
           k.harga,
           pl.namaLengkap AS namaPelanggan,
           pm.tanggalPemesanan,
-          pm.statusPemesanan
+          pm.statusPemesanan,
+          pm.jenisPemesanan
           FROM pembayaran p
           JOIN pemesanan pm ON p.idPemesanan = pm.idPemesanan
           JOIN pelanggan pl ON pm.idPelanggan = pl.idPelanggan
@@ -149,6 +202,7 @@ $payments = $connect->query($query);
                                         <th>Payment ID</th>
                                         <th>Customer</th>
                                         <th>Room</th>
+                                        <th>Type</th>
                                         <th>Amount</th>
                                         <th>Method</th>
                                         <th>Date</th>
@@ -163,6 +217,13 @@ $payments = $connect->query($query);
                                                 <td><?= htmlspecialchars($payment['namaPelanggan']) ?></td>
                                                 <td>
                                                     <?= htmlspecialchars($payment['nomorKamar']) ?> (<?= htmlspecialchars($payment['tipeKamar']) ?>)
+                                                </td>
+                                                <td>
+                                                    <?php if ($payment['jenisPemesanan'] === 'perpanjang'): ?>
+                                                        <span class="badge bg-warning">Extension</span>
+                                                    <?php else: ?>
+                                                        <span class="badge bg-primary">New Booking</span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>Rp <?= number_format($payment['jumlahPembayaran'], 0, ',', '.') ?></td>
                                                 <td><?= ucfirst($payment['metodePembayaran']) ?></td>
@@ -208,7 +269,7 @@ $payments = $connect->query($query);
                                         <?php endwhile; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="7" class="text-center py-4 text-muted">
+                                            <td colspan="8" class="text-center py-4 text-muted">
                                                 <i class="bi bi-check-circle-fill fs-1 text-success"></i>
                                                 <p class="mt-2 mb-0">No pending payments to verify</p>
                                             </td>

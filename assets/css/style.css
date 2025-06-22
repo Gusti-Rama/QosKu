@@ -40,3 +40,28 @@ body {
 .chart-container canvas {
   border-radius: 12px;
 }
+
+.card-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: scale3d(1.02, 1.02, 1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-color: #4fd1c5;
+}
+
+/* Styles for occupied rooms */
+.card-disabled {
+  opacity: 0.8;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.card-disabled .card-img-top {
+  filter: grayscale(30%);
+}
+
+.card-disabled .card-title,
+.card-disabled .card-text {
+  color: #6c757d !important;
+}

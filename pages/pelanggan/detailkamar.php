@@ -78,6 +78,18 @@ $costsQuery = "SELECT SUM(jumlahBiaya) AS total
 $costsResult = $connect->query($costsQuery);
 $additionalCosts = $costsResult->fetch_assoc()['total'] ?? 0;
 $totalAmount = $kamar['harga'] + $additionalCosts;
+
+// Get current booking information
+$bookingInfoQuery = "SELECT tanggal_mulai, tanggal_selesai, lamaSewa, jenis_sewa 
+                    FROM pemesanan 
+                    WHERE idKamar = ? 
+                    AND (idPelanggan = ? OR idPelanggan_aktif = ?)
+                    AND statusPemesanan = 'Terkonfirmasi'
+                    LIMIT 1";
+$bookingStmt = $connect->prepare($bookingInfoQuery);
+$bookingStmt->bind_param("iii", $idKamar, $idPelanggan, $idPelanggan);
+$bookingStmt->execute();
+$bookingInfo = $bookingStmt->get_result()->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -157,6 +169,85 @@ $totalAmount = $kamar['harga'] + $additionalCosts;
 
                     <!-- Pembayaran -->
                     <div class="col-md-4">
+                        <!-- Current Booking Info -->
+                        <?php if ($bookingInfo): ?>
+                            <div class="card shadow-sm border-0 rounded-4 p-4 mb-3">
+                                <h6 class="fw-bold">Informasi Sewa Saat Ini</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <small class="text-muted">Mulai Sewa</small>
+                                        <p class="mb-1 fw-bold"><?= date('d M Y', strtotime($bookingInfo['tanggal_mulai'])) ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Berakhir</small>
+                                        <p class="mb-1 fw-bold"><?= date('d M Y', strtotime($bookingInfo['tanggal_selesai'])) ?></p>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">Jenis Sewa</small>
+                                    <p class="mb-0 fw-bold"><?= ucfirst($bookingInfo['jenis_sewa']) ?> (<?= $bookingInfo['lamaSewa'] ?> periode)</p>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Extension Form -->
+                        <div class="card shadow-sm border-0 rounded-4 p-4 mb-3">
+                            <h6 class="fw-bold">Perpanjangan Sewa</h6>
+
+                            <?php
+                            // Calculate days remaining
+                            $daysRemaining = floor((strtotime($bookingInfo['tanggal_selesai']) - time()) / (60 * 60 * 24));
+                            if ($daysRemaining < 7): ?>
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    Sewa Anda akan berakhir dalam <?= $daysRemaining ?> hari.
+                                </div>
+                            <?php endif; ?>
+
+                            <form action="../../php/proses_pembayaran.php" method="POST">
+                                <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
+                                <input type="hidden" name="jenis_pembayaran" value="perpanjangan">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Perpanjangan</label>
+                                    <select class="form-select" name="jenis_perpanjangan" id="jenisPerpanjangan" required>
+                                        <option value="bulanan">Bulanan</option>
+                                        <option value="mingguan" <?= $daysRemaining < 14 ? 'selected' : '' ?>>Mingguan</option>
+                                        <option value="harian" <?= $daysRemaining < 7 ? 'selected' : '' ?>>Harian</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Durasi</label>
+                                    <input type="number" class="form-control" name="durasi_perpanjangan" id="durasiPerpanjangan"
+                                        min="1" value="<?= $daysRemaining < 14 ? 1 : 6 ?>" required>
+                                    <div class="form-text">Jumlah bulan/minggu/hari</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Metode Pembayaran</label>
+                                    <select class="form-select" name="metode_pembayaran" required>
+                                        <option value="cash">Uang Tunai</option>
+                                        <option value="transfer">Transfer Bank</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <p class="fw-bold mb-2">Biaya Perpanjangan</p>
+                                    <p>Harga per periode: <span id="hargaPerPeriode" class="float-end">Rp <?= number_format($kamar['harga'], 0, ',', '.') ?></span></p>
+                                    <p>Durasi: <span id="durasiDisplay" class="float-end">1 bulan</span></p>
+                                    <hr>
+                                    <h6 class="fw-bold">Total <span id="totalPerpanjangan" class="float-end">Rp <?= number_format($kamar['harga'], 0, ',', '.') ?></span></h6>
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100" style="background-color: #4FD1C5; border: none;">
+                                    Ajukan Perpanjangan
+                                </button>
+                                <small class="text-muted mt-2 d-block">*Perpanjangan akan diverifikasi oleh pemilik dalam 1x24 jam</small>
+                            </form>
+                        </div>
+
+                        <!-- Regular Payment Form -->
                         <form action="../../php/proses_pembayaran.php" method="POST">
                             <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
                             <div class="card shadow-sm border-0 rounded-4 p-4">
@@ -219,6 +310,54 @@ $totalAmount = $kamar['harga'] + $additionalCosts;
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Extension form calculations
+        const jenisPerpanjangan = document.getElementById('jenisPerpanjangan');
+        const durasiPerpanjangan = document.getElementById('durasiPerpanjangan');
+        const hargaPerPeriode = document.getElementById('hargaPerPeriode');
+        const durasiDisplay = document.getElementById('durasiDisplay');
+        const totalPerpanjangan = document.getElementById('totalPerpanjangan');
+
+        const basePrice = <?= $kamar['harga'] ?>;
+
+        function updateExtensionCalculation() {
+            const jenis = jenisPerpanjangan.value;
+            const durasi = parseInt(durasiPerpanjangan.value) || 1;
+
+            let pricePerPeriod = basePrice;
+            let periodText = '';
+
+            // Calculate price based on period type
+            switch (jenis) {
+                case 'mingguan':
+                    pricePerPeriod = Math.ceil(basePrice / 4); // Approximate weekly price
+                    periodText = durasi + (durasi === 1 ? ' minggu' : ' minggu');
+                    break;
+                case 'harian':
+                    pricePerPeriod = Math.ceil(basePrice / 30); // Approximate daily price
+                    periodText = durasi + (durasi === 1 ? ' hari' : ' hari');
+                    break;
+                default: // bulanan
+                    pricePerPeriod = basePrice;
+                    periodText = durasi + (durasi === 1 ? ' bulan' : ' bulan');
+                    break;
+            }
+
+            const total = pricePerPeriod * durasi;
+
+            // Update display
+            hargaPerPeriode.textContent = 'Rp ' + total.toLocaleString('id-ID');
+            durasiDisplay.textContent = periodText;
+            totalPerpanjangan.textContent = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        // Add event listeners
+        jenisPerpanjangan.addEventListener('change', updateExtensionCalculation);
+        durasiPerpanjangan.addEventListener('input', updateExtensionCalculation);
+
+        // Initialize calculation
+        updateExtensionCalculation();
+    </script>
 </body>
 
 </html>

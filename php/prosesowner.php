@@ -11,23 +11,21 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'owner') {
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Add new room
     if (isset($_POST['add_room'])) {
-        // Validate inputs
         $errors = [];
-        $nomorKamar = trim($_POST['nomorKamar'] ?? '');
+        $nomorKamar = (int)($_POST['nomorKamar'] ?? '');
         $tipeKamar = trim($_POST['tipeKamar'] ?? '');
         $harga = (int)($_POST['harga'] ?? 0);
         $deskripsi = trim($_POST['deskripsi'] ?? '');
 
         // Basic validation
-        if (empty($nomorKamar)) $errors[] = "Nomor kamar harus diisi";
+        if ($nomorKamar <= 0) $errors[] = "Nomor kamar harus berupa angka positif";
         if (empty($tipeKamar)) $errors[] = "Tipe kamar harus diisi";
         if ($harga <= 0) $errors[] = "Harga harus lebih dari 0";
 
         // Check for duplicate room number
         $checkStmt = $connect->prepare("SELECT idKamar FROM kamar_kos WHERE nomorKamar = ?");
-        $checkStmt->bind_param("s", $nomorKamar);
+        $checkStmt->bind_param("i", $nomorKamar);
         $checkStmt->execute();
         if ($checkStmt->get_result()->num_rows > 0) {
             $errors[] = "Nomor kamar sudah ada";
@@ -51,22 +49,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if (empty($errors)) {
-                $targetDir = "../../assets/img/";
-                $ext = pathinfo($_FILES['fotoKamar']['name'], PATHINFO_EXTENSION);
-                $fileName = 'room_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-                $targetFile = $targetDir . $fileName;
-
-                if (move_uploaded_file($_FILES['fotoKamar']['tmp_name'], $targetFile)) {
-                    $gambar = $fileName;
+                $targetDir = "../assets/img/";
+                
+                // Check if directory exists and is writable
+                if (!is_dir($targetDir)) {
+                    $errors[] = "Upload directory does not exist";
+                } elseif (!is_writable($targetDir)) {
+                    $errors[] = "Upload directory is not writable";
                 } else {
-                    $errors[] = "Gagal mengupload gambar";
+                    $ext = pathinfo($_FILES['fotoKamar']['name'], PATHINFO_EXTENSION);
+                    $fileName = 'kamar_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+                    $targetFile = $targetDir . $fileName;
+
+                    if (move_uploaded_file($_FILES['fotoKamar']['tmp_name'], $targetFile)) {
+                        $gambar = $fileName;
+                    } else {
+                        $errors[] = "Gagal mengupload gambar";
+                    }
                 }
             }
+        } else {
+            // No file uploaded, which is fine
         }
 
         if (empty($errors)) {
             $stmt = $connect->prepare("INSERT INTO kamar_kos (nomorKamar, tipeKamar, harga, statusKetersediaan, deskripsi, gambar) VALUES (?, ?, ?, 'Tersedia', ?, ?)");
-            $stmt->bind_param("ssiss", $nomorKamar, $tipeKamar, $harga, $deskripsi, $gambar);
+            $stmt->bind_param("isiss", $nomorKamar, $tipeKamar, $harga, $deskripsi, $gambar);
 
             if ($stmt->execute()) {
                 $_SESSION['success'] = "Kamar berhasil ditambahkan!";

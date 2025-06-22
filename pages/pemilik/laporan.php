@@ -275,7 +275,7 @@ function rupiah($angka)
                                     <?php endforeach; ?>
                                 </ul>
                                 <div class="text-end">
-                                    <a href="riwayatPembayaran.php" class="btn btn-outline-success btn-sm">Lihat
+                                    <a href="riwayattransaksi.php" class="btn btn-outline-success btn-sm">Lihat
                                         Semua</a>
                                 </div>
                             </div>

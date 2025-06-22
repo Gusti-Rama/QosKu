@@ -33,12 +33,12 @@ $is_laporan_related = in_array($current_page, ['laporan', 'riwayattransaksi']);
             </li>
             <li class="nav-item mb-2">
                 <a href="laporan.php" class="nav-link p-0">
-                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $current_page === 'laporan' ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
-                        <span class="d-flex justify-content-center align-items-center rounded-3 <?= $current_page === 'laporan' ? 'bg-utama' : 'bg-white' ?>"
+                    <div class="rounded-4 py-3 px-2 d-flex align-items-center <?= $is_laporan_related ? 'bg-white shadow-sm' : 'bg-transparent' ?>">
+                        <span class="d-flex justify-content-center align-items-center rounded-3 <?= $is_laporan_related ? 'bg-utama' : 'bg-white' ?>"
                             style="width: 32px; height: 32px;">
-                            <i class="bi bi-bar-chart-fill <?= $current_page === 'laporan' ? 'text-white' : 'text-utama' ?>"></i>
+                            <i class="bi bi-bar-chart-fill <?= $is_laporan_related ? 'text-white' : 'text-utama' ?>"></i>
                         </span>
-                        <span class="ms-2 <?= $current_page === 'laporan' ? 'fw-bold text-dark' : 'text-secondary' ?>">Laporan</span>
+                        <span class="ms-2 <?= $is_laporan_related ? 'fw-bold text-dark' : 'text-secondary' ?>">Laporan</span>
                     </div>
                 </a>
             </li>

@@ -66,6 +66,23 @@ if (!$stmt->get_result()->num_rows) {
     <div class="flex-grow-1">
       <?php include '../../layout/pemilikHeader.php'; ?>
 
+      <!-- Display error and success messages -->
+      <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show mx-3 mt-3" role="alert">
+          <?= $_SESSION['error'] ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+      <?php endif; ?>
+
+      <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show mx-3 mt-3" role="alert">
+          <?= $_SESSION['success'] ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+      <?php endif; ?>
+
       <div class="container-fluid pt-4 pb-3">
         <div class="d-flex justify-content-between align-items-center mb-3 px-2">
           <div>
@@ -96,7 +113,7 @@ if (!$stmt->get_result()->num_rows) {
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="nomorKamar" class="form-label">Nomor Kamar</label>
-                  <input type="text" class="form-control" id="nomorKamar" name="nomorKamar" required>
+                  <input type="number" class="form-control" id="nomorKamar" name="nomorKamar" required min="1">
                 </div>
                 <div class="mb-3">
                   <label for="tipeKamar" class="form-label">Tipe Kamar</label>
@@ -229,7 +246,24 @@ if (!$stmt->get_result()->num_rows) {
     &copy; 2025, Made with ❤️ for QosKu
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {});
+    document.addEventListener('DOMContentLoaded', function() {
+      // Basic form validation
+      const addRoomForm = document.querySelector('form[action="../../php/prosesowner.php"]');
+      if (addRoomForm) {
+        addRoomForm.addEventListener('submit', function(e) {
+          // Check if all required fields are filled
+          const nomorKamar = this.querySelector('#nomorKamar').value;
+          const tipeKamar = this.querySelector('#tipeKamar').value;
+          const harga = this.querySelector('#harga').value;
+          
+          if (!nomorKamar || !tipeKamar || !harga) {
+            e.preventDefault();
+            alert('Please fill in all required fields');
+            return false;
+          }
+        });
+      }
+    });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
