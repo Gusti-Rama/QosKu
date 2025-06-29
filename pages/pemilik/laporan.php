@@ -83,6 +83,57 @@ while ($row = $profitHistoryResult->fetch_assoc()) {
     $chartData[] = $row['profit'] / 1000000; // Convert to millions
 }
 
+// --------- FETCH DATA FOR TRANSACTION HISTORY ----------
+
+// Fetch all orders
+$ordersQuery = "SELECT 
+    p.idPemesanan,
+    p.tanggalPemesanan,
+    p.statusPemesanan,
+    pl.namaLengkap AS namaPelanggan,
+    k.nomorKamar
+FROM 
+    pemesanan p
+JOIN 
+    pelanggan pl ON p.idPelanggan = pl.idPelanggan
+JOIN 
+    kamar_kos k ON p.idKamar = k.idKamar
+ORDER BY 
+    p.tanggalPemesanan DESC
+LIMIT 6";
+$ordersResult = $connect->query($ordersQuery);
+$allOrders = $ordersResult->fetch_all(MYSQLI_ASSOC);
+
+// Fetch all payments
+$paymentsQuery = "SELECT 
+    pb.idPembayaran,
+    pb.tanggalPembayaran,
+    pb.metodePembayaran,
+    pb.jumlahPembayaran,
+    pb.statusPembayaran
+FROM 
+    pembayaran pb
+ORDER BY 
+    pb.tanggalPembayaran DESC
+LIMIT 6";
+$paymentsResult = $connect->query($paymentsQuery);
+$allPayments = $paymentsResult->fetch_all(MYSQLI_ASSOC);
+
+// Fetch all expenses
+$expensesQuery = "SELECT 
+    idPengeluaran,
+    tanggal,
+    namaPengeluaran,
+    jenisPengeluaran,
+    jumlah
+FROM 
+    pengeluaran
+ORDER BY 
+    tanggal DESC
+LIMIT 6";
+$expensesResult = $connect->query($expensesQuery);
+$allExpenses = $expensesResult->fetch_all(MYSQLI_ASSOC);
+
 // --------- RECENT TRANSACTIONS ----------
 $queryPembayaran = "
 SELECT 
@@ -256,27 +307,106 @@ function rupiah($angka)
                                     </span>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <?php foreach ($transaksi as $item): ?>
+                                    <?php
+                                    // Combine all transactions into one array
+                                    $allTransactions = [];
+
+                                    // Add orders (pemesanan)
+                                    foreach ($allOrders as $order) {
+                                        $allTransactions[] = [
+                                            'type' => 'order',
+                                            'id' => $order['idPemesanan'],
+                                            'date' => $order['tanggalPemesanan'],
+                                            'description' => 'Pemesanan Kamar ' . $order['nomorKamar'],
+                                            'customer' => $order['namaPelanggan'],
+                                            'amount' => 0, // Orders don't have amounts in this view
+                                            'status' => $order['statusPemesanan'],
+                                            'icon' => 'bi-journal-text',
+                                            'color' => 'primary'
+                                        ];
+                                    }
+
+                                    // Add payments (pembayaran)
+                                    foreach ($allPayments as $payment) {
+                                        $allTransactions[] = [
+                                            'type' => 'payment',
+                                            'id' => $payment['idPembayaran'],
+                                            'date' => $payment['tanggalPembayaran'],
+                                            'description' => 'Pembayaran',
+                                            'amount' => $payment['jumlahPembayaran'],
+                                            'method' => $payment['metodePembayaran'],
+                                            'status' => $payment['statusPembayaran'],
+                                            'icon' => 'bi-cash-coin',
+                                            'color' => 'success'
+                                        ];
+                                    }
+
+                                    // Add expenses (pengeluaran)
+                                    foreach ($allExpenses as $expense) {
+                                        $allTransactions[] = [
+                                            'type' => 'expense',
+                                            'id' => $expense['idPengeluaran'],
+                                            'date' => $expense['tanggal'],
+                                            'description' => $expense['namaPengeluaran'],
+                                            'amount' => -$expense['jumlah'], // Negative for expenses
+                                            'category' => $expense['jenisPengeluaran'],
+                                            'icon' => 'bi-wallet2',
+                                            'color' => 'danger'
+                                        ];
+                                    }
+
+                                    // Sort all transactions by date (newest first)
+                                    usort($allTransactions, function ($a, $b) {
+                                        return strtotime($b['date']) - strtotime($a['date']);
+                                    });
+
+                                    // Display only the 6 most recent transactions
+                                    $recentTransactions = array_slice($allTransactions, 0, 6);
+
+                                    foreach ($recentTransactions as $tx):
+                                        $txDate = strtotime($tx['date']);
+                                    ?>
                                         <li class="mb-3 d-flex align-items-start">
-                                            <i class="bi <?= $item['ikon'] ?> fs-5 me-2"></i>
+                                            <i class="bi <?= $tx['icon'] ?> fs-5 me-2 text-<?= $tx['color'] ?>"></i>
                                             <div class="flex-grow-1">
                                                 <div class="fw-semibold d-flex justify-content-between">
                                                     <span>
-                                                        <?= $item['jenis'] ?>
-                                                        <?php if ($item['id'])
-                                                            echo "#{$item['id']}"; ?>
+                                                        <?= $tx['description'] ?>
+                                                        <?php if ($tx['type'] === 'order'): ?>
+                                                            (<?= $tx['customer'] ?>)
+                                                        <?php endif; ?>
                                                     </span>
-                                                    <span class="text-success"><?= rupiah($item['jumlah']) ?></span>
+                                                    <?php if ($tx['type'] !== 'order'): ?>
+                                                        <span class="text-<?= $tx['amount'] >= 0 ? 'success' : 'danger' ?>">
+                                                            <?= rupiah(abs($tx['amount'])) ?>
+                                                        </span>
+                                                    <?php endif; ?>
                                                 </div>
-                                                <div class="text-muted small"><?= $item['tanggal'] ?> • <?= $item['jam'] ?>
+                                                <div class="text-muted small">
+                                                    <?= date('d M', $txDate) ?> • <?= date('H:i', $txDate) ?>
+                                                    <?php if ($tx['type'] === 'order'): ?>
+                                                        • <span class="badge bg-<?=
+                                                                                $tx['status'] === 'Terkonfirmasi' ? 'success' : ($tx['status'] === 'Tertunda' ? 'warning text-dark' : 'danger')
+                                                                                ?>">
+                                                            <?= $tx['status'] ?>
+                                                        </span>
+                                                    <?php elseif ($tx['type'] === 'payment'): ?>
+                                                        • <?= ucfirst($tx['method']) ?>
+                                                        • <span class="badge bg-<?=
+                                                                                $tx['status'] === 'Lunas' ? 'success' : ($tx['status'] === 'Menunggu Konfirmasi' ? 'warning text-dark' : 'secondary')
+                                                                                ?>">
+                                                            <?= $tx['status'] ?>
+                                                        </span>
+                                                    <?php else: ?>
+                                                        • <?= $tx['category'] ?>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
                                 <div class="text-end">
-                                    <a href="riwayattransaksi.php" class="btn btn-outline-success btn-sm">Lihat
-                                        Semua</a>
+                                    <a href="riwayattransaksi.php" class="btn btn-outline-success btn-sm">Lihat Semua</a>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +456,7 @@ function rupiah($angka)
                         },
                         ticks: {
                             color: 'rgba(255, 255, 255, 1)',
-                            callback: function (value) {
+                            callback: function(value) {
                                 return value + ' Juta';
                             }
                         }

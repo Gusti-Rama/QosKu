@@ -199,14 +199,14 @@ $payments = $connect->query($query);
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Payment ID</th>
-                                        <th>Customer</th>
-                                        <th>Room</th>
-                                        <th>Type</th>
-                                        <th>Amount</th>
-                                        <th>Method</th>
-                                        <th>Date</th>
-                                        <th>Actions</th>
+                                        <th>ID Pemesanan</th>
+                                        <th>Pelanggan</th>
+                                        <th>Kamar</th>
+                                        <th>Tipe</th>
+                                        <th>Jumlah</th>
+                                        <th>Metode Pembayaran</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -220,9 +220,9 @@ $payments = $connect->query($query);
                                                 </td>
                                                 <td>
                                                     <?php if ($payment['jenisPemesanan'] === 'perpanjang'): ?>
-                                                        <span class="badge bg-warning">Extension</span>
+                                                        <span class="badge bg-warning">Perpanjangan</span>
                                                     <?php else: ?>
-                                                        <span class="badge bg-primary">New Booking</span>
+                                                        <span class="badge bg-primary">Pesanan Kamar Baru</span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>Rp <?= number_format($payment['jumlahPembayaran'], 0, ',', '.') ?></td>
@@ -250,7 +250,7 @@ $payments = $connect->query($query);
                                                             <input type="hidden" name="payment_id" value="<?= $payment['idPembayaran'] ?>">
                                                             <input type="hidden" name="action" value="approve">
                                                             <button type="submit" class="btn btn-sm btn-primary">
-                                                                <i class="bi bi-check-circle"></i> Approve
+                                                                <i class="bi bi-check-circle"></i> Konfirmasi
                                                             </button>
                                                         </form>
 
@@ -260,7 +260,7 @@ $payments = $connect->query($query);
                                                             <input type="hidden" name="payment_id" value="<?= $payment['idPembayaran'] ?>">
                                                             <input type="hidden" name="action" value="decline">
                                                             <button type="submit" class="btn btn-sm btn-danger">
-                                                                <i class="bi bi-x-circle"></i> Decline
+                                                                <i class="bi bi-x-circle"></i> Tolak
                                                             </button>
                                                         </form>
                                                     </div>
@@ -271,7 +271,7 @@ $payments = $connect->query($query);
                                         <tr>
                                             <td colspan="8" class="text-center py-4 text-muted">
                                                 <i class="bi bi-check-circle-fill fs-1 text-success"></i>
-                                                <p class="mt-2 mb-0">No pending payments to verify</p>
+                                                <p class="mt-2 mb-0">Belum ada pesanan</p>
                                             </td>
                                         </tr>
                                     <?php endif; ?>
