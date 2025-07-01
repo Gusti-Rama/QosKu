@@ -3,7 +3,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
-    header("Location: ../../auth/login.php");
+    header(header: "Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
@@ -172,38 +172,38 @@ if ($bookingResult->num_rows > 0) {
                             <h4 class="fw-bold">Kamar Aktif Anda</h4>
                             <p class="text-muted">Anda memiliki <?= count($bookings) ?> kamar aktif</p>
                         </div>
-                        
+
                         <?php foreach ($bookings as $kamar): ?>
-                        <div class="col-md-12 mb-3  ">
-                            <div class="card shadow-sm border-0 rounded-4 h-100">
-                                <div class="card-header rounded-4 bg-white border-0">
-                                    <h5 class="fw-bold pt-3">Detail Kamar</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar']) ?>"
-                                                class="img-fluid rounded-3 w-100"
-                                                style="height: 300px; object-fit: cover;"
-                                                alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h5 class="fw-bold">Kamar No. <?= htmlspecialchars($kamar['nomorKamar']) ?></h5>
-                                            <p><strong>Tipe:</strong> <?= htmlspecialchars($kamar['tipeKamar']) ?></p>
-                                            <p><strong>Periode:</strong>
-                                                <?= date('d M Y', strtotime($kamar['tanggal_mulai'])) ?> -
-                                                <?= date('d M Y', strtotime($kamar['tanggal_selesai'])) ?>
-                                            </p>
-                                            <p><strong>Status:</strong> <span class="badge bg-success">Aktif</span></p>
-                                            <a href="detailkamar.php?idKamar=<?= $kamar['idKamar'] ?>"
-                                                class="btn btn-primary mt-2">
-                                                <i class="bi bi-eye-fill"></i> Lihat Detail
-                                            </a>
+                            <div class="col-md-12 mb-3  ">
+                                <div class="card shadow-sm border-0 rounded-4 h-100">
+                                    <div class="card-header rounded-4 bg-white border-0">
+                                        <h5 class="fw-bold pt-3">Detail Kamar</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar']) ?>"
+                                                    class="img-fluid rounded-3 w-100"
+                                                    style="height: 300px; object-fit: cover;"
+                                                    alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5 class="fw-bold">Kamar No. <?= htmlspecialchars($kamar['nomorKamar']) ?></h5>
+                                                <p><strong>Tipe:</strong> <?= htmlspecialchars($kamar['tipeKamar']) ?></p>
+                                                <p><strong>Periode:</strong>
+                                                    <?= date('d M Y', strtotime($kamar['tanggal_mulai'])) ?> -
+                                                    <?= date('d M Y', strtotime($kamar['tanggal_selesai'])) ?>
+                                                </p>
+                                                <p><strong>Status:</strong> <span class="badge bg-success">Aktif</span></p>
+                                                <a href="detailkamar.php?idKamar=<?= $kamar['idKamar'] ?>"
+                                                    class="btn btn-primary mt-2">
+                                                    <i class="bi bi-eye-fill"></i> Lihat Detail
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <div class="col-12">

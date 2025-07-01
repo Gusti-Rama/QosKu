@@ -2,7 +2,7 @@
 session_start();
 require "../../php/connect.php";
 if (!isset($_SESSION['role'])) {
-  header("Location: ../../pages/login.php?error=not_logged_in");
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
   exit;
 }
 
@@ -12,7 +12,7 @@ $diperbolehkan = ['owner'];
 
 // cek peran usernya
 if (!in_array($peran, $diperbolehkan)) {
-  header("Location: ../../pages/login.php?error=Akses_Ditolak");
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
   exit;
 }
 

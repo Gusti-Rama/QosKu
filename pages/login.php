@@ -56,6 +56,12 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
                 case 'password_kosong':
                     echo "Password Wajib diisi!";
                     break;
+                case 'Akses_Ditolak':
+                    echo "Akses Ditolak";
+                    break;
+                case 'not_logged_in':
+                    echo "Silahkan Login Terlebih Dahulu";
+                    break;
                 default:
                     echo "Ada Kesalahan saat Login!";
             }
