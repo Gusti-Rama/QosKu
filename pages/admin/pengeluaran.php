@@ -144,10 +144,10 @@ $currentMonthName = $monthNames[$currentMonth];
 
 <body class="bg-light">
     <div class="d-flex min-vh-100 ms-4 me-4">
-        <?php include '../../layout/pemilikNavbar.php'; ?>
+        <?php include '../../layout/adminNavbar.php'; ?>
 
         <div class="flex-grow-1">
-            <?php include '../../layout/pemilikHeader.php'; ?>
+            <?php include '../../layout/adminHeader.php'; ?>
 
             <!-- Edit Modal -->
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">

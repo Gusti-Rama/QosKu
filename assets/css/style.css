@@ -7,11 +7,11 @@ body {
 }
 
 .button-utama {
-  background-color:#4fd1c5;
+  background-color: #4fd1c5;
 }
 
 .button-utama:hover {
-  background-color:#4fd1c48e;
+  background-color: #4fd1c48e;
 }
 
 .form-check-input:checked {
@@ -71,4 +71,23 @@ body {
 .card-disabled .card-title,
 .card-disabled .card-text {
   color: #6c757d !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+#imagePreviewModal .modal-content {
+  background-color: transparent;
+  box-shadow: none;
+}
+#imagePreviewModal .btn-close {
+  filter: invert(1);
+}
+
+.dropdown-item.active {
+  background-color: #4fd1c5;
+  color: white;
+}
+.dropdown-item.active:hover {
+  background-color: #4fd1c4d3;
 }

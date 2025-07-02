@@ -3,8 +3,8 @@ session_start();
 require "../../php/connect.php";
 
 if (!isset($_SESSION['role'])) {
-  header(header: "Location: ../../pages/login.php?pesan=not_logged_in");
-  exit;
+    header(header: "Location: ../../pages/login.php?pesan=not_logged_in");
+    exit;
 }
 
 $peran = strtolower($_SESSION['role']);
@@ -13,8 +13,8 @@ $diperbolehkan = ['admin'];
 
 // cek peran usernya
 if (!in_array($peran, $diperbolehkan)) {
-  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
-  exit;
+    header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+    exit;
 }
 
 // Validate room ID
@@ -129,25 +129,6 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                                         <li>Kamar mandi: <?= htmlspecialchars($kamar['kamarMandi']) ?></li>
                                     <?php endif; ?>
                                 </ul>
-
-                                <!-- Action Buttons -->
-                                <div class="position-absolute bottom-0 end-0 m-3">
-                                    <div class="btn-group" role="group">
-                                        <!-- Edit Button -->
-                                        <button class="btn btn-sm btn-outline-primary rounded-start-4"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#editKamarModal"
-                                            data-kamar-id="<?= $idKamar ?>">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
-
-                                        <!-- Delete Button -->
-                                        <button class="btn btn-sm btn-outline-danger rounded-end-4"
-                                            onclick="confirmDelete(<?= $idKamar ?>, '<?= htmlspecialchars($kamar['nomorKamar']) ?>')">
-                                            <i class="bi bi-trash"></i> Hapus
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -157,9 +138,10 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                             <div class="d-flex gap-3 flex-wrap">
                                 <?php foreach ($additionalImages as $image): ?>
                                     <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>"
-                                        class="img-thumbnail rounded-3"
+                                        class="img-thumbnail rounded-3 cursor-pointer"
                                         style="width: 100px; height: 80px; object-fit: cover;"
-                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>"
+                                        onclick="showImagePreview('../../assets/img/<?= htmlspecialchars($image['image_path']) ?>')">
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -284,91 +266,18 @@ $totalCost = $roomPrice + $additionalCostsTotal;
         </div>
     </div>
 
-    <!-- Edit Kamar Modal -->
-    <div class="modal fade" id="editKamarModal" tabindex="-1" aria-labelledby="editKamarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editKamarModalLabel">Edit Kamar <span id="editKamarTitle"></span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid rounded-3" alt="Preview">
                 </div>
-                <form method="POST" enctype="multipart/form-data" action="../../php/prosesadmin.php">
-                    <div class="modal-body">
-                        <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
-                        <input type="hidden" name="edit_room" value="1">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="editNamaKamar" class="form-label">Nomor Kamar</label>
-                                    <input type="text" class="form-control" id="editNamaKamar"
-                                        name="nomorKamar" value="<?= htmlspecialchars($kamar['nomorKamar'] ?? '') ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editHargaKamar" class="form-label">Harga Kamar</label>
-                                    <input type="number" class="form-control" id="editHargaKamar"
-                                        name="harga" value="<?= $kamar['harga'] ?? '' ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editLuasKamar" class="form-label">Luas Kamar</label>
-                                    <input type="text" class="form-control" id="editLuasKamar"
-                                        name="luasKamar" value="<?= htmlspecialchars($kamar['luasKamar'] ?? '') ?>">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="editFotoKamar" class="form-label">Foto Kamar</label>
-                                    <input class="form-control" type="file" id="editFotoKamar" name="fotoKamar" accept="image/*">
-                                    <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
-                                </div>
-                                <div class="current-image">
-                                    <img src="../../assets/img/<?= htmlspecialchars($kamar['gambar'] ?? 'room-placeholder.jpg') ?>"
-                                        class="img-thumbnail" width="150" alt="Current Image">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDeskripsiKamar" class="form-label">Deskripsi Kamar</label>
-                            <textarea class="form-control" id="editDeskripsiKamar" name="deskripsi" rows="3"><?= htmlspecialchars($kamar['deskripsi'] ?? '') ?></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPerabotanKamar" class="form-label">Perabotan</label>
-                            <textarea class="form-control" id="editPerabotanKamar" name="perabotan" rows="2"><?= htmlspecialchars($kamar['perabotan'] ?? '') ?></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Kamar Mandi</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiDalam"
-                                    value="dalam" <?= ($kamar['kamarMandi'] ?? '') === 'dalam' ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="editKamarMandiDalam">Dalam</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="kamarMandi" id="editKamarMandiLuar"
-                                    value="luar" <?= ($kamar['kamarMandi'] ?? '') === 'luar' ? 'checked' : '' ?>>
-                                <label class="form-check-label" for="editKamarMandiLuar">Luar</label>
-                            </div>
-                        </div>
-
-                        <!-- Add Images Form -->
-                        <div class="mb-3">
-                            <label for="additionalImages" class="form-label">Tambah Foto Lainnya</label>
-                            <input class="form-control" type="file" id="additionalImages" name="additionalImages[]" accept="image/*" multiple>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                    </div>
-                </form>
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
         </div>
     </div>
-
-    <!-- Hidden form for delete action -->
-    <form id="deleteForm" method="POST" action="../../php/prosesadmin.php" class="d-none">
-        <input type="hidden" name="idKamar" id="deleteIdInput">
-        <input type="hidden" name="delete_room" value="1">
-    </form>
 
     <div class="footer text-center mt-5 pt-5">
         &copy; 2025, Made with ❤️ for QosKu
@@ -386,20 +295,12 @@ $totalCost = $roomPrice + $additionalCostsTotal;
             document.getElementById('addForm').style.display = 'none';
         });
 
-        // Delete room confirmation
-        function confirmDelete(id, roomNumber) {
-            if (confirm(`Apakah Anda yakin ingin menghapus Kamar No. ${roomNumber}?`)) {
-                document.getElementById('deleteIdInput').value = id;
-                document.getElementById('deleteForm').submit();
-            }
+        // Image preview function
+        function showImagePreview(imageSrc) {
+            const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            document.getElementById('modalImage').src = imageSrc;
+            modal.show();
         }
-
-        // Edit modal setup
-        document.getElementById('editKamarModal').addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget;
-            const kamarId = button.getAttribute('data-kamar-id');
-            document.getElementById('editKamarTitle').textContent = kamarId;
-        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

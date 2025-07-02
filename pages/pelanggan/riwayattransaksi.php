@@ -4,10 +4,7 @@ require_once "../../php/connect.php";
 
 // Cek login
 if (!isset($_SESSION['idPelanggan']) || !isset($_SESSION['username'])) {
-    echo "<script>
-        alert('Silakan login terlebih dahulu.');
-        window.location.href='../../auth/login.php';
-    </script>";
+    header("Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
@@ -219,4 +216,5 @@ $stmt->close();
         updateTableAndPagination();
     </script>
 </body>
+
 </html>

@@ -17,13 +17,6 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         <p class="fs-5 fw-bold"><?php echo $page_titles[$current_page] ?? ''; ?></p>
     </div>
     <div class="d-flex align-items-start gap-3">
-        <div class="input-group input-group-sm">
-            <span class="input-group-text bg-white rounded-4 border-end-0 rounded-end-0">
-                <i class="bi bi-search"></i>
-            </span>
-            <input type="text" class="form-control border-start-0 rounded-4 rounded-start-0" placeholder="Pencarian">
-        </div>
-
         <div class="dropdown-center">
             <div class="d-flex align-items-center gap-1 text-secondary profile-trigger" style="cursor: pointer;">
                 <div class="profile-container position-relative">

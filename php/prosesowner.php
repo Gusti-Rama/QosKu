@@ -104,6 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $perabotan = trim($_POST['perabotan'] ?? '');
         $kamarMandi = trim($_POST['kamarMandi'] ?? 'dalam');
 
+        // Define these variables at the start of edit_room section
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize = 2 * 1024 * 1024; // 2MB
+        $targetDir = "../assets/img/";
+        
         // Check if room number is being changed to an existing one
         $currentRoomStmt = $connect->prepare("SELECT nomorKamar FROM kamar_kos WHERE idKamar = ?");
         $currentRoomStmt->bind_param("i", $idKamar);
@@ -202,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (in_array($fileType, $allowedTypes)) {
                             $ext = pathinfo($_FILES['additionalImages']['name'][$key], PATHINFO_EXTENSION);
                             $fileName = 'room_extra_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
-                            $targetFile = $targetDir . $fileName;
+                            $targetFile = $targetDir . $fileName; // Use same $targetDir
 
                             if (move_uploaded_file($tmp_name, $targetFile)) {
                                 $insertStmt = $connect->prepare("INSERT INTO kamar_images (idKamar, image_path) VALUES (?, ?)");

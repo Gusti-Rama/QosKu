@@ -3,8 +3,8 @@ session_start();
 require "../../php/connect.php";
 
 if (!isset($_SESSION['role'])) {
-  header("Location: ../../pages/login.php?pesan=not_logged_in");
-  exit;
+    header("Location: ../../pages/login.php?pesan=not_logged_in");
+    exit;
 }
 
 $peran = strtolower($_SESSION['role']);
@@ -13,8 +13,8 @@ $diperbolehkan = ['owner'];
 
 // cek peran usernya
 if (!in_array($peran, $diperbolehkan)) {
-  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
-  exit;
+    header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+    exit;
 }
 
 // Validate room ID
@@ -157,9 +157,10 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                             <div class="d-flex gap-3 flex-wrap">
                                 <?php foreach ($additionalImages as $image): ?>
                                     <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>"
-                                        class="img-thumbnail rounded-3"
+                                        class="img-thumbnail rounded-3 cursor-pointer"
                                         style="width: 100px; height: 80px; object-fit: cover;"
-                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>"
+                                        onclick="showImagePreview('../../assets/img/<?= htmlspecialchars($image['image_path']) ?>')">
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -370,6 +371,19 @@ $totalCost = $roomPrice + $additionalCostsTotal;
         <input type="hidden" name="delete_room" value="1">
     </form>
 
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid rounded-3" alt="Preview">
+                </div>
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <div class="footer text-center mt-5 pt-5">
         &copy; 2025, Made with ❤️ for QosKu
     </div>
@@ -400,6 +414,13 @@ $totalCost = $roomPrice + $additionalCostsTotal;
             const kamarId = button.getAttribute('data-kamar-id');
             document.getElementById('editKamarTitle').textContent = kamarId;
         });
+
+        // Image preview function
+        function showImagePreview(imageSrc) {
+            const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            document.getElementById('modalImage').src = imageSrc;
+            modal.show();
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

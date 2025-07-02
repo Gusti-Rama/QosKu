@@ -4,7 +4,7 @@ require "../../php/connect.php";
 
 // Check if user is logged in
 if (!isset($_SESSION['idPelanggan'])) {
-    header("Location: ../../auth/login.php");
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
@@ -154,14 +154,16 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
 
                         </div>
 
-                        <?php if (!empty($additionalImages)): ?>
+                        <!-- Additional Images -->
+                        <?php if ($additionalImages): ?>
                             <h6 class="fw-bold mt-4">Foto Lainnya</h6>
                             <div class="d-flex gap-3 flex-wrap">
                                 <?php foreach ($additionalImages as $image): ?>
                                     <img src="../../assets/img/<?= htmlspecialchars($image['image_path']) ?>"
-                                        class="img-thumbnail rounded-3"
+                                        class="img-thumbnail rounded-3 cursor-pointer"
                                         style="width: 100px; height: 80px; object-fit: cover;"
-                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>">
+                                        alt="Kamar <?= htmlspecialchars($kamar['nomorKamar']) ?>"
+                                        onclick="showImagePreview('../../assets/img/<?= htmlspecialchars($image['image_path']) ?>')">
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
@@ -301,7 +303,19 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid rounded-3" alt="Preview">
+                </div>
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
         </div>
     </div>
 
@@ -357,6 +371,12 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
 
         // Initialize calculation
         updateExtensionCalculation();
+        // Image preview function
+        function showImagePreview(imageSrc) {
+            const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+            document.getElementById('modalImage').src = imageSrc;
+            modal.show();
+        }
     </script>
 </body>
 

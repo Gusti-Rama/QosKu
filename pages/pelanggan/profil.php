@@ -3,7 +3,7 @@ session_start();
 require_once "../../php/connect.php";
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['idPelanggan'])) {
-    header("Location: ../../pages/login.php?pesan=not_logged_in");
+    header(header: "Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
@@ -114,11 +114,11 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             <?php else: ?>
                                 <ul class="list-unstyled small mb-0">
                                     <?php foreach ($transactions as $transaction): ?>
-                                        <li><?= date('d M Y', strtotime($transaction['tanggalPemesanan'])) ?> — Rp<?= number_format($transaction['totalHarga'], 0, ',', '.') ?></li>
+                                        <li><i class="bi bi-receipt text-dark"></i> <?= date('d M Y', strtotime($transaction['tanggalPemesanan'])) ?> — Rp<?= number_format($transaction['totalHarga'], 0, ',', '.') ?></li>
                                     <?php endforeach; ?>
                                 </ul>
                             <?php endif; ?>
-                            <a class="btn btn-light w-100 text-dark fw-bold mt-3 border-0" href="riwayattransaksi.php" style="background-color: #4FD1C5;">Lihat Semua</a>
+                            <a class="btn button-utama w-100 text-dark fw-bold mt-3 border-0" href="riwayattransaksi.php">Lihat Semua</a>
                         </div>
                     </div>
                 </div>
