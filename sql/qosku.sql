@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 22, 2025 at 10:48 AM
+-- Generation Time: Jul 02, 2025 at 03:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.3.13
 
@@ -126,7 +126,8 @@ INSERT INTO `kamar_kos` (`idKamar`, `nomorKamar`, `tipeKamar`, `harga`, `statusK
 (1, 1, 'Standard', 600000, 'Ditempati', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tempor eros et porttitor rutrum. In placerat quis tellus ac luctus. Cras pulvinar nisi eu sem consequat, non tempor est porta. In semper dictum nisi, sed placerat massa facilisis eu. Donec ult', '6848260ab1a2c_Kamar1.png'),
 (5, 5, 'asdasd', 123123, 'Ditempati', 'asdad', '68483de0a1729_Kamar2.png'),
 (7, 8, 'asd', 800000, 'Ditempati', 'kamar kos', '684938a9555c6_Kamar3.png'),
-(9, 6, 'Standard', 800000, 'Ditempati', 'Lorem ipsum dolor sit amet', 'room_1750584991_e50489ce.png');
+(9, 6, 'Standard', 800000, 'Ditempati', 'Lorem ipsum dolor sit amet', 'room_1750584991_e50489ce.png'),
+(10, 10, 'Premium', 1000000, 'Tersedia', 'Lorem ipsum', 'kamar_1750597623_e906714f.png');
 
 -- --------------------------------------------------------
 
@@ -164,8 +165,8 @@ CREATE TABLE `pelanggan` (
 --
 
 INSERT INTO `pelanggan` (`idPelanggan`, `username`, `password`, `namaLengkap`, `nomorHp`, `email`, `alamat`, `profilePicture`) VALUES
-(1, 'rama', '123', 'gusti rama', '123', 'rama@mail.com', 'jalan', ''),
-(2, 'adis', '$2y$10$LoOeuxlNk355xUqwXbYnwOohp/NAVISmwU5opif2oVwDY.wzVK3EO', 'Adi Setya', '082108210821', 'adi@gmail.com', 'Jl. Jalan No. 22', '68515fb236d78_images (2).jpg'),
+(1, 'rama', '$2y$10$0cE.c.TWUj7QL/UkFXGbAOrklnso9OzNrUj.qh7zTL.yxkIJKaYIu', 'gusti rama', '123', 'rama@mail.com', 'jalan', ''),
+(2, 'adis', '$2y$10$LoOeuxlNk355xUqwXbYnwOohp/NAVISmwU5opif2oVwDY.wzVK3EO', 'Adi Setya Nur Pradipta', '082108210821', 'adi@gmail.com', 'Jl. Jalan No. 22', '68647b54125b9_GtFoeelawAAa_s_.jpg'),
 (6, 'jokowi', '$2y$10$t69fabhRQAkT5lOoOWmzieZJrR0S9bFNeeuLU.RjK09BdP1niXLWG', 'jkw dodo', '-', 'jkw@gmail.com', '-', ''),
 (7, 'bahlil', '$2y$10$Rorse7B04m.8LNbPu7AdLul8SYeTi1VHM8UocXjH/FtyElearwT1S', 'bahlil silver', '-', 'bahlil@gmail.com', '-', '');
 
@@ -201,7 +202,9 @@ INSERT INTO `pembayaran` (`idPembayaran`, `tanggalPembayaran`, `metodePembayaran
 (9, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12),
 (10, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12),
 (11, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12),
-(12, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12);
+(12, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12),
+(16, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 12),
+(17, '2025-06-22', 'cash', 800000, 'Lunas', NULL, 13);
 
 -- --------------------------------------------------------
 
@@ -238,7 +241,8 @@ INSERT INTO `pemesanan` (`idPemesanan`, `tanggalPemesanan`, `lamaSewa`, `jenis_s
 (9, '2025-06-17', 1, 'bulanan', 123123, 123123, 'Terkonfirmasi', 6, 6, 5, '2025-06-17', '1970-01-01', 1, 'pesan'),
 (10, '2025-06-22', 1, 'bulanan', 123123, 123123, 'Terkonfirmasi', 2, 2, 5, '2025-06-22', '1970-01-01', 1, 'pesan'),
 (11, '2025-06-22', 6, 'bulanan', 800000, 4800000, 'Terkonfirmasi', 2, 2, 9, '2025-06-22', '1970-01-01', 1, 'pesan'),
-(12, '2025-06-22', 1, 'bulanan', 800000, 800000, 'Terkonfirmasi', 7, 7, 7, '2025-06-22', '2025-09-22', 1, 'pesan');
+(12, '2025-06-22', 2, 'bulanan', 800000, 1600000, 'Terkonfirmasi', 7, 7, 7, '2025-06-22', '2025-11-22', 1, 'pesan'),
+(13, '2025-06-22', 1, 'bulanan', 800000, 800000, 'Terkonfirmasi', 7, 7, 7, '2025-10-22', '2025-11-22', 1, 'perpanjang');
 
 -- --------------------------------------------------------
 
@@ -262,7 +266,8 @@ CREATE TABLE `pengeluaran` (
 INSERT INTO `pengeluaran` (`idPengeluaran`, `tanggal`, `keterangan`, `jenisPengeluaran`, `jumlah`, `namaPengeluaran`) VALUES
 (2, '2025-06-21', '', 'Listrik', 1000000, 'PLN'),
 (3, '2025-06-21', '', 'Air', 100000, 'PDAM'),
-(4, '2025-06-21', '', 'Lainnya', 50000, 'Sampah');
+(4, '2025-06-21', '', 'Lainnya', 50000, 'Sampah'),
+(5, '2025-07-02', '', 'Listrik', 1000000, 'PLN');
 
 --
 -- Indexes for dumped tables
@@ -366,7 +371,7 @@ ALTER TABLE `kamar_images`
 -- AUTO_INCREMENT for table `kamar_kos`
 --
 ALTER TABLE `kamar_kos`
-  MODIFY `idKamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `idKamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `laporan`
@@ -384,19 +389,19 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `idPembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idPembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
-  MODIFY `idPemesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idPemesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `idPengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idPengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

@@ -1,11 +1,19 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'owner') {
-    echo "<script>
-        alert('Silakan login sebagai owner terlebih dahulu.');
-        window.location.href='../../auth/login.php';
-    </script>";
-    exit;
+
+if (!isset($_SESSION['role'])) {
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
+  exit;
+}
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+  exit;
 }
 
 include '../../php/connect.php';

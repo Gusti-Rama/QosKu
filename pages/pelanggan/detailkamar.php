@@ -240,7 +240,7 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                                     <h6 class="fw-bold">Total <span id="totalPerpanjangan" class="float-end">Rp <?= number_format($kamar['harga'], 0, ',', '.') ?></span></h6>
                                 </div>
 
-                                <button type="submit" class="btn btn-success w-100" style="background-color: #4FD1C5; border: none;">
+                                <button type="submit" class="btn button-utama w-100">
                                     Ajukan Perpanjangan
                                 </button>
                                 <small class="text-muted mt-2 d-block">*Perpanjangan akan diverifikasi oleh pemilik dalam 1x24 jam</small>
@@ -248,7 +248,7 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                         </div>
 
                         <!-- Regular Payment Form -->
-                        <form action="../../php/proses_pembayaran.php" method="POST">
+                        <!-- <form action="../../php/proses_pembayaran.php" method="POST">
                             <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
                             <div class="card shadow-sm border-0 rounded-4 p-4">
                                 <h6 class="fw-bold">Bayar Tagihan</h6>
@@ -297,7 +297,7 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                                     Bayar
                                 </button>
                             </div>
-                        </form>
+                        </form> -->
                     </div>
                 </div>
             </div>

@@ -95,7 +95,7 @@ $stmt->close();
                         </div>
 
                         <?php if (empty($transactions)): ?>
-                            <div class="alert alert-info">Belum ada transaksi pembayaran yang lunas.</div>
+                            <div class="alert alert-info">Belum ada transaksi.</div>
                         <?php else: ?>
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle rounded-4 shadow-sm bg-white">
@@ -105,7 +105,7 @@ $stmt->close();
                                             <th>Jenis</th>
                                             <th>ID Transaksi</th>
                                             <th>Tanggal</th>
-                                            <th>JumlahPembayaran</th>
+                                            <th>Jumlah Pembayaran</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -119,7 +119,7 @@ $stmt->close();
                             </nav>
                         <?php endif; ?>
 
-                        <a href="dashboard.php" class="btn btn-secondary mt-4">Kembali ke Dashboard</a>
+                        <a href="profil.php" class="btn btn-dark mt-4">Kembali</a>
 
                     </div>
                 </div>

@@ -2,14 +2,23 @@
 session_start();
 require "../../php/connect.php";
 
-// Check if user is logged in as owner
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'owner') {
-    echo "<script>
-        alert('Silakan login sebagai owner terlebih dahulu.');
-        window.location.href='../../auth/login.php';
-    </script>";
+if (!isset($_SESSION['role'])) {
+    header("Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+    header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+    exit;
+}
+// Get current month and year
+$currentMonth = date('m');
+$currentYear = date('Y');
 
 // Process form submission for adding new expense
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add'])) {
@@ -81,16 +90,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit'])) {
     exit;
 }
 
-// Fetch existing expenses
+// Fetch ALL existing expenses (for the table)
 $expensesQuery = "SELECT * FROM pengeluaran ORDER BY tanggal DESC";
 $expensesResult = $connect->query($expensesQuery);
 $expenses = $expensesResult->fetch_all(MYSQLI_ASSOC);
 
-// Calculate totals by category
+// Calculate totals by category for CURRENT MONTH ONLY
 $totalsQuery = "SELECT 
                 jenisPengeluaran,
                 SUM(jumlah) as total
                 FROM pengeluaran
+                WHERE MONTH(tanggal) = $currentMonth
+                AND YEAR(tanggal) = $currentYear
                 GROUP BY jenisPengeluaran";
 $totalsResult = $connect->query($totalsQuery);
 $categoryTotals = [];
@@ -100,6 +111,23 @@ while ($row = $totalsResult->fetch_assoc()) {
     $categoryTotals[$row['jenisPengeluaran']] = $row['total'];
     $grandTotal += $row['total'];
 }
+
+// Get month name in Indonesian
+$monthNames = [
+    '01' => 'Januari',
+    '02' => 'Februari',
+    '03' => 'Maret',
+    '04' => 'April',
+    '05' => 'Mei',
+    '06' => 'Juni',
+    '07' => 'Juli',
+    '08' => 'Agustus',
+    '09' => 'September',
+    '10' => 'Oktober',
+    '11' => 'November',
+    '12' => 'Desember'
+];
+$currentMonthName = $monthNames[$currentMonth];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -234,7 +262,7 @@ while ($row = $totalsResult->fetch_assoc()) {
                                         <label for="keterangan" class="form-label">Keterangan (Optional)</label>
                                         <textarea class="form-control" id="keterangan" name="keterangan" rows="2"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                                    <button type="submit" class="btn button-utama w-100">Simpan</button>
                                 </form>
                             </div>
                         </div>
@@ -243,7 +271,11 @@ while ($row = $totalsResult->fetch_assoc()) {
                     <div class="col-md-8">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body">
-                                <h5 class="card-title fw-bold mb-4">Riwayat Pengeluaran</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h5 class="card-title fw-bold mb-0">Riwayat Pengeluaran</h5>
+                                    <h6 class="text-muted mb-0">Total Bulan <?= $currentMonthName ?> <?= $currentYear ?></h6>
+                                </div>
+
                                 <div class="row mb-4">
                                     <?php foreach (['Listrik', 'Air', 'Wifi', 'Lainnya'] as $category): ?>
                                         <div class="col-md-3 mb-3">
@@ -251,14 +283,15 @@ while ($row = $totalsResult->fetch_assoc()) {
                                                 <div class="card-body text-center">
                                                     <h6 class="text-secondary">Total <?= $category ?></h6>
                                                     <h5 class="fw-bold">Rp<?= number_format($categoryTotals[$category] ?? 0, 0, ',', '.') ?></h5>
+                                                    <small class="text-muted">Bulan <?= $currentMonthName ?></small>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
                                     <div class="col-md-12">
-                                        <div class="card bg-primary text-white border-0 rounded-3">
+                                        <div class="card bg-primary text-dark border-0 rounded-3" style="background-color: #4FD1C5 !important;">
                                             <div class="card-body text-center">
-                                                <h6 class="mb-0">Total Semua Pengeluaran</h6>
+                                                <h6 class="mb-0">Total Semua Pengeluaran Bulan <?= $currentMonthName ?></h6>
                                                 <h4 class="fw-bold mb-0">Rp<?= number_format($grandTotal, 0, ',', '.') ?></h4>
                                             </div>
                                         </div>

@@ -1,70 +1,95 @@
 <?php
 session_start();
-include 'connect.php';
+require_once "connect.php";
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['idPelanggan'])) {
-    header("Location: ../pages/login.php");
+    header("Location: ../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $idPelanggan = $_SESSION['idPelanggan'];
-    $namaLengkap = trim($_POST['namaLengkap']);
-    $nomorHp = trim($_POST['nomorHp']);
-    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-    $alamat = trim($_POST['alamat']);
+// Get current profile data
+$stmt = $connect->prepare("SELECT profilePicture FROM pelanggan WHERE idPelanggan = ?");
+$stmt->bind_param("i", $_SESSION['idPelanggan']);
+$stmt->execute();
+$result = $stmt->get_result();
+$currentData = $result->fetch_assoc();
+
+// Handle file upload only if a new file was provided
+$profilePicture = $currentData['profilePicture']; // Keep current picture by default
+
+if (!empty($_FILES['profilePicture']['name'])) {
+    $targetDir = "../assets/img/";
+    $fileName = basename($_FILES['profilePicture']['name']);
+    $targetFile = $targetDir . $fileName;
+    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
     
-    // Handle profile picture upload
-    $profilePicture = null;
-    if (isset($_FILES['profilePicture']) && $_FILES['profilePicture']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../assets/img/';
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+    // Check if image file is actual image
+    $check = getimagesize($_FILES['profilePicture']['tmp_name']);
+    if ($check === false) {
+        $_SESSION['error'] = "File bukan gambar.";
+        header("Location: ../pages/pelanggan/profil.php");
+        exit;
+    }
+    
+    // Check file size (max 2MB)
+    if ($_FILES['profilePicture']['size'] > 3000000) {
+        $_SESSION['error'] = "Ukuran file terlalu besar (maks 3MB).";
+        header("Location: ../pages/pelanggan/profil.php");
+        exit;
+    }
+    
+    // Allow certain file formats
+    $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+    if (!in_array($imageFileType, $allowedTypes)) {
+        $_SESSION['error'] = "Hanya format JPG, JPEG, PNG & GIF yang diperbolehkan.";
+        header("Location: ../pages/pelanggan/profil.php");
+        exit;
+    }
+    
+    // Generate unique filename to prevent overwriting
+    $newFileName = "profile_" . $_SESSION['idPelanggan'] . "_" . time() . "." . $imageFileType;
+    $targetFile = $targetDir . $newFileName;
+    
+    // Try to upload file
+    if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $targetFile)) {
+        $profilePicture = $newFileName;
         
-        $fileName = uniqid() . '_' . basename($_FILES['profilePicture']['name']);
-        $targetFile = $uploadDir . $fileName;
-        
-        // Check if image file is a actual image
-        $check = getimagesize($_FILES['profilePicture']['tmp_name']);
-        if ($check !== false) {
-            if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $targetFile)) {
-                $profilePicture = $fileName;
+        // Delete old profile picture if it exists and isn't the default
+        if (!empty($currentData['profilePicture']) && $currentData['profilePicture'] !== 'profilepic.png') {
+            $oldFile = $targetDir . $currentData['profilePicture'];
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
             }
         }
-    }
-    
-    // Update profile in database
-    $query = "UPDATE pelanggan SET 
-              namaLengkap = ?, 
-              nomorHp = ?, 
-              email = ?, 
-              alamat = ?,
-              profilePicture = ?";
-    
-    $params = [$namaLengkap, $nomorHp, $email, $alamat, $profilePicture];
-    $types = "sssss";
-    
-    if ($profilePicture) {
-        $query .= ", profilePicture = ?";
-        $params[] = $profilePicture;
-        $types .= "s";
-    }
-    
-    $query .= " WHERE idPelanggan = ?";
-    $params[] = $idPelanggan;
-    $types .= "i";
-    
-    $stmt = $connect->prepare($query);
-    $stmt->bind_param($types, ...$params);
-    
-    if ($stmt->execute()) {
-        $_SESSION['success'] = "Profil berhasil diperbarui!";
     } else {
-        $_SESSION['error'] = "Gagal memperbarui profil: " . $stmt->error;
+        $_SESSION['error'] = "Gagal mengunggah gambar.";
+        header("Location: ../pages/pelanggan/profil.php");
+        exit;
     }
-    
-    header("Location: ../pages/pelanggan/profil.php");
-    exit;
 }
-?> 
+
+// Update other profile information
+$stmt = $connect->prepare("
+    UPDATE pelanggan 
+    SET namaLengkap = ?, nomorHp = ?, email = ?, alamat = ?, profilePicture = ?
+    WHERE idPelanggan = ?
+");
+$stmt->bind_param(
+    "sssssi",
+    $_POST['namaLengkap'],
+    $_POST['nomorHp'],
+    $_POST['email'],
+    $_POST['alamat'],
+    $profilePicture,
+    $_SESSION['idPelanggan']
+);
+
+if ($stmt->execute()) {
+    $_SESSION['success'] = "Profil berhasil diperbarui";
+} else {
+    $_SESSION['error'] = "Gagal memperbarui profil: " . $stmt->error;
+}
+
+header("Location: ../pages/pelanggan/profil.php");
+exit;
+?>

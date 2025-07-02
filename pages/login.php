@@ -79,10 +79,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
             <div class="collapse navbar-collapse justify-content-center me-5 pe-5" id="navbarMenu">
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item px-2">
-                        <a class="nav-link fw-medium" href="dashboard.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
+                        <a class="nav-link fw-medium" href="./pelanggan/dashboard.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
                     </li>
                     <li class="nav-item px-2">
-                        <a class="nav-link fw-medium" href="#"><i class="bi bi-person-fill"></i> PROFILE</a>
+                        <a class="nav-link fw-medium" href="./pelanggan/profil.php"><i class="bi bi-person-fill"></i> PROFILE</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link fw-medium" href="daftar.php"><i class="bi bi-person-fill-add"></i> SIGN UP</a>
@@ -109,11 +109,12 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
                         <label for="password" class="form-label mt-2">Password</label>
                         <input type="password" name="password" class="form-control rounded-3" id="password" placeholder="Password anda">
                     </div>
-                    <div class="form-check form-switch mb-3">
+                    <div class="form-check form-switch mb-0">
                         <input class="form-check-input" type="checkbox" id="ingat">
-                        <label class="form-check-label mb-3" name="ingat" for="ingat">Ingat Saya</label>
+                        <label class="form-check-label mb-2" name="ingat" for="ingat">Ingat Saya</label>
                     </div>
-                    <button type="submit" class="btn btn-lg btn-dark w-100 fs-6">Masuk</button>
+                    <a href="lupapassword.php" class="text-dark fw-semibold text-decoration-none">Lupa Password?</a>
+                    <button type="submit" class="btn btn-lg btn-dark w-100 fs-6 mt-3">Masuk</button>
                     <p class="mt-2 text-center text-secondary">Belum memiliki akun? <a href="daftar.php" class="text-dark fw-semibold text-decoration-none">Daftar</a></p>
                 </form>
             </div>

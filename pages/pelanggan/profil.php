@@ -3,7 +3,7 @@ session_start();
 require_once "../../php/connect.php";
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['idPelanggan'])) {
-    header("Location: ../../pages/login.php");
+    header("Location: ../../pages/login.php?pesan=not_logged_in");
     exit;
 }
 
@@ -54,12 +54,12 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     style="bottom: 0; left: 0; right: 0; transform: translateY(50%); padding: 0 1rem;">
                     <div class="bg-white bg-opacity-75 rounded-4 shadow-sm d-flex align-items-center p-3 mx-auto border border-white border-2" style="max-width: 1150px;">
                         <?php
-                        $profilePicture = !empty($pelanggan['profilePicture']) 
+                        $profilePicture = !empty($pelanggan['profilePicture'])
                             ? "../../assets/img/" . $pelanggan['profilePicture']
                             : "../../assets/img/profilepic.png";
                         ?>
                         <img
-                            src="<?= $profilePicture?>"
+                            src="<?= $profilePicture ?>"
                             alt="Profile Pic"
                             class="rounded-circle me-3 shadow-sm"
                             style="width:60px; height:60px; object-fit:cover;" />
@@ -73,18 +73,20 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
 
             <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
-                <?= $_SESSION['success'] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['success']); endif; ?>
+                <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
+                    <?= $_SESSION['success'] ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php unset($_SESSION['success']);
+            endif; ?>
 
             <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
-                <?= $_SESSION['error'] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['error']); endif; ?>
+                <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                    <?= $_SESSION['error'] ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php unset($_SESSION['error']);
+            endif; ?>
 
             <div class="pt-5 mt-4 container-fluid">
                 <div class="row g-4">
@@ -105,45 +107,17 @@ $transactions = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     </div>
                     <div class="col-md-6">
                         <div class="card shadow-sm rounded-4 p-4 h-100 border-0">
-                            <h6 class="fw-bold mb-3">Pengaturan Platform</h6>
-                            <hr class="mt-0">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="emailtagihankamar" checked>
-                                <label class="form-check-label" for="emailtagihankamar">Email saya untuk tagihan kamar</label>
-                            </div>
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="emailtagihantambahan">
-                                <label class="form-check-label" for="emailtagihantambahan">Email saya untuk tagihan tambahan</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="emailinvoice">
-                                <label class="form-check-label" for="emailinvoice">Email saya invoice pembayaran</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="langgananberita">
-                                <label class="form-check-label" for="langgananberita">Berlangganan ke berita</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="infokamarkosong">
-                                <label class="form-check-label" for="infokamarkosong">Informasi kamar kosong</label>
-                            </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="infopromo">
-                                <label class="form-check-label" for="infopromo">Informasi diskon dan promo</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-4 mt-0">
-                    <div class="col-md-12">
-                        <div class="card shadow-sm rounded-4 p-4 h-100 border-0">
                             <h6 class="fw-bold mb-3">Riwayat Transaksi</h6>
                             <hr class="mt-0">
-                            <ul class="list-unstyled small mb-0">
-                                <?php foreach ($transactions as $transaction): ?>
-                                <li><?= date('d M Y', strtotime($transaction['tanggalPemesanan'])) ?> — Rp<?= number_format($transaction['totalHarga'], 0, ',', '.') ?></li>
-                                <?php endforeach; ?>
-                            </ul>
+                            <?php if (empty($transactions)): ?>
+                                <div class="alert alert-info">Belum ada transaksi.</div>
+                            <?php else: ?>
+                                <ul class="list-unstyled small mb-0">
+                                    <?php foreach ($transactions as $transaction): ?>
+                                        <li><?= date('d M Y', strtotime($transaction['tanggalPemesanan'])) ?> — Rp<?= number_format($transaction['totalHarga'], 0, ',', '.') ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
                             <a class="btn btn-light w-100 text-dark fw-bold mt-3 border-0" href="riwayattransaksi.php" style="background-color: #4FD1C5;">Lihat Semua</a>
                         </div>
                     </div>

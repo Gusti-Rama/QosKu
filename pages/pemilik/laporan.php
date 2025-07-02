@@ -2,13 +2,19 @@
 session_start();
 require_once "../../php/connect.php";
 
-// Check login and role
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'owner') {
-    echo "<script>
-        alert('Silakan login sebagai owner terlebih dahulu.');
-        window.location.href='../../auth/login.php';
-    </script>";
-    exit;
+if (!isset($_SESSION['role'])) {
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
+  exit;
+}
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+  exit;
 }
 
 // Get current month and year
@@ -244,7 +250,7 @@ function rupiah($angka)
                     <div class="col-md-7">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body p-4">
-                                <h6 class="fw-semibold mb-3">Keuntungan enam bulan terakhir (dalam jutaan rupiah)</h6>
+                                <h6 class="fw-semibold mb-3">Keuntungan enam bulan terakhir</h6>
                                 <div class="chart-container mb-4">
                                     <canvas id="profitChart" height="160"></canvas>
                                 </div>
@@ -287,9 +293,9 @@ function rupiah($angka)
                                     </div>
                                 </div>
                                 <div class="d-grid gap-2">
-                                    <a href="export_laporan.php?type=monthly" class="btn btn-info text-white">Unduh
+                                    <a href="../../php/export_laporan.php?type=monthly" class="btn button-utama">Unduh
                                         Laporan Bulanan</a>
-                                    <a href="export_laporan.php?type=yearly" class="btn btn-info text-white">Unduh
+                                    <a href="../../php/export_laporan.php?type=yearly" class="btn button-utama">Unduh
                                         Laporan Tahunan</a>
                                 </div>
                             </div>

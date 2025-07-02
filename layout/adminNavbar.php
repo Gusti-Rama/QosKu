@@ -5,8 +5,8 @@ $is_laporan_related = in_array($current_page, ['laporan', 'riwayattransaksi']);
 ?>
 
 <nav class="bg-transparent p-3 me-4 d-flex flex-column flex-shrink-0" style="width: 250px;">
-    <a class="navbar-brand fw-bold fs-3 pt-3 border-bottom" href="dashboard.php" style="color: #2D3748;">
-        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu
+    <a class="navbar-brand fw-bold fs-5 pt-3 border-bottom" href="dashboard.php" style="color: #2D3748;">
+        <img src="../../assets/img/QosKuIMG.png" class="mb-1" alt="Logo" height="80">QosKu Admin
     </a>
     <div class="flex-grow-1 mt-3 d-flex flex-column justify-content-between h-100">
         <ul class="nav flex-column">

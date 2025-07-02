@@ -1,8 +1,18 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
-    header("Location: ../pages/login.php");
-    exit();
+if (!isset($_SESSION['role'])) {
+  header(header: "Location: ../../pages/login.php?pesan=not_logged_in");
+  exit;
+}
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+  exit;
 }
 
 include 'connect.php';

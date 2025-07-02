@@ -2,6 +2,21 @@
 session_start();
 require "../../php/connect.php";
 
+if (!isset($_SESSION['role'])) {
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
+  exit;
+}
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+  exit;
+}
+
 // Validate room ID
 $idKamar = isset($_GET['idKamar']) ? (int)$_GET['idKamar'] : 0;
 if (!$idKamar) {

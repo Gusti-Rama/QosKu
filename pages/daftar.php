@@ -87,10 +87,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['role'])) {
       <div class="collapse navbar-collapse justify-content-center me-5 pe-5" id="navbarMenu">
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item px-2">
-            <a class="nav-link fw-medium" href="dashboardKamar.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
+            <a class="nav-link fw-medium" href="./pelanggan/dashboard.php"><i class="bi bi-box-fill"></i> DASHBOARD</a>
           </li>
           <li class="nav-item px-2">
-            <a class="nav-link fw-medium" href="#"><i class="bi bi-person-fill"></i> PROFILE</a>
+            <a class="nav-link fw-medium" href="./pelanggan/profil.php"><i class="bi bi-person-fill"></i> PROFILE</a>
           </li>
           <li class="nav-item px-2">
             <a class="nav-link fw-medium active" href="#"><i class="bi bi-person-fill-add"></i> SIGN UP</a>

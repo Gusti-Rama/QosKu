@@ -2,10 +2,19 @@
 session_start();
 require_once "../../php/connect.php";
 
-// Check login and owner role
-if (!isset($_SESSION['username'])) {
-    header("Location: ../../auth/login.php");
-    exit;
+if (!isset($_SESSION['role'])) {
+  header("Location: ../../pages/login.php?pesan=not_logged_in");
+  exit;
+}
+
+$peran = strtolower($_SESSION['role']);
+
+$diperbolehkan = ['owner'];
+
+// cek peran usernya
+if (!in_array($peran, $diperbolehkan)) {
+  header("Location: ../../pages/login.php?pesan=Akses_Ditolak");
+  exit;
 }
 
 // Fetch all orders with related information

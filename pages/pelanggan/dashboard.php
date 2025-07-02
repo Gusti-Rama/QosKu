@@ -96,7 +96,7 @@ if ($bookingResult->num_rows > 0) {
             <?php include '../../layout/pelangganHeader.php'; ?>
 
             <div class="container-fluid pt-4 pb-3">
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 rounded-4">
                             <div class="card-body d-flex justify-content-between align-items-center">
@@ -169,16 +169,13 @@ if ($bookingResult->num_rows > 0) {
                 <div class="row">
                     <?php if ($hasActiveRooms): ?>
                         <div class="col-12 mb-0">
-                            <h4 class="fw-bold">Kamar Aktif Anda</h4>
-                            <p class="text-muted">Anda memiliki <?= count($bookings) ?> kamar aktif</p>
+                            <h4 class="fw-bold">Kamar Anda</h4>
+                            <p class="text-muted">Anda memiliki <?= count($bookings) ?> kamar</p>
                         </div>
 
                         <?php foreach ($bookings as $kamar): ?>
                             <div class="col-md-12 mb-3  ">
                                 <div class="card shadow-sm border-0 rounded-4 h-100">
-                                    <div class="card-header rounded-4 bg-white border-0">
-                                        <h5 class="fw-bold pt-3">Detail Kamar</h5>
-                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -196,7 +193,7 @@ if ($bookingResult->num_rows > 0) {
                                                 </p>
                                                 <p><strong>Status:</strong> <span class="badge bg-success">Aktif</span></p>
                                                 <a href="detailkamar.php?idKamar=<?= $kamar['idKamar'] ?>"
-                                                    class="btn btn-primary mt-2">
+                                                    class="btn button-utama mt-2">
                                                     <i class="bi bi-eye-fill"></i> Lihat Detail
                                                 </a>
                                             </div>
@@ -212,12 +209,12 @@ if ($bookingResult->num_rows > 0) {
                                     <i class="bi bi-house-exclamation-fill fs-1 text-muted"></i>
                                 </div>
                                 <h5 class="fw-bold mb-2">Anda belum memiliki kamar aktif</h5>
-                                <p class="text-muted mb-4">Silakan selesaikan pembayaran atau pesan kamar baru</p>
+                                <p class="text-muted mb-4">Tunggu pembayaran dikonfirmasi atau pesan kamar baru</p>
                                 <div class="d-flex justify-content-center gap-3">
-                                    <a href="listkamar.php" class="btn btn-primary px-4">
+                                    <a href="listkamar.php" class="btn button-utama px-4">
                                         <i class="bi bi-plus-circle me-2"></i> Pesan Kamar
                                     </a>
-                                    <a href="riwayat.php" class="btn btn-outline-secondary px-4">
+                                    <a href="riwayattransaksi.php" class="btn btn-outline-secondary px-4">
                                         <i class="bi bi-clock-history me-2"></i> Riwayat
                                     </a>
                                 </div>
