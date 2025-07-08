@@ -240,7 +240,7 @@ $payments = $connect->query($query);
                                                             data-date="<?= date('d M Y H:i', strtotime($payment['tanggalPembayaran'])) ?>"
                                                             data-customer="<?= htmlspecialchars($payment['namaPelanggan']) ?>"
                                                             data-room="<?= htmlspecialchars($payment['nomorKamar']) . ' (' . htmlspecialchars($payment['tipeKamar']) . ')' ?>"
-                                                            data-proof="<?= isset($payment['bukti_transfer']) ? '../../assets/payment_proofs/' . htmlspecialchars($payment['bukti_transfer']) : '#' ?>">
+                                                            data-proof="<?= isset($payment['bukti_transfer']) ? '../../assets/img/' . htmlspecialchars($payment['bukti_transfer']) : '#' ?>">
                                                             <i class="bi bi-eye"></i> View
                                                         </button>
 

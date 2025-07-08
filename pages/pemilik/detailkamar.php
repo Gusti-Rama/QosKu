@@ -306,6 +306,11 @@ $totalCost = $roomPrice + $additionalCostsTotal;
                                         name="nomorKamar" value="<?= htmlspecialchars($kamar['nomorKamar'] ?? '') ?>" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="editTipeKamar" class="form-label">Tipe Kamar</label>
+                                    <input type="text" class="form-control" id="editTipeKamar"
+                                        name="tipeKamar" value="<?= $kamar['tipeKamar'] ?? '' ?>" required>
+                                </div>
+                                <div class="mb-3">
                                     <label for="editHargaKamar" class="form-label">Harga Kamar</label>
                                     <input type="number" class="form-control" id="editHargaKamar"
                                         name="harga" value="<?= $kamar['harga'] ?? '' ?>" required>

@@ -206,7 +206,7 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                                 </div>
                             <?php endif; ?>
 
-                            <form action="../../php/proses_pembayaran.php" method="POST">
+                            <form action="../../php/proses_pembayaran.php" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
                                 <input type="hidden" name="jenis_pembayaran" value="perpanjangan">
 
@@ -228,10 +228,19 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
 
                                 <div class="mb-3">
                                     <label class="form-label">Metode Pembayaran</label>
-                                    <select class="form-select" name="metode_pembayaran" required>
-                                        <option value="cash">Uang Tunai</option>
-                                        <option value="transfer">Transfer Bank</option>
-                                    </select>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metode_pembayaran" id="cash" value="cash" checked>
+                                        <label class="form-check-label" for="cash">Uang Tunai</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="metode_pembayaran" id="transfer" value="transfer">
+                                        <label class="form-check-label" for="transfer">Transfer Bank</label>
+                                    </div>
+                                </div>
+
+                                <div id="transferProofContainer" class="mt-3 d-none">
+                                    <label for="payment_proof" class="form-label">Upload Bukti Transfer</label>
+                                    <input type="file" class="form-control" id="payment_proof" name="payment_proof" accept="image/*">
                                 </div>
 
                                 <div class="mb-3">
@@ -248,58 +257,6 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
                                 <small class="text-muted mt-2 d-block">*Perpanjangan akan diverifikasi oleh pemilik dalam 1x24 jam</small>
                             </form>
                         </div>
-
-                        <!-- Regular Payment Form -->
-                        <!-- <form action="../../php/proses_pembayaran.php" method="POST">
-                            <input type="hidden" name="idKamar" value="<?= $idKamar ?>">
-                            <div class="card shadow-sm border-0 rounded-4 p-4">
-                                <h6 class="fw-bold">Bayar Tagihan</h6>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Jenis Pembayaran</label>
-                                    <select class="form-select" name="jenis_pembayaran" required>
-                                        <option value="bulanan">Bulanan</option>
-                                        <option value="mingguan">Mingguan</option>
-                                        <option value="harian">Harian</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Metode Pembayaran</label>
-                                    <select class="form-select" name="metode_pembayaran" required>
-                                        <option value="cash">Uang Tunai</option>
-                                        <option value="transfer">Transfer Bank</option>
-                                    </select>
-                                </div>
-
-                                <p class="fw-bold">Biaya Tambahan</p>
-                                <ul class="ps-3">
-                                    <?php if ($additionalCostsResult && $additionalCostsResult->num_rows > 0): ?>
-                                        <?php while ($cost = $additionalCostsResult->fetch_assoc()): ?>
-                                            <?php $totalAdditional += $cost['jumlahBiaya']; ?>
-                                            <li>
-                                                <?= htmlspecialchars($cost['jenisBiaya']) ?>
-                                                <span class="float-end">Rp<?= number_format($cost['jumlahBiaya'], 0, ',', '.') ?></span>
-                                            </li>
-                                        <?php endwhile; ?>
-                                    <?php else: ?>
-                                        <li>Tidak ada biaya tambahan</li>
-                                    <?php endif; ?>
-                                </ul>
-
-                                <hr>
-                                <p>Harga Kamar <span class="float-end">Rp<?= number_format($kamar['harga'], 0, ',', '.') ?></span></p>
-                                <?php if ($totalAdditional > 0): ?>
-                                    <p>Biaya Tambahan <span class="float-end">Rp<?= number_format($totalAdditional, 0, ',', '.') ?></span></p>
-                                <?php endif; ?>
-                                <hr>
-                                <h5 class="fw-bold">Total <span class="float-end">Rp<?= number_format($kamar['harga'] + $totalAdditional, 0, ',', '.') ?></span></h5>
-
-                                <button type="submit" class="btn btn-primary w-100 mt-3" style="background-color: #4FD1C5; border: none;">
-                                    Bayar
-                                </button>
-                            </div>
-                        </form> -->
                     </div>
                 </div>
             </div>
@@ -368,6 +325,14 @@ $bookingInfo = $bookingStmt->get_result()->fetch_assoc();
         // Add event listeners
         jenisPerpanjangan.addEventListener('change', updateExtensionCalculation);
         durasiPerpanjangan.addEventListener('input', updateExtensionCalculation);
+
+        // Transfer proof handling (same as before)
+        document.querySelectorAll('input[name="metode_pembayaran"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const transferProofContainer = document.getElementById('transferProofContainer');
+                transferProofContainer.classList.toggle('d-none', this.value !== 'transfer');
+            });
+        });
 
         // Initialize calculation
         updateExtensionCalculation();

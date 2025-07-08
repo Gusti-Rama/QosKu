@@ -20,6 +20,17 @@ $idKamar = intval($_POST['idKamar']);
 $idPelanggan = $_SESSION['idPelanggan'];
 $jenisPembayaran = $_POST['jenis_pembayaran'] ?? 'bulanan';
 $metodePembayaran = $_POST['metode_pembayaran'] ?? 'cash';
+$buktiTransfer = null;
+
+// Handle file upload if metode_pembayaran is transfer
+if ($metodePembayaran === 'transfer' && isset($_FILES['payment_proof']) && $_FILES['payment_proof']['error'] === UPLOAD_ERR_OK) {
+    $targetDir = '../assets/img/';
+    $fileName = uniqid('bukti_') . '_' . basename($_FILES['payment_proof']['name']);
+    $targetFile = $targetDir . $fileName;
+    if (move_uploaded_file($_FILES['payment_proof']['tmp_name'], $targetFile)) {
+        $buktiTransfer = $fileName;
+    }
+}
 
 // Get extension data if this is an extension payment
 $jenisPerpanjangan = $_POST['jenis_perpanjangan'] ?? null;
@@ -69,7 +80,7 @@ if ($jenisPembayaran === 'perpanjangan') {
     $costsStmt->execute();
     $costsResult = $costsStmt->get_result();
     $biayaTambahan = $costsResult->fetch_assoc()['total'] ?? 0;
-    
+
     $totalHarga = $hargaKamar + $biayaTambahan;
 }
 
@@ -89,14 +100,14 @@ try {
         $stmt->bind_param("iii", $idKamar, $idPelanggan, $idPelanggan);
         $stmt->execute();
         $currentBookingResult = $stmt->get_result();
-        
+
         if ($currentBookingResult->num_rows === 0) {
             throw new Exception("Tidak ada pemesanan aktif untuk diperpanjang");
         }
-        
+
         $currentBooking = $currentBookingResult->fetch_assoc();
         $startDate = $currentBooking['tanggal_selesai']; // Start from current end date
-        
+
         // Calculate end date based on extension type and duration
         switch ($jenisPerpanjangan) {
             case 'bulanan':
@@ -109,7 +120,7 @@ try {
                 $endDate = date('Y-m-d', strtotime($startDate . " + $durasiPerpanjangan days"));
                 break;
         }
-        
+
         // Create new pemesanan record for extension
         $extensionQuery = "INSERT INTO pemesanan (
             tanggalPemesanan,
@@ -140,9 +151,10 @@ try {
             0,
             'perpanjang'
         )";
-        
+
         $stmt = $connect->prepare($extensionQuery);
-        $stmt->bind_param("isiiiiiss", 
+        $stmt->bind_param(
+            "isiiiiiss",
             $durasiPerpanjangan,
             $jenisPerpanjangan,
             $hargaPerPeriode,
@@ -155,26 +167,28 @@ try {
         );
         $stmt->execute();
         $extensionId = $connect->insert_id;
-        
+
         // Create payment record for the extension
         $insertPayment = "INSERT INTO pembayaran (
             tanggalPembayaran, 
             metodePembayaran, 
             jumlahPembayaran, 
             statusPembayaran, 
+            bukti_transfer,
             idPemesanan
         ) VALUES (
             CURDATE(), 
             ?, 
             ?, 
             'Menunggu Konfirmasi', 
+            ?,
             ?
         )";
-        
+
         $stmt = $connect->prepare($insertPayment);
-        $stmt->bind_param("sii", $metodePembayaran, $totalHarga, $extensionId);
+        $stmt->bind_param("sisi", $metodePembayaran, $totalHarga, $buktiTransfer, $extensionId);
         $stmt->execute();
-        
+
         $_SESSION['success'] = "Permintaan perpanjangan sewa berhasil diajukan! Menunggu konfirmasi dari pemilik.";
     } else {
         // Regular payment processing
@@ -184,12 +198,14 @@ try {
                             metodePembayaran, 
                             jumlahPembayaran, 
                             statusPembayaran, 
+                            bukti_transfer,
                             idPemesanan
                         ) VALUES (
                             CURDATE(), 
                             ?, 
                             ?, 
                             'Lunas', 
+                            ?,
                             (SELECT idPemesanan FROM pemesanan 
                              WHERE idKamar = ? 
                              AND (idPelanggan = ? OR idPelanggan_aktif = ?)
@@ -197,9 +213,9 @@ try {
                              AND is_active = 1
                              LIMIT 1)
                         )";
-        
+
         $stmt = $connect->prepare($insertPayment);
-        $stmt->bind_param("siiii", $metodePembayaran, $totalHarga, $idKamar, $idPelanggan, $idPelanggan);
+        $stmt->bind_param("sisiiii", $metodePembayaran, $totalHarga, $buktiTransfer, $idKamar, $idPelanggan, $idPelanggan);
         $stmt->execute();
 
         // 2. Update additional costs status
@@ -208,20 +224,19 @@ try {
                        WHERE idPelanggan = ?
                        AND Periode = ?
                        AND statusPembayaran = 'belum_lunas'";
-        
+
         $stmt = $connect->prepare($updateCosts);
         $stmt->bind_param("is", $idPelanggan, $currentMonth);
         $stmt->execute();
-        
+
         $_SESSION['success'] = "Pembayaran berhasil diproses!";
     }
 
     // Commit transaction
     $connect->commit();
-    
+
     header("Location: ../pages/pelanggan/detailkamar.php?idKamar=" . $idKamar . "&payment_success=1");
     exit;
-
 } catch (Exception $e) {
     // Rollback transaction on error
     $connect->rollback();

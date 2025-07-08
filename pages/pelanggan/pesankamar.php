@@ -7,28 +7,6 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-// Add these at the top of your PHP code (after the session checks)
-$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
-
-// Modify your room query to include filtering and sorting
-$whereClause = "";
-if ($filter === 'ditempati') {
-    $whereClause = "WHERE statusKetersediaan = 'Tidak Tersedia'";
-} elseif ($filter === 'tersedia') {
-    $whereClause = "WHERE statusKetersediaan = 'Tersedia'";
-}
-
-$orderClause = "ORDER BY nomorKamar " . ($sort === 'desc' ? 'DESC' : 'ASC');
-
-// Update your room query
-$query = "SELECT * FROM kamar_kos $whereClause $orderClause LIMIT $perPage OFFSET $offset";
-$hasil = $connect->query($query);
-$kamar = [];
-if ($hasil) {
-    $kamar = $hasil->fetch_all(MYSQLI_ASSOC);
-}
-
 // Verify pelanggan exists and get their ID
 $username = $_SESSION['username'];
 $stmt = $connect->prepare("SELECT idPelanggan FROM pelanggan WHERE username = ?");

@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         $maxSize = 2 * 1024 * 1024; // 2MB
         $targetDir = "../assets/img/";
-        
+
         // Check if room number is being changed to an existing one
         $currentRoomStmt = $connect->prepare("SELECT nomorKamar FROM kamar_kos WHERE idKamar = ?");
         $currentRoomStmt->bind_param("i", $idKamar);
@@ -186,16 +186,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt->execute();
 
-            // Update fasilitas
+            // Update fasilitas - Fixed version
             $facilityStmt = $connect->prepare("
-                INSERT INTO fasilitas (idKamar, luasKamar, perabotan, kamarMandi)
-                VALUES (?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE
-                luasKamar = VALUES(luasKamar),
-                perabotan = VALUES(perabotan),
-                kamarMandi = VALUES(kamarMandi)
-            ");
-            $facilityStmt->bind_param("isss", $idKamar, $luasKamar, $perabotan, $kamarMandi);
+    SELECT idFasilitas FROM fasilitas WHERE idKamar = ?
+");
+            $facilityStmt->bind_param("i", $idKamar);
+            $facilityStmt->execute();
+            $facilityExists = $facilityStmt->get_result()->num_rows > 0;
+
+            if ($facilityExists) {
+                // Update existing facilities
+                $facilityStmt = $connect->prepare("
+        UPDATE fasilitas SET 
+        luasKamar = ?,
+        perabotan = ?,
+        kamarMandi = ?
+        WHERE idKamar = ?
+    ");
+                $facilityStmt->bind_param("sssi", $luasKamar, $perabotan, $kamarMandi, $idKamar);
+            } else {
+                // Insert new facilities
+                $facilityStmt = $connect->prepare("
+        INSERT INTO fasilitas (idKamar, luasKamar, perabotan, kamarMandi)
+        VALUES (?, ?, ?, ?)
+    ");
+                $facilityStmt->bind_param("isss", $idKamar, $luasKamar, $perabotan, $kamarMandi);
+            }
             $facilityStmt->execute();
 
             // Handle additional images

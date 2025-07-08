@@ -216,7 +216,7 @@ $payments = $connect->query($query);
                                                 <td>#<?= $payment['idPembayaran'] ?></td>
                                                 <td><?= htmlspecialchars($payment['namaPelanggan']) ?></td>
                                                 <td>
-                                                    <?= htmlspecialchars($payment['nomorKamar']) ?> (<?= htmlspecialchars($payment['tipeKamar']) ?>)
+                                                    <?= htmlspecialchars($payment['nomorKamar']) ?> <?= htmlspecialchars($payment['tipeKamar']) ?>
                                                 </td>
                                                 <td>
                                                     <?php if ($payment['jenisPemesanan'] === 'perpanjang'): ?>
@@ -240,7 +240,7 @@ $payments = $connect->query($query);
                                                             data-date="<?= date('d M Y H:i', strtotime($payment['tanggalPembayaran'])) ?>"
                                                             data-customer="<?= htmlspecialchars($payment['namaPelanggan']) ?>"
                                                             data-room="<?= htmlspecialchars($payment['nomorKamar']) . ' (' . htmlspecialchars($payment['tipeKamar']) . ')' ?>"
-                                                            data-proof="<?= isset($payment['bukti_transfer']) ? '../../assets/payment_proofs/' . htmlspecialchars($payment['bukti_transfer']) : '#' ?>">
+                                                            data-proof="<?= isset($payment['bukti_transfer']) ? '../../assets/img/' . htmlspecialchars($payment['bukti_transfer']) : '#' ?>">
                                                             <i class="bi bi-eye"></i> View
                                                         </button>
 
@@ -295,26 +295,26 @@ $payments = $connect->query($query);
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Payment ID:</strong> <span id="modalPaymentId"></span></p>
-                            <p><strong>Customer:</strong> <span id="modalCustomer"></span></p>
-                            <p><strong>Room:</strong> <span id="modalRoom"></span></p>
-                            <p><strong>Amount:</strong> Rp <span id="modalAmount"></span></p>
+                            <p><strong>ID:</strong> <span id="modalPaymentId"></span></p>
+                            <p><strong>Pelanggan:</strong> <span id="modalCustomer"></span></p>
+                            <p><strong>Kamar No:</strong> <span id="modalRoom"></span></p>
+                            <p><strong>Jumlah:</strong> Rp <span id="modalAmount"></span></p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Payment Method:</strong> <span id="modalMethod"></span></p>
-                            <p><strong>Payment Date:</strong> <span id="modalDate"></span></p>
+                            <p><strong>Metode Pembayaran:</strong> <span id="modalMethod"></span></p>
+                            <p><strong>Tanggal:</strong> <span id="modalDate"></span></p>
                             <p><strong>Status:</strong> <span class="badge bg-warning">Pending</span></p>
                         </div>
                     </div>
 
                     <div class="mt-4" id="proofContainer">
-                        <h6>Payment Proof</h6>
+                        <h6>Bukti Pembayaran</h6>
                         <img id="paymentProofImage" src="" class="img-fluid rounded-3 border" alt="Payment Proof" style="max-height: 300px; display: none;">
-                        <p class="text-muted mt-2" id="noProofMessage">No payment proof available</p>
+                        <p class="text-muted mt-2" id="noProofMessage">Tidak ada bukti pembayaran</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
